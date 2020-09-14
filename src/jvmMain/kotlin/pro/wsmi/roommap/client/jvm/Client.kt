@@ -27,8 +27,8 @@ import kotlin.system.exitProcess
 
 const val APP_NAME = "RoomMap-Client"
 const val APP_VERSION = "0.1.0"
-val DEFAULT_CLIENT_DIR = File(System.getProperty("user.home"), ".room-client")
-const val DEFAULT_CFG_FILE_NAME = "roommap-client.yml"
+val DEFAULT_CFG_FILE_DIR = File(System.getProperty("user.home"))
+const val DEFAULT_CFG_FILE_NAME = ".roommap-client.yml"
 const val MAIN_PAGE_TEMPLATE_FILE_NAME = "main_page.ftlh"
 
 @ExperimentalSerializationApi
@@ -148,7 +148,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
     {
         print("Loading of client configuration ... ")
 
-        val configFile = this.cfgFilePathCLA ?: File(DEFAULT_CLIENT_DIR, DEFAULT_CFG_FILE_NAME)
+        val configFile = this.cfgFilePathCLA ?: File(DEFAULT_CFG_FILE_DIR, DEFAULT_CFG_FILE_NAME)
         if (!configFile.exists() || !configFile.isFile) {
             println("FAILED")
             println("The configuration file ${configFile.canonicalFile} does not exist.")
@@ -160,7 +160,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             exitProcess(2)
         }
 
-        val mainPageTemplateFile = File(DEFAULT_CLIENT_DIR, MAIN_PAGE_TEMPLATE_FILE_NAME)
+        val mainPageTemplateFile = File(DEFAULT_CFG_FILE_DIR, MAIN_PAGE_TEMPLATE_FILE_NAME)
         if (!mainPageTemplateFile.exists() || !mainPageTemplateFile.isFile) {
             println("FAILED")
             println("The main page file ${mainPageTemplateFile.canonicalFile} does not exist.")
@@ -187,7 +187,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         println("Http server starting ... ")
 
         val freemarkerCfg = Configuration(Version(clientCfg.freeMarkerTemplateVersion))
-        freemarkerCfg.setDirectoryForTemplateLoading(DEFAULT_CLIENT_DIR)
+        freemarkerCfg.setDirectoryForTemplateLoading(DEFAULT_CFG_FILE_DIR)
         freemarkerCfg.defaultEncoding = "UTF-8"
 
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(

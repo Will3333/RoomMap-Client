@@ -12,6 +12,7 @@ val KAML_VERSION = "0.21.0"
 val CLIKT_VERSION = "3.0.0"
 val KWSMILIB_VERSION = "0.6.0"
 val HTTP4K_VERSION = "3.260.0"
+val KTOR_VERSION = "1.4.0"
 val FREEMARKER_VERSION = "2.3.30"
 
 repositories {
@@ -31,6 +32,7 @@ kotlin {
                 implementation("pro.wsmi:roommap-lib:$ROOMMAP_LIB_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
                 implementation("pro.wsmi:kwsmilib:$KWSMILIB_VERSION")
+                implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
             }
         }
         val jvmMain by getting {
@@ -39,8 +41,14 @@ kotlin {
                 implementation("com.github.ajalt.clikt:clikt:$CLIKT_VERSION")
                 implementation("org.http4k:http4k-core:$HTTP4K_VERSION")
                 implementation("org.http4k:http4k-server-jetty:$HTTP4K_VERSION")
-                implementation("org.http4k:http4k-client-apache:$HTTP4K_VERSION")
+                implementation("io.ktor:ktor-client-apache:$KTOR_VERSION")
                 implementation("org.freemarker:freemarker:$FREEMARKER_VERSION")
+            }
+        }
+
+        val jsMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-js:$KTOR_VERSION")
             }
         }
     }
