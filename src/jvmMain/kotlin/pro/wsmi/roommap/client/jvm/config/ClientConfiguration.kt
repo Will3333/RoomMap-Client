@@ -4,6 +4,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import pro.wsmi.kwsmilib.jvm.serialization.FileSerializer
+import pro.wsmi.kwsmilib.net.URL
 import java.io.File
 
 @ExperimentalSerializationApi
@@ -11,8 +12,8 @@ import java.io.File
 data class ClientConfiguration (
     @SerialName("instance_name")
     val instanceName: String,
-    @SerialName("api_http_server")
-    val apiHttpServer: APIHttpServer,
+    @SerialName("api_url")
+    val apiURL: URL,
     @SerialName("client_http_server")
     val clientHttpServer: ClientHttpServer,
     @SerialName("resource_directory")

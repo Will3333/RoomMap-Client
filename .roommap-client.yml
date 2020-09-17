@@ -2,10 +2,6 @@ instance_name: RoomMap.org
 client_http_server:
   port: 80
   compression: true
-api_http_server:
-  server:
-    host: 127.0.0.1
-    port: 9999
-  tls: false
-  compression: true
+api_url: http://127.0.0.1:9999
+resource_directory: D:\.RoomMapResources
 freemarker_template_version: 2.3.30

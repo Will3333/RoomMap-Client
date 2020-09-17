@@ -7,6 +7,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import freemarker.template.Configuration
 import freemarker.template.Version
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.http4k.client.ApacheClient
@@ -17,19 +19,26 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
+import pro.wsmi.roommap.client.APP_NAME
+import pro.wsmi.roommap.client.APP_VERSION
+import pro.wsmi.roommap.client.MatrixRoomPerPage
+import pro.wsmi.roommap.client.USER_AGENT
 import pro.wsmi.roommap.client.jvm.config.ClientConfiguration
 import pro.wsmi.roommap.client.jvm.freemarker.model.MatrixRoom
 import pro.wsmi.roommap.client.jvm.freemarker.model.MatrixServer
+import pro.wsmi.roommap.client.jvm.freemarker.model.PageInfo
+import pro.wsmi.roommap.lib.api.APIRoomListReq
 import pro.wsmi.roommap.lib.api.APIRoomListReqResponse
+import pro.wsmi.roommap.lib.api.APIServerListReq
+import pro.wsmi.roommap.lib.api.APIServerListReqResponse
 import java.io.File
 import java.io.StringWriter
 import kotlin.system.exitProcess
 
-const val APP_NAME = "RoomMap-Client"
-const val APP_VERSION = "0.1.0"
+
 val DEFAULT_CFG_FILE_DIR = File(System.getProperty("user.home"))
 const val DEFAULT_CFG_FILE_NAME = ".roommap-client.yml"
-const val MAIN_PAGE_TEMPLATE_FILE_NAME = "main_page.ftlh"
+const val MAIN_PAGE_TEMPLATE_RELATIVE_PATH = "main_page.ftlh"
 
 @ExperimentalSerializationApi
 fun configureServerGlobalHttpFilter(debugMode: Boolean, clientCfg: ClientConfiguration) : Filter
@@ -46,48 +55,56 @@ fun configureServerGlobalHttpFilter(debugMode: Boolean, clientCfg: ClientConfigu
 }
 
 @ExperimentalSerializationApi
-fun configureAPIGlobalHttpRequest(method: Method, clientCfg: ClientConfiguration) : Request
-{
-    val baseReq = Request(
-        method,
-        Uri(
-            scheme = if (clientCfg.apiHttpServer.tls) "https" else "http",
-            userInfo = "",
-            host = clientCfg.apiHttpServer.server.hostString,
-            port = clientCfg.apiHttpServer.server.port,
-            path = "",
-            query = "",
-            fragment = ""
-        )
-    )
+fun serverRootReqHandler(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerCfg: Configuration, mainPageTemplateFile: File) : (Request) -> Response = { req ->
 
-    return baseReq.replaceHeader("User-Agent", "$APP_NAME/$APP_VERSION (${clientCfg.instanceName})")
-}
-
-@ExperimentalSerializationApi
-fun serverRootReqHandler(clientCfg: ClientConfiguration, freemarkerCfg: Configuration, mainPageTemplateFile: File) : HttpHandler = { req ->
-
-    val apiBaseGetReq = configureAPIGlobalHttpRequest(Method.GET, clientCfg)
-    val apiRoomListReq = apiBaseGetReq.uri(apiBaseGetReq.uri.path("/api/rooms"))
+    val jsonSerializer = Json {
+        prettyPrint = debugMode
+    }
 
     val apiHttpClient = ApacheClient()
-    val apiResponse = apiHttpClient(apiRoomListReq)
+    val apiHttpReqBase = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
 
-    if (apiResponse.status == Status.OK)
+    val apiServerListReq = apiHttpReqBase
+        .uri(apiHttpReqBase.uri.path(APIServerListReq.REQ_PATH))
+        .method(Method.GET)
+    val apiServerListReqHttpResponse = apiHttpClient(apiServerListReq)
+
+    if (apiServerListReqHttpResponse.status == Status.OK)
     {
-        val apiRoomListReqResponse = Json.decodeFromString(APIRoomListReqResponse.serializer(), apiResponse.bodyString())
+        val matrixRoomPerPage = MatrixRoomPerPage.FIFTY
 
-        val freemarkerTemplateModel = mutableMapOf<String, Any>()
-        val matrixServerTemplateModel = apiRoomListReqResponse.servers.mapValues {
-            MatrixServer(it.value.name, it.value.apiURL.toString(), it.value.updateFreq)
-        }
-        val matrixRoomListFMModel = mutableListOf<MatrixRoom>()
-        apiRoomListReqResponse.rooms.forEach{ (serverId, rooms) ->
-            rooms.forEach { room ->
-                matrixRoomListFMModel.add(
+        val apiServerListReqResponse = jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), apiServerListReqHttpResponse.bodyString())
+        val servers = apiServerListReqResponse.servers
+
+        val apiRoomListReq = apiHttpReqBase
+            .uri(apiHttpReqBase.uri.path(APIRoomListReq.REQ_PATH))
+            .method(Method.POST)
+            .body(jsonSerializer.encodeToString(APIRoomListReq.serializer(), APIRoomListReq(end = matrixRoomPerPage.number)))
+        val apiRoomListReqHttpResponse = apiHttpClient(apiRoomListReq)
+
+        if (apiRoomListReqHttpResponse.status == Status.OK)
+        {
+            val apiRoomListReqResponse = jsonSerializer.decodeFromString(APIRoomListReqResponse.serializer(), apiRoomListReqHttpResponse.bodyString())
+            val rooms = apiRoomListReqResponse.rooms
+
+            val freemarkerModel = mutableMapOf<String, Any>()
+
+            freemarkerModel["page_info"] = PageInfo(
+                1,
+                (apiRoomListReqResponse.roomsTotalNum / matrixRoomPerPage.number).let {
+                    if ((apiRoomListReqResponse.roomsTotalNum % matrixRoomPerPage.number) != 0) it + 1
+                    else it
+                }
+            )
+
+            freemarkerModel["rooms"] = rooms.map {room ->
+
+                val server = servers[room.serverId]
+                if (server != null)
+                {
                     MatrixRoom(
                         room.roomId,
-                        matrixServerTemplateModel[serverId]!!,
+                        MatrixServer(server.name, server.apiURL.toString(), server.updateFreq),
                         room.aliases,
                         room.canonicalAlias,
                         room.name,
@@ -97,36 +114,59 @@ fun serverRootReqHandler(clientCfg: ClientConfiguration, freemarkerCfg: Configur
                         room.guestCanJoin,
                         room.avatarUrl
                     )
-                )
+                }
+                else
+                    null
             }
-        }
-        matrixRoomListFMModel.sortByDescending {
-            it.num_joined_members
-        }
-        freemarkerTemplateModel["rooms"] = matrixRoomListFMModel
 
-        val mainPageTemplate = freemarkerCfg.getTemplate(mainPageTemplateFile.name)
-        val stringWriter = StringWriter()
-        mainPageTemplate.process(freemarkerTemplateModel, stringWriter)
+            val mainPageTemplate = freemarkerCfg.getTemplate(mainPageTemplateFile.name)
+            val stringWriter = StringWriter()
+            mainPageTemplate.process(freemarkerModel, stringWriter)
 
-        Response(Status.OK).body(stringWriter.toString())
+            Response(Status.OK).body(stringWriter.toString())
+        }
+        else
+        {
+            Response(Status.INTERNAL_SERVER_ERROR).body(
+                """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Hello World</title>
+              </head>
+              <body>
+                <h1>Status: ${apiRoomListReqHttpResponse.status.code}</h1>
+                <p>${apiRoomListReqHttpResponse.status.description}</p>
+                <h1>Body</h1>
+                <p>${apiRoomListReqHttpResponse.bodyString()}</p>
+              </body>
+            </html>
+            """.trimIndent()
+            )
+        }
     }
     else
     {
-        Response(Status.OK).body("""<!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Hello World</title>
-          </head>
-          <body>
-            <h1>Status: ${apiResponse.status.code}</h1>
-            <p>${apiResponse.status.description}</p>
-            <h1>Body</h1>
-            <p>${apiResponse.bodyString()}</p>
-          </body>
-        </html>""".trimIndent())
+        Response(Status.INTERNAL_SERVER_ERROR).body(
+            """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Hello World</title>
+              </head>
+              <body>
+                <h1>Status: ${apiServerListReqHttpResponse.status.code}</h1>
+                <p>${apiServerListReqHttpResponse.status.description}</p>
+                <h1>Body</h1>
+                <p>${apiServerListReqHttpResponse.bodyString()}</p>
+              </body>
+            </html>
+            """.trimIndent()
+        )
     }
 }
 
@@ -144,11 +184,11 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
     private val debugModeCLA by option("--debug", help = "Turn on the debug mode").flag()
 
     @ExperimentalSerializationApi
-    override fun run()
-    {
+    override fun run() = runBlocking {
+
         print("Loading of client configuration ... ")
 
-        val configFile = this.cfgFilePathCLA ?: File(DEFAULT_CFG_FILE_DIR, DEFAULT_CFG_FILE_NAME)
+        val configFile = this@BaseLineCmd.cfgFilePathCLA ?: File(DEFAULT_CFG_FILE_DIR, DEFAULT_CFG_FILE_NAME)
         if (!configFile.exists() || !configFile.isFile) {
             println("FAILED")
             println("The configuration file ${configFile.canonicalFile} does not exist.")
@@ -158,18 +198,6 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             println("FAILED")
             println("The configuration file ${configFile.canonicalFile} is not readable.")
             exitProcess(2)
-        }
-
-        val mainPageTemplateFile = File(DEFAULT_CFG_FILE_DIR, MAIN_PAGE_TEMPLATE_FILE_NAME)
-        if (!mainPageTemplateFile.exists() || !mainPageTemplateFile.isFile) {
-            println("FAILED")
-            println("The main page file ${mainPageTemplateFile.canonicalFile} does not exist.")
-            exitProcess(10)
-        }
-        if (!mainPageTemplateFile.canRead()) {
-            println("FAILED")
-            println("The main page file ${mainPageTemplateFile.canonicalFile} is not readable.")
-            exitProcess(11)
         }
 
         val clientCfg = try {
@@ -182,17 +210,44 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             exitProcess(3)
         }
 
+        val resourceDir = clientCfg.resourceDirectory
+        if (!resourceDir.exists() || !resourceDir.isDirectory)
+        {
+            println("FAILED")
+            println("The resources directory ${resourceDir.canonicalFile} does not exist.")
+            exitProcess(4)
+        }
+        if (!resourceDir.canRead()) {
+            println("FAILED")
+            println("The resources directory ${resourceDir.canonicalFile} is not readable.")
+            exitProcess(5)
+        }
+
         println("OK")
+
+        val mainPageTemplateFile = File(resourceDir, MAIN_PAGE_TEMPLATE_RELATIVE_PATH)
+        if (!mainPageTemplateFile.exists() || !mainPageTemplateFile.isFile) {
+            println("FAILED")
+            println("The main page file ${mainPageTemplateFile.canonicalFile} does not exist.")
+            exitProcess(10)
+        }
+        if (!mainPageTemplateFile.canRead()) {
+            println("FAILED")
+            println("The main page file ${mainPageTemplateFile.canonicalFile} is not readable.")
+            exitProcess(11)
+        }
 
         println("Http server starting ... ")
 
         val freemarkerCfg = Configuration(Version(clientCfg.freeMarkerTemplateVersion))
-        freemarkerCfg.setDirectoryForTemplateLoading(DEFAULT_CFG_FILE_DIR)
+        freemarkerCfg.setDirectoryForTemplateLoading(resourceDir)
         freemarkerCfg.defaultEncoding = "UTF-8"
 
-        configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
-            "/" bind Method.GET to serverRootReqHandler(clientCfg, freemarkerCfg, mainPageTemplateFile)
-        )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
+        launch {
+            configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
+                "/" bind Method.GET to serverRootReqHandler(debugModeCLA, clientCfg, freemarkerCfg, mainPageTemplateFile)
+            )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
+        }
 
         print("OK")
     }
