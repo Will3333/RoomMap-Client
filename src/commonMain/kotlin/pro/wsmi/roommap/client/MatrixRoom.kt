@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.jvm.freemarker.model
+package pro.wsmi.roommap.client
 
 data class MatrixRoom (
     val room_id: String,

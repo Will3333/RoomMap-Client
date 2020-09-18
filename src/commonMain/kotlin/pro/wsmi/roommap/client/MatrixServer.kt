@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.jvm.freemarker.model
+package pro.wsmi.roommap.client
 
 data class MatrixServer (
     val name: String,
