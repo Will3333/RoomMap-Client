@@ -8,7 +8,7 @@ import io.ktor.http.*
 import kotlinx.serialization.ExperimentalSerializationApi
 
 @ExperimentalSerializationApi
-fun getAPIHttpClient(userAgent: String, apiURL: String): HttpClient = HttpClient(Js) {
+fun getAPIHttpClient(userAgent: String, apiHost: Url): HttpClient = HttpClient(Js) {
 
     install(UserAgent) {
         agent = userAgent
@@ -17,8 +17,11 @@ fun getAPIHttpClient(userAgent: String, apiURL: String): HttpClient = HttpClient
         register(io.ktor.utils.io.charsets.Charsets.UTF_8)
     }
     defaultRequest {
-        contentType(ContentType.Application.Json)
+        url {
+            protocol = apiHost.protocol
+        }
+        host = apiHost.host
+        port = apiHost.port
         accept(ContentType.Application.Json)
-        url(Url(apiURL))
     }
 }

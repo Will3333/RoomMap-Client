@@ -4,6 +4,7 @@ plugins {
 }
 
 val ROOMMAP_LIB_VERSION = "0.1.0"
+val COROUTINES_VERSION = "1.3.9"
 val KWSMILIB_VERSION = "0.6.0"
 val SERIALIZATION_VERSION = "1.0.0-RC"
 val KTOR_VERSION = "1.4.0"
@@ -33,6 +34,8 @@ kotlin {
         implementation(kotlin("stdlib-js"))
         implementation(project(":roommap-client-lib"))
         implementation("pro.wsmi:roommap-lib:$ROOMMAP_LIB_VERSION")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$COROUTINES_VERSION")
         implementation("pro.wsmi:kwsmilib:$KWSMILIB_VERSION")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
         implementation("io.ktor:ktor-client-core:$KTOR_VERSION")

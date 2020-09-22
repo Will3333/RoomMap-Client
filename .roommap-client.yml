@@ -1,5 +1,5 @@
 instance_name: RoomMap.org
-client_http_server:
+client_backend:
   port: 80
   compression: true
 api_url: http://127.0.0.1:9999

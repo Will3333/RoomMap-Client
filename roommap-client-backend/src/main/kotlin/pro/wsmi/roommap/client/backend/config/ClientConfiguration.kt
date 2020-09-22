@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.http_server.config
+package pro.wsmi.roommap.client.backend.config
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
@@ -14,8 +14,8 @@ data class ClientConfiguration (
     val instanceName: String,
     @SerialName("api_url")
     val apiURL: URL,
-    @SerialName("client_http_server")
-    val clientHttpServer: ClientHttpServer,
+    @SerialName("client_backend")
+    val clientHttpServer: ClientBackend,
     @SerialName("resource_directory")
     @Serializable(with = FileSerializer::class)
     val resourceDirectory: File,

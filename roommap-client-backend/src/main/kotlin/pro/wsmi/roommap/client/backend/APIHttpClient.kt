@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.http_server
+package pro.wsmi.roommap.client.backend
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.http4k.core.ContentType

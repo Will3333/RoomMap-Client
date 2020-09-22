@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.http_server.http4k
+package pro.wsmi.roommap.client.backend.http4k
 
 import org.http4k.core.ContentType
 

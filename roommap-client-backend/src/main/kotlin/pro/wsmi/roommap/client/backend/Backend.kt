@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.http_server
+package pro.wsmi.roommap.client.backend
 
 import com.charleskorn.kaml.Yaml
 import com.github.ajalt.clikt.core.CliktCommand
@@ -17,11 +17,15 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
-import pro.wsmi.roommap.client.http_server.config.ClientConfiguration
-import pro.wsmi.roommap.client.http_server.http4k.APPLICATION_JS
-import pro.wsmi.roommap.client.http_server.http4k.TEXT_CSS
+import pro.wsmi.roommap.client.backend.api.handleMatrixRoomListReq
+import pro.wsmi.roommap.client.backend.api.handleMatrixServerListReq
+import pro.wsmi.roommap.client.backend.config.ClientConfiguration
+import pro.wsmi.roommap.client.backend.http4k.APPLICATION_JS
+import pro.wsmi.roommap.client.backend.http4k.TEXT_CSS
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
+import pro.wsmi.roommap.client.lib.api.ClientAPIRoomListReq
+import pro.wsmi.roommap.client.lib.api.ClientAPIServerListReq
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -34,17 +38,17 @@ const val JS_FILES_DIR_NAME = "js"
 const val MATRIX_ROOMS_PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
 
 @ExperimentalSerializationApi
-fun configureServerGlobalHttpFilter(debugMode: Boolean, clientCfg: ClientConfiguration) : Filter
-{
-    val serverHeaderFilter : Filter = Filter { next: HttpHandler ->
+fun configureServerGlobalHttpFilter(debugMode: Boolean, clientCfg: ClientConfiguration) : Filter =
+    Filter { next: HttpHandler ->
         { req: Request ->
             val originalResponse = next(req)
             originalResponse.header("Server", "$APP_NAME/$APP_VERSION")
         }
+    }.let {
+        if (clientCfg.clientHttpServer.compression) it.then(ServerFilters.GZip()) else it
+    }.let {
+        if (debugMode) it.then(DebuggingFilters.PrintRequestAndResponse()) else it
     }
-    val compressionFilter = if (clientCfg.clientHttpServer.compression) serverHeaderFilter.then(ServerFilters.GZip()) else serverHeaderFilter
-    return if (debugMode) compressionFilter.then(DebuggingFilters.PrintRequestAndResponse()) else compressionFilter
-}
 
 class BaseLineCmd : CliktCommand(name = "RoomMapClient")
 {
@@ -127,6 +131,8 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath), Pair("css", ContentType.TEXT_CSS)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath), Pair("js", ContentType.APPLICATION_JS), Pair("js.map", ContentType.TEXT_PLAIN)),
+            ClientAPIRoomListReq.REQ_PATH bind Method.GET to handleMatrixRoomListReq(debugModeCLA, clientCfg),
+            ClientAPIServerListReq.REQ_PATH bind Method.GET to handleMatrixServerListReq(debugModeCLA, clientCfg),
             "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
