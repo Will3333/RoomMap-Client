@@ -1,0 +1,54 @@
+#matrix-rooms-container {
+    display: grid;
+    align-items: end;
+}
+
+.matrix-rooms-name-header {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.matrix-rooms-nou-header {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.matrix-rooms-ga-header {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.matrix-rooms-wr-header {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+.matrix-rooms-server-header {
+    grid-column: 5;
+    grid-row: 1;
+}
+
+.matrix-room-name-elm {
+    grid-column: 1;
+}
+
+.matrix-room-nou-elm {
+    grid-column: 2;
+}
+
+.matrix-room-ga-elm {
+    grid-column: 3;
+}
+
+.matrix-room-wr-elm {
+    grid-column: 4;
+}
+
+.matrix-room-server-elm {
+    grid-column: 5;
+}
+
+.matrix-room-topic-elm {
+    grid-column: 1 / 6;
+    display: none;
+}

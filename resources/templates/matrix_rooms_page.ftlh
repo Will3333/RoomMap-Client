@@ -8,25 +8,6 @@
   </head>
   <body>
     <h1>Rooms</h1>
-    <table>
-	  <tr>
-	    <th>Server</th>
-	    <th>Name</th>
-		<th>Number of users</th>
-		<th>Guest access</th>
-	  </tr>
-	<#list rooms as room>
-	  <tr>
-	    <td><a href="${servers[room.serverId].apiUrl}">${servers[room.serverId].name}</a></td>
-	    <td <#if (room.roomId)??>title="${room.roomId}"</#if>><details>
-	      <summary><#if (room.name)??>${room.name}<#else>${room.roomId}</#if></summary>
-	      <#if (room.topic)??>${room.topic}</#if>
-	    </details></td>
-		<td>${room.numJoinedMembers}</td>
-		<td><#if room.guestCanJoin>yes<#else>no</#if></td>
-	  </tr>
-	</#list>
-	</table>
     <menu type="toolbar">
       <#if page_info.current_page_number gt 1><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1"></#if>&lt;&lt;<#if page_info.current_page_number gt 1></a></#if>
       <#if page_info.current_page_number gt 1><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}"></#if>&lt;<#if page_info.current_page_number gt 1></a></#if>
@@ -35,10 +16,25 @@
       <#if page_info.current_page_number lt page_info.max_page><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}"></#if>&gt;&gt;<#if page_info.current_page_number lt page_info.max_page></a></#if>
       <select>
       <#list page_info.rooms_per_page_standard_num as standard_num>
-        <option<#if standard_num == page_info.matrix_rooms_per_page> selected</#if> value=${standard_num?string.computer}>${standard_num} per page</option>
+         <option<#if standard_num == page_info.matrix_rooms_per_page> selected</#if> value=${standard_num?string.computer}>${standard_num} per page</option>
       </#list>
       </select>
     </menu>
+    <div id="matrix-rooms-container">
+	  <div class="matrix-rooms-name-header">Name</div>
+      <div class="matrix-rooms-nou-header">Number of users</div>
+	  <div class="matrix-rooms-ga-header">Guest access</div>
+	  <div class="matrix-rooms-wr-header">World readable</div>
+	  <div class="matrix-rooms-server-header">Server</div>
+	  <#list rooms as room>
+	  <div id="matrix-room-name-elm-${room?index}" class="matrix-room-name-elm"><#if (room.name)??>${room.name}<#else>${room.roomId}</#if></div>
+      <div class="matrix-room-nou-elm">${room.numJoinedMembers}</div>
+	  <div class="matrix-room-ga-elm"><#if room.guestCanJoin>yes<#else>no</#if></div>
+	  <div class="matrix-room-wr-elm"><#if room.worldReadable>yes<#else>no</#if></div>
+	  <div class="matrix-room-server-elm"><a href="${servers[room.serverId].apiUrl}">${servers[room.serverId].name}</a></div>
+	  <#if (room.topic)??><div id="matrix-room-topic-elm-${room?index}" class="matrix-room-topic-elm">${room.topic}</div></#if>
+	  </#list>
+	</div>
     <script>
       const debugMode = ${debug_mode?c};
       const initialRoomsPerPage = ${page_info.matrix_rooms_per_page?string.computer};

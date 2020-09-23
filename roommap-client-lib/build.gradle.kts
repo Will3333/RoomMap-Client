@@ -4,7 +4,7 @@ plugins {
 }
 
 val SERIALIZATION_VERSION = "1.0.0-RC"
-val KWSMILIB_VERSION = "0.6.0"
+val KWSMILIB_VERSION = "0.8.0"
 val KTOR_VERSION = "1.4.0"
 
 
