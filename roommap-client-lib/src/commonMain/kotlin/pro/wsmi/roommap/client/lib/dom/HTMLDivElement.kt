@@ -1,10 +1,13 @@
 package pro.wsmi.roommap.client.lib.dom
 
-data class HTMLDivElement (
-    override val id: String? = null,
-    override val classList: List<String> = listOf(),
-    override val onclick: String? = null
-) : HTMLElement()
+expect class HTMLDivElement (
+    id: String? = null,
+    classList: Set<String> = setOf(),
+    onclick: String? = null
+): HTMLElement
 {
-    override val tagName: String = "div"
+    override val id: String?
+    override val classList: Set<String>
+    override val onclick: String?
+    override val tagName: String
 }
