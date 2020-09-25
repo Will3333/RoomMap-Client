@@ -32,6 +32,19 @@
     grid-column: 1;
 }
 
+.matrix-room-name-arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.matrix-room-name-right-arrow {
+    transform: rotate(-45deg);
+}
+.matrix-room-name-down-arrow {
+    transform: rotate(45deg);
+}
+
 .matrix-room-nou-elm {
     grid-column: 2;
 }

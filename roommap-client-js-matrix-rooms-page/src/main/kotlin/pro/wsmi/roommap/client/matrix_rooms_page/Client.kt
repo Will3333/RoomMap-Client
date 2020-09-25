@@ -35,56 +35,6 @@ var pageNumber = initialPageNumber
 private val apiHttpClient = getAPIHttpClient(USER_AGENT, Url(window.location.protocol))
 
 
-private fun handleMatrixRoomNameClickEvent() = { event: Event ->
-    val nameLabel = event.currentTarget as HTMLDivElement
-    val topicLabel = document.getElementById(nameLabel.id.replace("-name-", "-topic-")) as HTMLDivElement?
-
-    if (topicLabel != null) {
-        if (topicLabel.style.display.isBlank() || topicLabel.style.display == "none")
-            topicLabel.style.display = "block"
-        else topicLabel.style.display = "none"
-    }
-}
-
-fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : List<HTMLElement> = mutableListOf(
-    document.create.div {
-        id = "matrix-room-name-elm-$number"
-        classes = setOf("matrix-room-name-elm")
-        onClickFunction = handleMatrixRoomNameClickEvent()
-        +(room.name ?: room.roomId)
-    },
-    document.create.div {
-        classes = setOf("matrix-room-nou-elm")
-        + room.numJoinedMembers.toString()
-    },
-    document.create.div {
-        classes = setOf("matrix-room-ga-elm")
-        + (if (room.guestCanJoin) "yes" else "no")
-    },
-    document.create.div {
-        classes = setOf("matrix-room-wr-elm")
-        + (if (room.worldReadable) "yes" else "no")
-    },
-    document.create.div {
-        classes = setOf("matrix-room-server-elm")
-        a {
-            href = server.apiUrl
-            + server.name
-        }
-    }
-).let {
-    if (room.topic != null){
-        it.add(
-            document.create.div {
-                id = "matrix-room-topic-elm-$number"
-                classes = setOf("matrix-room-topic-elm")
-                + room.topic!!
-            }
-        )
-    }
-    it
-}.toList()
-
 @ExperimentalSerializationApi
 private fun handlePageReqFieldKeydownEvent() = { event: Event ->
     val keyboardEvent = event as KeyboardEvent

@@ -3,8 +3,6 @@ plugins {
     kotlin("plugin.serialization") version "1.4.10"
 }
 
-val KHTML_VERSION = "0.7.2"
-
 kotlin {
     js {
         browser {
@@ -29,6 +27,6 @@ kotlin {
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${rootProject.extra["SERIALIZATION_VERSION"]}")
         implementation("io.ktor:ktor-client-core:${rootProject.extra["KTOR_VERSION"]}")
         implementation("io.ktor:ktor-client-js:${rootProject.extra["KTOR_VERSION"]}")
-        implementation("org.jetbrains.kotlinx:kotlinx-html-js:$KHTML_VERSION")
+        implementation("org.jetbrains.kotlinx:kotlinx-html-js:${rootProject.extra["KHTML_VERSION"]}")
     }
 }

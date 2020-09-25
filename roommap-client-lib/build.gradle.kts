@@ -15,6 +15,7 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${rootProject.extra["SERIALIZATION_VERSION"]}")
                 implementation("pro.wsmi:kwsmilib:${rootProject.extra["KWSMILIB_VERSION"]}")
+                implementation("org.jetbrains.kotlinx:kotlinx-html:${rootProject.extra["KHTML_VERSION"]}")
             }
         }
         val jsMain by getting {
