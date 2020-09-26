@@ -4,6 +4,7 @@ expect class HTMLAnchorElement (
     id: String? = null,
     classList: Set<String> = setOf(),
     href: String? = null,
+    hidden: Boolean? = null,
     onclick: String? = null
 ) : HTMLElement, HTMLHyperlinkElementUtils
 {

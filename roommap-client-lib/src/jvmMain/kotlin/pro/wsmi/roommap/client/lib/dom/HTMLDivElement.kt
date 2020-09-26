@@ -6,6 +6,7 @@ import kotlinx.html.stream.createHTML
 actual class HTMLDivElement actual constructor(
     override val id: String?,
     override val classList: Set<String>,
+    override val hidden: Boolean?,
     actual override val onclick: String?
 ) : HTMLElement()
 {
@@ -15,6 +16,8 @@ actual class HTMLDivElement actual constructor(
         if (this@HTMLDivElement.id != null)
             id = this@HTMLDivElement.id
         classes = this@HTMLDivElement.classList
+        if (this@HTMLDivElement.hidden != null)
+            hidden = this@HTMLDivElement.hidden
         if (this@HTMLDivElement.onclick != null)
             onClick = this@HTMLDivElement.onclick
 

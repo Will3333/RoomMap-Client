@@ -65,20 +65,32 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
             classList = setOf("matrix-room-name-elm-container")
         ).let { mainDiv ->
             mainDiv.appendChild(
-                HTMLDivElement (
-                    classList = setOf("matrix-room-name-arrow-container"),
-                    onclick = "handleMatrixRoomArrowClickEvent('$matrixRoomNameArrowSpanId')"
-                ).let {
-                    if (room.topic != null)
-                    {
+                if (room.topic != null)
+                {
+                    HTMLDivElement (
+                        classList = setOf("matrix-room-name-arrow-container"),
+                        onclick = "handleMatrixRoomArrowClickEvent('$matrixRoomNameArrowSpanId')"
+                    ).let {
                         it.appendChild(
                             HTMLSpanElement(
                                 id = matrixRoomNameArrowSpanId,
                                 classList = setOf("matrix-room-name-arrow", "matrix-room-name-right-arrow")
                             )
                         )
+                        it
                     }
-                    it
+                } else {
+                    HTMLDivElement (
+                        classList = setOf("matrix-room-name-arrow-container"),
+                    ).let {
+                        it.appendChild(
+                            HTMLSpanElement(
+                                id = matrixRoomNameArrowSpanId,
+                                hidden = true
+                            )
+                        )
+                        it
+                    }
                 }
             )
             mainDiv.appendChild(

@@ -3,6 +3,7 @@ package pro.wsmi.roommap.client.lib.dom
 expect class HTMLSpanElement (
     id: String? = null,
     classList: Set<String> = setOf(),
+    hidden: Boolean? = null,
     onclick: String? = null
 ) : HTMLElement
 {

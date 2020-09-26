@@ -3,6 +3,7 @@ package pro.wsmi.roommap.client.lib.dom
 import kotlinx.browser.document
 import kotlinx.html.classes
 import kotlinx.html.dom.create
+import kotlinx.html.hidden
 import kotlinx.html.id
 import kotlinx.html.js.a
 import kotlinx.html.onClick
@@ -11,6 +12,7 @@ actual class HTMLAnchorElement actual constructor(
     id: String?,
     classList: Set<String>,
     href: String?,
+    hidden: Boolean?,
     onclick: String?
 ) : HTMLElement(), HTMLHyperlinkElementUtils
 {
@@ -20,6 +22,8 @@ actual class HTMLAnchorElement actual constructor(
         this.classes = classList
         if (href != null)
             this.href = href
+        if (hidden != null)
+            this.hidden = hidden
         if (onclick != null)
             this.onClick = onclick
     }

@@ -7,6 +7,7 @@ actual class HTMLAnchorElement actual constructor(
     override val id: String?,
     override val classList: Set<String>,
     actual override val href: String?,
+    override val hidden: Boolean?,
     actual override val onclick: String?
 ) : HTMLElement(), HTMLHyperlinkElementUtils
 {
@@ -16,8 +17,10 @@ actual class HTMLAnchorElement actual constructor(
         if (this@HTMLAnchorElement.id != null)
             id = this@HTMLAnchorElement.id
         classes = this@HTMLAnchorElement.classList
-        if(this@HTMLAnchorElement.href != null)
+        if (this@HTMLAnchorElement.href != null)
             href = this@HTMLAnchorElement.href
+        if (this@HTMLAnchorElement.hidden != null)
+            hidden = this@HTMLAnchorElement.hidden
         if (this@HTMLAnchorElement.onclick != null)
             onClick = this@HTMLAnchorElement.onclick
 

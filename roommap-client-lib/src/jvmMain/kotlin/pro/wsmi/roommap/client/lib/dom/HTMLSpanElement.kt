@@ -6,6 +6,7 @@ import kotlinx.html.stream.createHTML
 actual class HTMLSpanElement actual constructor(
     override val id: String?,
     override val classList: Set<String>,
+    override val hidden: Boolean?,
     actual override val onclick: String?
 ) : HTMLElement()
 {
@@ -15,6 +16,8 @@ actual class HTMLSpanElement actual constructor(
         if (this@HTMLSpanElement.id != null)
             id = this@HTMLSpanElement.id
         classes = this@HTMLSpanElement.classList
+        if (this@HTMLSpanElement.hidden != null)
+            hidden = this@HTMLSpanElement.hidden
         if (this@HTMLSpanElement.onclick != null)
             onClick = this@HTMLSpanElement.onclick
 
