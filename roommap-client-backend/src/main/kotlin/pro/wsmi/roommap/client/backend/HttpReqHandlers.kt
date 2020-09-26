@@ -75,8 +75,7 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
                             else it
                         },
                         "matrix_rooms_total_num" to apiRoomListReqResponse.roomsTotalNum,
-                        "matrix_rooms_per_page" to elmPerPage,
-                        "rooms_per_page_standard_num" to matrixRoomsPageRoomsPerPageStandardNum
+                        "matrix_rooms_per_page" to elmPerPage
                     ),
                     "room_elm_list" to rooms.joinToString("") { room ->
                         val server = servers[room.serverId]

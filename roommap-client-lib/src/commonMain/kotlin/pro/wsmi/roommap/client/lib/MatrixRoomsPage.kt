@@ -10,49 +10,6 @@ const val MATRIX_ROOMS_PAGE_PAGE_REQ_NAME = "page"
 const val MATRIX_ROOMS_PAGE_DEFAULT_PAGE = 1
 const val MATRIX_ROOMS_PAGE_DEFAULT_ROOMS_PER_PAGE = 20
 
-val matrixRoomsPageRoomsPerPageStandardNum = listOf(20, 50, 100, 200, 500, 1000)
-
-/*
-fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : List<HTMLElement> = mutableListOf(
-    DIV() {
-        id = "matrix-room-name-elm-$number"
-        classes = setOf("matrix-room-name-elm")
-        onClick = "pro.wsmi.roommap.client.matrix_rooms_page.handleMatrixRoomArrowClickEvent(\"$id\")"
-        +(room.name ?: room.roomId)
-    },
-    createHTML().div {
-        classes = setOf("matrix-room-nou-elm")
-        + room.numJoinedMembers.toString()
-    },
-    createHTML().div {
-        classes = setOf("matrix-room-ga-elm")
-        + (if (room.guestCanJoin) "yes" else "no")
-    },
-    createHTML().div {
-        classes = setOf("matrix-room-wr-elm")
-        + (if (room.worldReadable) "yes" else "no")
-    },
-    createHTML().div {
-        classes = setOf("matrix-room-server-elm")
-        a {
-            href = server.apiUrl
-            + server.name
-        }
-    }
-).let {
-    if (room.topic != null){
-        it.add(
-            createHTML().div {
-                id = "matrix-room-topic-elm-$number"
-                classes = setOf("matrix-room-topic-elm")
-                + room.topic!!
-            }
-        )
-    }
-    it
-}.toList()
-
- */
 
 fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : DocumentFragment
 {

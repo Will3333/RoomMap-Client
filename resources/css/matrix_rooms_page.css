@@ -1,6 +1,47 @@
 body {
     background-color: #404040;
-    color: #eeeeee;
+    color: #e1e1e1;
+}
+
+.matrix-rooms-page-management {
+    white-space: normal;
+    text-align: center;
+}
+.matrix-rooms-current-page-management {
+    display: inline-block;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-style: solid;
+    border-width: 0.2em;
+    border-radius: 5px;
+    border-color: #222222;
+    white-space: nowrap;
+}
+.matrix-rooms-current-page-management a {
+    text-decoration: none;
+}
+
+.matrix-rooms-per-page-management {
+    display: inline-block;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    border-style: solid;
+    border-width: 0.2em;
+    border-radius: 5px;
+    border-color: #222222;
+    white-space: nowrap;
 }
 
 #matrix-rooms-container {
