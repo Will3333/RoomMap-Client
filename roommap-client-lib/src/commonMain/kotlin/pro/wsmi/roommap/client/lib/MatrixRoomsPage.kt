@@ -59,10 +59,11 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     val docFrag = DocumentFragment()
 
     val matrixRoomNameArrowSpanId = "matrix-room-elm-arrow-$number"
+    val lineClass = if (number % 2 == 0) "matrix-room-elm-line-var1" else "matrix-room-elm-line-var2"
 
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-name-elm-container")
+            classList = setOf("matrix-room-name-elm-container", lineClass)
         ).let { mainDiv ->
             mainDiv.appendChild(
                 if (room.topic != null)
@@ -94,11 +95,21 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
                 }
             )
             mainDiv.appendChild(
-                HTMLDivElement (
-                    classList = setOf("matrix-room-name-elm")
-                ).let {
-                    it.appendChild(Text(data = room.name ?: room.roomId))
-                    it
+                if (room.topic != null)
+                {
+                    HTMLDivElement (
+                        classList = setOf("matrix-room-name-elm")
+                    ).let {
+                        it.appendChild(Text(data = room.name ?: room.roomId))
+                        it
+                    }
+                } else {
+                    HTMLDivElement (
+                        classList = setOf("matrix-room-name-elm-without-arrow")
+                    ).let {
+                        it.appendChild(Text(data = room.name ?: room.roomId))
+                        it
+                    }
                 }
             )
             mainDiv
@@ -106,7 +117,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-nou-elm")
+            classList = setOf("matrix-room-nou-elm", lineClass)
         ).let {
             it.appendChild(Text(data = room.numJoinedMembers.toString()))
             it
@@ -114,7 +125,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-ga-elm")
+            classList = setOf("matrix-room-ga-elm", lineClass)
         ).let {
             it.appendChild(Text(data = if (room.guestCanJoin) "yes" else "no"))
             it
@@ -122,7 +133,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-wr-elm")
+            classList = setOf("matrix-room-wr-elm", lineClass)
         ).let {
             it.appendChild(Text(data = if (room.worldReadable) "yes" else "no"))
             it
@@ -130,7 +141,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-server-elm")
+            classList = setOf("matrix-room-server-elm", lineClass)
         ).let {
             it.appendChild(
                 HTMLAnchorElement(
