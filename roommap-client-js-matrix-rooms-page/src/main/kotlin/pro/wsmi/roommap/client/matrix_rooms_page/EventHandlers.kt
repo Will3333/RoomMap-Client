@@ -25,8 +25,7 @@ internal fun handlePageReqFieldKeydownEvent() = { event: Event ->
                 val slicedRooms = rooms.slice(IntRange((newPage-1)*roomsPerPage, (newPage*roomsPerPage)-1))
 
                 document.removeAllElementsWithClassNames(listOf(
-                    "matrix-room-name-arrow-container",
-                    "matrix-room-name-elm",
+                    "matrix-room-name-elm-container",
                     "matrix-room-nou-elm",
                     "matrix-room-ga-elm",
                     "matrix-room-wr-elm",

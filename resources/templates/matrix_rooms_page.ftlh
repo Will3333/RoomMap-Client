@@ -21,7 +21,6 @@
       </select>
     </menu>
     <div id="matrix-rooms-container">
-      <div class="matrix-rooms-arrow-header"></div>
 	  <div class="matrix-rooms-name-header">Name</div>
       <div class="matrix-rooms-nou-header">Number of users</div>
 	  <div class="matrix-rooms-ga-header">Guest access</div>

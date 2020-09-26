@@ -62,27 +62,34 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
 
     docFrag.appendChild(
         HTMLDivElement (
-            classList = setOf("matrix-room-name-arrow-container"),
-            onclick = "handleMatrixRoomArrowClickEvent('$matrixRoomNameArrowSpanId')"
-        ).let {
-            if (room.topic != null)
-            {
-                it.appendChild(
-                    HTMLSpanElement(
-                        id = matrixRoomNameArrowSpanId,
-                        classList = setOf("matrix-room-name-arrow", "matrix-room-name-right-arrow")
-                    )
-                )
-            }
-            it
-        }
-    )
-    docFrag.appendChild(
-        HTMLDivElement (
-            classList = setOf("matrix-room-name-elm")
-        ).let {
-            it.appendChild(Text(data = room.name ?: room.roomId))
-            it
+            classList = setOf("matrix-room-name-elm-container")
+        ).let { mainDiv ->
+            mainDiv.appendChild(
+                HTMLDivElement (
+                    classList = setOf("matrix-room-name-arrow-container"),
+                    onclick = "handleMatrixRoomArrowClickEvent('$matrixRoomNameArrowSpanId')"
+                ).let {
+                    if (room.topic != null)
+                    {
+                        it.appendChild(
+                            HTMLSpanElement(
+                                id = matrixRoomNameArrowSpanId,
+                                classList = setOf("matrix-room-name-arrow", "matrix-room-name-right-arrow")
+                            )
+                        )
+                    }
+                    it
+                }
+            )
+            mainDiv.appendChild(
+                HTMLDivElement (
+                    classList = setOf("matrix-room-name-elm")
+                ).let {
+                    it.appendChild(Text(data = room.name ?: room.roomId))
+                    it
+                }
+            )
+            mainDiv
         }
     )
     docFrag.appendChild(
