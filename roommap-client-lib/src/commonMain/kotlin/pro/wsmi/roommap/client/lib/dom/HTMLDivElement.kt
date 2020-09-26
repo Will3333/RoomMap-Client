@@ -6,8 +6,5 @@ expect class HTMLDivElement (
     onclick: String? = null
 ): HTMLElement
 {
-    override val id: String?
-    override val classList: Set<String>
     override val onclick: String?
-    override val tagName: String
 }

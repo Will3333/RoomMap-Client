@@ -78,26 +78,11 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
                         "matrix_rooms_per_page" to elmPerPage,
                         "rooms_per_page_standard_num" to matrixRoomsPageRoomsPerPageStandardNum
                     ),
-                    "servers" to servers.mapValues {
-                        MatrixServer(
-                            it.value.name,
-                            it.value.apiURL.toString(),
-                            it.value.updateFreq
-                        )
-                    },
-                    "rooms" to rooms.map { room ->
-                        MatrixRoom(
-                            room.roomId,
-                            room.serverId,
-                            room.aliases,
-                            room.canonicalAlias,
-                            room.name,
-                            room.numJoinedMembers,
-                            room.topic,
-                            room.worldReadable,
-                            room.guestCanJoin,
-                            room.avatarUrl
-                        )
+                    "room_elm_list" to rooms.joinToString("") { room ->
+                        val server = servers[room.serverId]
+                        if (server != null)
+                            getRoomElementHTML(rooms.indexOf(room), MatrixRoom(room.roomId, room.serverId, room.aliases, room.canonicalAlias, room.name, room.numJoinedMembers, room.topic, room.worldReadable, room.guestCanJoin, room.avatarUrl), MatrixServer(server.name, server.apiURL.toString(), server.updateFreq)).getChildrenHTMLString()
+                        else ""
                     }
                 )
 

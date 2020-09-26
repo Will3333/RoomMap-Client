@@ -1,0 +1,26 @@
+package pro.wsmi.roommap.client.lib.dom
+
+import kotlinx.html.*
+import kotlinx.html.stream.createHTML
+
+actual class HTMLAnchorElement actual constructor(
+    override val id: String?,
+    override val classList: Set<String>,
+    actual override val href: String?,
+    actual override val onclick: String?
+) : HTMLElement(), HTMLHyperlinkElementUtils
+{
+    override val tagName: String = "a"
+
+    override fun toHTMLString(): String = createHTML().a {
+        if (this@HTMLAnchorElement.id != null)
+            id = this@HTMLAnchorElement.id
+        classes = this@HTMLAnchorElement.classList
+        if(this@HTMLAnchorElement.href != null)
+            href = this@HTMLAnchorElement.href
+        if (this@HTMLAnchorElement.onclick != null)
+            onClick = this@HTMLAnchorElement.onclick
+
+        unsafe { + this@HTMLAnchorElement.getChildrenHTMLString() }
+    }
+}

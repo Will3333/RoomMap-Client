@@ -1,8 +1,8 @@
 package pro.wsmi.roommap.client.lib.dom
 
-class DocumentFragment : Node(), ParentNode
+expect class DocumentFragment() : Node, ParentNode
 {
-    override val nodeName: String = "#document-fragment"
+    override val nodeName: String
     @ExperimentalUnsignedTypes
-    override val nodeType: NodeType = NodeType.DOCUMENT_FRAGMENT_NODE
+    override val nodeType: NodeType
 }

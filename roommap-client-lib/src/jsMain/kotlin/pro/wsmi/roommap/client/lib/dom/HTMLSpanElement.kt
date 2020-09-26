@@ -4,16 +4,16 @@ import kotlinx.browser.document
 import kotlinx.html.classes
 import kotlinx.html.dom.create
 import kotlinx.html.id
-import kotlinx.html.js.div
+import kotlinx.html.js.span
 import kotlinx.html.onClick
 
-actual class HTMLDivElement actual constructor(
+actual class HTMLSpanElement actual constructor(
     id: String?,
     classList: Set<String>,
     onclick: String?
-) : HTMLElement() {
-
-    override val domEventTarget : org.w3c.dom.HTMLDivElement = document.create.div {
+) : HTMLElement()
+{
+    override val domEventTarget: org.w3c.dom.HTMLSpanElement = document.create.span {
         if (id != null)
             this.id = id
         classes = classList

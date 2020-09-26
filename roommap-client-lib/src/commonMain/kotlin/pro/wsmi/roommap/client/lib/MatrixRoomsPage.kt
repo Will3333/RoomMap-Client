@@ -62,27 +62,32 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
 
     docFrag.appendChild(
         HTMLDivElement (
-            classList = listOf("matrix-room-name-elm")
-        ).let { nameDiv ->
-            nameDiv.appendChild(
-                HTMLSpanElement(
-                    id = matrixRoomNameArrowSpanId,
-                    classList = listOf("matrix-room-name-arrow", "matrix-room-name-right-arrow"),
-                    onclick = "pro.wsmi.roommap.client.matrix_rooms_page.handleMatrixRoomArrowClickEvent(\"$matrixRoomNameArrowSpanId\")"
+            classList = setOf("matrix-room-name-arrow-container"),
+            onclick = "handleMatrixRoomArrowClickEvent('$matrixRoomNameArrowSpanId')"
+        ).let {
+            if (room.topic != null)
+            {
+                it.appendChild(
+                    HTMLSpanElement(
+                        id = matrixRoomNameArrowSpanId,
+                        classList = setOf("matrix-room-name-arrow", "matrix-room-name-right-arrow")
+                    )
                 )
-            )
-            nameDiv.appendChild(
-                HTMLSpanElement().let { nameSpan ->
-                    nameSpan.appendChild(Text(data = room.name ?: room.roomId))
-                    nameSpan
-                }
-            )
-            nameDiv
+            }
+            it
         }
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = listOf("matrix-room-nou-elm")
+            classList = setOf("matrix-room-name-elm")
+        ).let {
+            it.appendChild(Text(data = room.name ?: room.roomId))
+            it
+        }
+    )
+    docFrag.appendChild(
+        HTMLDivElement (
+            classList = setOf("matrix-room-nou-elm")
         ).let {
             it.appendChild(Text(data = room.numJoinedMembers.toString()))
             it
@@ -90,7 +95,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = listOf("matrix-room-ga-elm")
+            classList = setOf("matrix-room-ga-elm")
         ).let {
             it.appendChild(Text(data = if (room.guestCanJoin) "yes" else "no"))
             it
@@ -98,7 +103,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = listOf("matrix-room-wr-elm")
+            classList = setOf("matrix-room-wr-elm")
         ).let {
             it.appendChild(Text(data = if (room.worldReadable) "yes" else "no"))
             it
@@ -106,7 +111,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
     )
     docFrag.appendChild(
         HTMLDivElement (
-            classList = listOf("matrix-room-server-elm")
+            classList = setOf("matrix-room-server-elm")
         ).let {
             it.appendChild(
                 HTMLAnchorElement(
@@ -124,7 +129,7 @@ fun getRoomElementHTML(number: Int, room: MatrixRoom, server: MatrixServer) : Do
         docFrag.appendChild(
             HTMLDivElement (
                 id = "matrix-room-topic-elm-$number",
-                classList = listOf("matrix-room-topic-elm")
+                classList = setOf("matrix-room-topic-elm")
             ).let {
                 it.appendChild(Text(data = room.topic))
                 it

@@ -3,6 +3,8 @@ package pro.wsmi.roommap.client.lib.dom
 actual abstract class Node actual constructor() : EventTarget()
 {
     actual var parentNode: Node? = null
+    var parentDomNode: org.w3c.dom.Node? = null
+        internal set
     actual var childNodes: List<Node> = listOf()
 
     actual abstract val nodeName: String
@@ -30,27 +32,31 @@ actual abstract class Node actual constructor() : EventTarget()
     actual fun appendChild(child: Node): Node? = when(child)
     {
         is ChildNode, is DocumentFragment -> {
-            val domNode = this.domEventTarget as org.w3c.dom.Node
-            domNode.appendChild(child.domEventTarget as org.w3c.dom.Node)
-            when(child) {
-                is ChildNode -> {
-                    this.childNodes = this.childNodes.toMutableList().let {
-                        it.add(child)
-                        it.toList()
+            if (child.parentNode == null && child.parentDomNode == null) {
+                val domNode = this.domEventTarget as org.w3c.dom.Node
+                domNode.appendChild(child.domEventTarget as org.w3c.dom.Node)
+                when(child) {
+                    is ChildNode -> {
+                        this.childNodes = this.childNodes.toMutableList().let {
+                            it.add(child)
+                            it.toList()
+                        }
+                        child.parentNode = this
+                        child
                     }
-                    child.parentNode = this
-                    child
-                }
-                is DocumentFragment -> {
-                    this.childNodes = this.childNodes.toMutableList().let {
-                        it.addAll(child.childNodes)
-                        it.toList()
+                    is DocumentFragment -> {
+                        this.childNodes = this.childNodes.toMutableList().let {
+                            it.addAll(child.childNodes)
+                            child.childNodes = listOf()
+                            it.toList()
+                        }
+                        child.childNodes = listOf()
+                        child
                     }
-                    child.childNodes = listOf()
-                    child
+                    else -> null
                 }
-                else -> null
             }
+            else null
         }
         else -> null
     }

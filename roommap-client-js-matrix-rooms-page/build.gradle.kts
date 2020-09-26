@@ -9,7 +9,6 @@ kotlin {
             webpackTask {
                 cssSupport.enabled = true
             }
-
             runTask {
                 cssSupport.enabled = true
             }

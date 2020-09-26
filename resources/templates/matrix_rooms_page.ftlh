@@ -21,25 +21,20 @@
       </select>
     </menu>
     <div id="matrix-rooms-container">
+      <div class="matrix-rooms-arrow-header"></div>
 	  <div class="matrix-rooms-name-header">Name</div>
       <div class="matrix-rooms-nou-header">Number of users</div>
 	  <div class="matrix-rooms-ga-header">Guest access</div>
 	  <div class="matrix-rooms-wr-header">World readable</div>
 	  <div class="matrix-rooms-server-header">Server</div>
-	  <#list rooms as room>
-	  <div id="matrix-room-name-elm-${room?index}" class="matrix-room-name-elm"><#if (room.name)??>${room.name}<#else>${room.roomId}</#if></div>
-      <div class="matrix-room-nou-elm">${room.numJoinedMembers}</div>
-	  <div class="matrix-room-ga-elm"><#if room.guestCanJoin>yes<#else>no</#if></div>
-	  <div class="matrix-room-wr-elm"><#if room.worldReadable>yes<#else>no</#if></div>
-	  <div class="matrix-room-server-elm"><a href="${servers[room.serverId].apiUrl}">${servers[room.serverId].name}</a></div>
-	  <#if (room.topic)??><div id="matrix-room-topic-elm-${room?index}" class="matrix-room-topic-elm">${room.topic}</div></#if>
-	  </#list>
+	  ${room_elm_list?no_esc}
 	</div>
     <script>
       const debugMode = ${debug_mode?c};
       const initialRoomsPerPage = ${page_info.matrix_rooms_per_page?string.computer};
       const initialPageNumber = ${page_info.current_page_number?string.computer};
     </script>
+    <script src="/static/js/roommap-client-js-matrix-rooms-page-native.js"></script>
     <script src="/static/js/roommap-client-js-matrix-rooms-page.js"></script>
   </body>
 </html>

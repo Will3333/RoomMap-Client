@@ -1,10 +1,15 @@
 package pro.wsmi.roommap.client.lib.dom
 
+import org.w3c.dom.asList
+
 actual abstract class Element : Node(), ParentNode, ChildNode, NonDocumentTypeChildNode
 {
-    actual abstract val tagName: String
-    actual abstract val id: String?
-    actual abstract val classList: Set<String>
+    actual open val tagName: String
+        get() = (this.domEventTarget as org.w3c.dom.Element).tagName
+    actual open val id: String?
+        get() = (this.domEventTarget as org.w3c.dom.Element).id
+    actual open val classList: Set<String>
+        get() = (this.domEventTarget as org.w3c.dom.Element).classList.asList().toSet()
 
     @ExperimentalUnsignedTypes
     actual override val nodeType: NodeType

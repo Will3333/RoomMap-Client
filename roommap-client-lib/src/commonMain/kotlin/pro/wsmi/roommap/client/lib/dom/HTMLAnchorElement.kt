@@ -1,11 +1,12 @@
 package pro.wsmi.roommap.client.lib.dom
 
-data class HTMLAnchorElement (
-    override val id: String? = null,
-    override val classList: Set<String> = setOf(),
-    override val href: String? = null,
-    override val onclick: String? = null
-) : HTMLElement(), HTMLHyperlinkElementUtils
+expect class HTMLAnchorElement (
+    id: String? = null,
+    classList: Set<String> = setOf(),
+    href: String? = null,
+    onclick: String? = null
+) : HTMLElement, HTMLHyperlinkElementUtils
 {
-    override val tagName: String = "a"
+    override val href: String?
+    override val onclick: String?
 }

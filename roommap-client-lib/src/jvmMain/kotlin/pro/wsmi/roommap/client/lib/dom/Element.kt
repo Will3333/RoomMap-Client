@@ -2,9 +2,9 @@ package pro.wsmi.roommap.client.lib.dom
 
 actual abstract class Element : Node(), ParentNode, ChildNode, NonDocumentTypeChildNode
 {
-    actual abstract val tagName: String
-    actual abstract val id: String?
-    actual abstract val classList: Set<String>
+    actual open val tagName: String = ""
+    actual open val id: String? = null
+    actual open val classList: Set<String> = setOf()
 
     @ExperimentalUnsignedTypes
     actual override val nodeType: NodeType = NodeType.ELEMENT_NODE

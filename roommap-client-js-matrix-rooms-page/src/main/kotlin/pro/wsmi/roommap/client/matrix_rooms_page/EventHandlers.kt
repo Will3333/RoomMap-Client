@@ -1,27 +1,48 @@
 package pro.wsmi.roommap.client.matrix_rooms_page
 
 import kotlinx.browser.document
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLSpanElement
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
+import pro.wsmi.kwsmilib.js.dom.removeAllElementsWithClassNames
+import pro.wsmi.roommap.client.lib.dom.appendChild
+import pro.wsmi.roommap.client.lib.getRoomElementHTML
 
-fun handleMatrixRoomArrowClickEvent(arrowElmId: String)
-{
-    val nameLabel = document.getElementById(arrowElmId) as HTMLSpanElement?
-    val topicLabel = if (nameLabel != null)
-        document.getElementById(nameLabel.id.replace("-elm-arrow-", "-topic-elm-")) as HTMLDivElement?
-    else null
 
-    if (topicLabel != null)
+@ExperimentalSerializationApi
+internal fun handlePageReqFieldKeydownEvent() = { event: Event ->
+    val keyboardEvent = event as KeyboardEvent
+
+    if (keyboardEvent.keyCode == 13) // Enter key
     {
-        if (nameLabel!!.classList.contains("matrix-room-name-down-arrow"))
-        {
-            nameLabel.classList.remove("matrix-room-name-down-arrow")
-            nameLabel.classList.add("matrix-room-name-right-arrow")
-            topicLabel.style.display = "none"
-        } else {
-            nameLabel.classList.remove("matrix-room-name-right-arrow")
-            nameLabel.classList.add("matrix-room-name-down-arrow")
-            topicLabel.style.display = "block"
+        GlobalScope.launch {
+            BusinessData.getAndExecuteOrFail(apiHttpClient) { servers, rooms ->
+
+                val newPage = pageReqField.value.toInt()
+
+                val slicedRooms = rooms.slice(IntRange((newPage-1)*roomsPerPage, (newPage*roomsPerPage)-1))
+
+                document.removeAllElementsWithClassNames(listOf(
+                    "matrix-room-name-arrow-container",
+                    "matrix-room-name-elm",
+                    "matrix-room-nou-elm",
+                    "matrix-room-ga-elm",
+                    "matrix-room-wr-elm",
+                    "matrix-room-server-elm",
+                    "matrix-room-topic-elm"
+                ))
+
+                slicedRooms.forEachIndexed { index, matrixRoom ->
+                    val matrixServer = servers[matrixRoom.serverId]
+                    if (matrixServer != null) {
+                        matrixRoomsContainer.appendChild(getRoomElementHTML(index, matrixRoom, matrixServer))
+                    }
+                }
+
+                pageNumber = newPage
+            }
         }
     }
 }

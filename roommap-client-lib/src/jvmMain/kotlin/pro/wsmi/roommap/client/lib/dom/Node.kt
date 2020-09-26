@@ -27,26 +27,30 @@ actual abstract class Node actual constructor() : EventTarget()
         }
         else null
 
-    actual fun appendChild(child: Node): Node? = when(child)
+    actual fun appendChild(child: Node): Node? = if (child.parentNode == null)
     {
-        is ChildNode -> {
-            this.childNodes = this.childNodes.toMutableList().let {
-                it.add(child)
-                it.toList()
+        when(child)
+        {
+            is ChildNode -> {
+                this.childNodes = this.childNodes.toMutableList().let {
+                    it.add(child)
+                    it.toList()
+                }
+                child.parentNode = this
+                child
             }
-            child.parentNode = this
-            child
-        }
-        is DocumentFragment -> {
-            this.childNodes = this.childNodes.toMutableList().let {
-                it.addAll(child.childNodes)
-                it.toList()
+            is DocumentFragment -> {
+                this.childNodes = this.childNodes.toMutableList().let {
+                    it.addAll(child.childNodes)
+                    it.toList()
+                }
+                child.childNodes = listOf()
+                child
             }
-            child.childNodes = listOf()
-            child
+            else -> null
         }
-        else -> null
     }
+    else null
 
     actual fun removeChild(child: Node): Node? = if (this.childNodes.contains(child))
     {
@@ -59,4 +63,13 @@ actual abstract class Node actual constructor() : EventTarget()
     }
     else
         null
+
+
+    fun getChildrenHTMLString(): String = this.childNodes.joinToString(separator = "") {
+        when (it) {
+            is Text -> it.data
+            is HTMLElement -> it.toHTMLString()
+            else -> ""
+        }
+    }
 }
