@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.lib.dom
 
-expect abstract class CharacterData() : Node, ChildNode, NonDocumentTypeChildNode
+expect abstract class CharacterData : Node, ChildNode, NonDocumentTypeChildNode
 {
     abstract val data: String
 

@@ -1,10 +1,10 @@
 package pro.wsmi.roommap.client.lib.dom
 
-actual class Text actual constructor(actual override val data: String) : CharacterData()
+actual open class Text protected constructor(override val data: String) : CharacterData()
 {
     @ExperimentalUnsignedTypes
-    actual override val nodeType: NodeType = NodeType.TEXT_NODE
-    actual override val nodeName: String = "#text"
+    override val nodeType: NodeType = NodeType.TEXT_NODE
+    override val nodeName: String = "#text"
 
     actual val previousTextSibling: Text?
         get() = this.previousSibling.let {
@@ -51,4 +51,8 @@ actual class Text actual constructor(actual override val data: String) : Charact
 
             return wholeText
         }
+
+    actual companion object {
+        actual fun create(data: String): Text = Text(data)
+    }
 }

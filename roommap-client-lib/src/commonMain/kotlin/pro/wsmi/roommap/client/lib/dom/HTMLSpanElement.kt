@@ -1,11 +1,13 @@
 package pro.wsmi.roommap.client.lib.dom
 
-expect class HTMLSpanElement (
-    id: String? = null,
-    classList: Set<String> = setOf(),
-    hidden: Boolean? = null,
-    onclick: String? = null
-) : HTMLElement
+expect open class HTMLSpanElement : HTMLElement
 {
-    override val onclick: String?
+    companion object {
+        fun create (
+            id: String? = null,
+            classList: Set<String> = setOf(),
+            hidden: Boolean? = null,
+            onclick: String? = null
+        ) : HTMLSpanElement
+    }
 }

@@ -1,9 +1,5 @@
 package pro.wsmi.roommap.client.lib.dom
 
-import kotlinx.browser.document
-import kotlinx.html.html
-import org.w3c.dom.Document
-
 fun org.w3c.dom.Node.appendChild(child: Node) : Node? {
     return if (child.parentNode == null && child.parentDomNode == null)
     {

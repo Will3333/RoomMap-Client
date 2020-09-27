@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.lib.dom
 
-actual abstract class Node actual constructor() : EventTarget()
+actual abstract class Node : EventTarget()
 {
     actual var parentNode: Node? = null
     actual var childNodes: List<Node> = listOf()

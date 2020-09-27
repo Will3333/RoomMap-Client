@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.lib.dom
 
-actual abstract class CharacterData : Node(), ChildNode, NonDocumentTypeChildNode
+actual abstract class CharacterData(domEventTarget: org.w3c.dom.CharacterData) : Node(domEventTarget), ChildNode, NonDocumentTypeChildNode
 {
     actual abstract val data: String
 

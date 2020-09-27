@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.lib.dom
 
-expect abstract class Node() : EventTarget
+expect abstract class Node : EventTarget
 {
     var parentNode: Node?
         private set

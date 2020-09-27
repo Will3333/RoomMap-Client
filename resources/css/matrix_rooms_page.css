@@ -1,6 +1,33 @@
+
+:root {
+    --page-bg-color: #404040;
+}
+
 body {
-    background-color: #404040;
+    background-color: var(--page-bg-color);
     color: #e1e1e1;
+}
+
+.button {
+    background-color: #222222;
+    border: 0.1em solid #222222;
+    transition-duration: 0.4s;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    color: #e1e1e1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: var(--page-bg-color);
+}
+
+.button-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .matrix-rooms-page-management {
@@ -22,9 +49,6 @@ body {
     border-radius: 5px;
     border-color: #222222;
     white-space: nowrap;
-}
-.matrix-rooms-current-page-management a {
-    text-decoration: none;
 }
 
 .matrix-rooms-per-page-management {
