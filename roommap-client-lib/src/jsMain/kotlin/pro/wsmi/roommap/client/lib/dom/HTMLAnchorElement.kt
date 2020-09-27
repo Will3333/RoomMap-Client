@@ -8,7 +8,7 @@ import kotlinx.html.id
 import kotlinx.html.js.a
 import kotlinx.html.onClick
 
-actual open class HTMLAnchorElement protected constructor(domEventTarget: org.w3c.dom.HTMLAnchorElement) : HTMLElement(domEventTarget), HTMLHyperlinkElementUtils
+actual open class HTMLAnchorElement(domEventTarget: org.w3c.dom.HTMLAnchorElement) : HTMLElement(domEventTarget), HTMLHyperlinkElementUtils
 {
     override val href: String?
         get() = (this.domEventTarget as org.w3c.dom.HTMLAnchorElement).href

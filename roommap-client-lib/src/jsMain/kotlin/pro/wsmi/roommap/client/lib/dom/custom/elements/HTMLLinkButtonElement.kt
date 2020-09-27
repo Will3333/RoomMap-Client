@@ -11,7 +11,7 @@ import pro.wsmi.roommap.client.lib.dom.HTMLAnchorElement
 import pro.wsmi.roommap.client.lib.dom.HTMLHyperlinkElementUtils
 import pro.wsmi.roommap.client.lib.dom.HTMLSpanElement
 
-actual open class HTMLLinkButtonElement protected constructor(protected var anchorChild: HTMLAnchorElement, domEventTarget: org.w3c.dom.HTMLSpanElement) : HTMLSpanElement(domEventTarget), HTMLHyperlinkElementUtils {
+actual open class HTMLLinkButtonElement(protected var anchorChild: HTMLAnchorElement, domEventTarget: org.w3c.dom.HTMLSpanElement) : HTMLSpanElement(domEventTarget), HTMLHyperlinkElementUtils {
 
     actual val disabled: Boolean
         get() = this.childNodes.contains(this.anchorChild)

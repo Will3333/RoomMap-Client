@@ -2,7 +2,7 @@ package pro.wsmi.roommap.client.lib.dom
 
 import kotlinx.browser.document
 
-actual open class Text protected constructor(domEventTarget: org.w3c.dom.Text) : CharacterData(domEventTarget)
+actual open class Text(domEventTarget: org.w3c.dom.Text) : CharacterData(domEventTarget)
 {
     override val data: String
         get() = (this.domEventTarget as org.w3c.dom.Text).data

@@ -8,7 +8,7 @@ import kotlinx.html.id
 import kotlinx.html.js.span
 import kotlinx.html.onClick
 
-actual open class HTMLSpanElement protected constructor(domEventTarget: org.w3c.dom.HTMLSpanElement) : HTMLElement(domEventTarget)
+actual open class HTMLSpanElement(domEventTarget: org.w3c.dom.HTMLSpanElement) : HTMLElement(domEventTarget)
 {
     actual companion object {
         actual fun create(id: String?, classList: Set<String>, hidden: Boolean?, onclick: String?): HTMLSpanElement = HTMLSpanElement(

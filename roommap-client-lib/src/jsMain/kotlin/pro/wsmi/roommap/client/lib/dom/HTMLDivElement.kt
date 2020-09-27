@@ -9,7 +9,7 @@ import kotlinx.html.js.div
 import kotlinx.html.onClick
 
 
-actual open class HTMLDivElement protected constructor(domEventTarget : org.w3c.dom.HTMLDivElement) : HTMLElement(domEventTarget)
+actual open class HTMLDivElement(domEventTarget : org.w3c.dom.HTMLDivElement) : HTMLElement(domEventTarget)
 {
     actual companion object {
         actual fun create (id: String?, classList: Set<String>, hidden: Boolean?, onclick: String?): HTMLDivElement = HTMLDivElement(
