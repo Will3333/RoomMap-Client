@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.matrix_rooms_page
+package pro.wsmi.roommap.client.js.matrix_rooms_page
 
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -17,20 +17,20 @@ internal object BusinessData
 
     suspend fun init(httpClient: HttpClient) : BusinessData?
     {
-        this.fullMatrixServerList = getFullMatrixServerList(httpClient)
-        this.fullMatrixRoomList = getFullMatrixRoomList(httpClient)
+        fullMatrixServerList = getFullMatrixServerList(httpClient)
+        fullMatrixRoomList = getFullMatrixRoomList(httpClient)
 
-        return if (this.isInitialized()) this else null
+        return if (isInitialized()) this else null
     }
 
-    fun isInitialized() = this.fullMatrixServerList != null && this.fullMatrixRoomList != null
+    fun isInitialized() = fullMatrixServerList != null && fullMatrixRoomList != null
 
     suspend fun <T>getAndExecuteOrFail(httpClient: HttpClient, codeToExecute : (fullMatrixServerList: Map<String, MatrixServer>, fullMatrixRoomList: List<MatrixRoom>) -> T) : T?
     {
-        val businessData = if (!this.isInitialized()) this.init(httpClient) else this
+        val businessData = if (!isInitialized()) init(httpClient) else this
 
         return if (businessData != null)
-            codeToExecute(businessData.fullMatrixServerList!!, businessData.fullMatrixRoomList!!)
+            codeToExecute(fullMatrixServerList!!, fullMatrixRoomList!!)
         else {
             println("Unable to get business data")
             null

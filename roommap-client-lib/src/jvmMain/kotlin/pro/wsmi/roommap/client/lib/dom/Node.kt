@@ -66,10 +66,8 @@ actual abstract class Node : EventTarget()
 
 
     fun getChildrenHTMLString(): String = this.childNodes.joinToString(separator = "") {
-        when (it) {
-            is Text -> it.data
-            is HTMLElement -> it.toHTMLString()
-            else -> ""
-        }
+        if (it is HTMLProducer)
+            it.toHTMLString()
+        else ""
     }
 }

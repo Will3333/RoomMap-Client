@@ -33,11 +33,6 @@
       </span>
     </menu>
     <div id="matrix-rooms-container">
-	  <div class="matrix-rooms-name-header">Name</div>
-      <div class="matrix-rooms-nou-header">Number of users</div>
-	  <div class="matrix-rooms-ga-header">Guest access</div>
-	  <div class="matrix-rooms-wr-header">World readable</div>
-	  <div class="matrix-rooms-server-header">Server</div>
 	  ${room_elm_list?no_esc}
 	</div>
     <script>

@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.lib.dom
 
-actual open class Text protected constructor(override val data: String) : CharacterData()
+actual open class Text protected constructor(override val data: String) : CharacterData(), HTMLProducer
 {
     @ExperimentalUnsignedTypes
     override val nodeType: NodeType = NodeType.TEXT_NODE
@@ -51,6 +51,8 @@ actual open class Text protected constructor(override val data: String) : Charac
 
             return wholeText
         }
+
+    override fun toHTMLString(): String = this.data
 
     actual companion object {
         actual fun create(data: String): Text = Text(data)

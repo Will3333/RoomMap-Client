@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.matrix_rooms_page
+package pro.wsmi.roommap.client.js.matrix_rooms_page
 
 import io.ktor.http.*
 import kotlinx.browser.document

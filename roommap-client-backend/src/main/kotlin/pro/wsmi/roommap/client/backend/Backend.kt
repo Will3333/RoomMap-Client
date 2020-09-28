@@ -22,6 +22,7 @@ import pro.wsmi.roommap.client.backend.api.handleMatrixServerListReq
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.http4k.APPLICATION_JS
 import pro.wsmi.roommap.client.backend.http4k.TEXT_CSS
+import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageReq
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
 import pro.wsmi.roommap.client.lib.api.ClientAPIRoomListReq

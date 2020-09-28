@@ -24,4 +24,6 @@ actual abstract class Element(domEventTarget: org.w3c.dom.Element) : Node(domEve
         get() = this.nextSibling.let {
             if (it != null && it is Element) it else null
         }
+
+    fun getElementsByClassName(classes: Set<String>) : List<Element> = (this.domEventTarget as org.w3c.dom.Element).getElementsByClassName(classes.joinTo(separator = " ")).asList().map {  }
 }
