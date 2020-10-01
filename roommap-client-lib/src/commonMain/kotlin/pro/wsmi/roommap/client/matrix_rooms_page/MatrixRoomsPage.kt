@@ -1,4 +1,4 @@
-package pro.wsmi.roommap.client.js.matrix_rooms_page
+package pro.wsmi.roommap.client.matrix_rooms_page
 
 const val MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME = "matrix_rooms_per_page"
 const val MATRIX_ROOMS_PAGE_PAGE_REQ_NAME = "page"

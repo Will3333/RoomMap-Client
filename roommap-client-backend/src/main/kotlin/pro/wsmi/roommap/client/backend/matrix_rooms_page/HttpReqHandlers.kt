@@ -9,7 +9,6 @@ import org.http4k.lens.Query
 import org.http4k.lens.int
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.getAPIHttpRequestBase
-import pro.wsmi.roommap.client.js.matrix_rooms_page.*
 import pro.wsmi.roommap.client.lib.*
 import pro.wsmi.roommap.client.lib.api.MatrixRoom
 import pro.wsmi.roommap.client.lib.api.MatrixServer
@@ -80,25 +79,23 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
                         "matrix_rooms_total_num" to apiRoomListReqResponse.roomsTotalNum,
                         "matrix_rooms_per_page" to elmPerPage
                     ),
-                    "room_elm_list" to MatrixRoomListView.create (
-                        servers = servers.mapValues { server ->
-                            MatrixServer(server.value.name, server.value.apiURL.toString(), server.value.updateFreq)
-                        },
-                        rooms = rooms.map { room ->
-                            MatrixRoom(
-                                room.roomId,
-                                room.serverId,
-                                room.aliases,
-                                room.canonicalAlias,
-                                room.name,
-                                room.numJoinedMembers,
-                                room.topic,
-                                room.worldReadable,
-                                room.guestCanJoin,
-                                room.avatarUrl
-                            )
-                        }
-                    ).getDocumentFragment().getChildrenHTMLString()
+                    "serverList" to servers.mapValues { server ->
+                        MatrixServer(server.value.name, server.value.apiURL.toString(), server.value.updateFreq)
+                    },
+                    "roomList" to rooms.map { room ->
+                        MatrixRoom(
+                            room.roomId,
+                            room.serverId,
+                            room.aliases,
+                            room.canonicalAlias,
+                            room.name,
+                            room.numJoinedMembers,
+                            room.topic,
+                            room.worldReadable,
+                            room.guestCanJoin,
+                            room.avatarUrl
+                        )
+                    }
                 )
 
                 val mainPageTemplate = freemarkerCfg.getTemplate(mainPageTemplateFile.name)

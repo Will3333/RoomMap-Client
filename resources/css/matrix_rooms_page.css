@@ -51,6 +51,10 @@ body {
     white-space: nowrap;
 }
 
+.matrix-rooms-current-page-management form {
+    display: inline-block;
+}
+
 .matrix-rooms-per-page-management {
     display: inline-block;
     margin-top: 0.25em;
