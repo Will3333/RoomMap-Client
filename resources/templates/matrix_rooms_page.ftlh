@@ -11,8 +11,8 @@
     <menu class="matrix-rooms-page-management" type="toolbar">
       <span class="matrix-rooms-current-page-management">
         <#if page_info.current_page_number gt 1>
-		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1">&lt;&lt;</a></span>
-		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}">&lt;</a></span>
+		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1">&lt;&lt;</a>
+		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}">&lt;</a>
 		<#else>
 		<span class="link-button link-button-disabled">&lt;&lt;</span>
 		<span class="link-button link-button-disabled">&lt;</span>
@@ -23,11 +23,14 @@
 		  <input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
 		  <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
 		  <input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
+		  <#if page_info.server_filter??><input type="hidden" name="${queries.server_filter_req_name}" value="${page_info.server_filter}"></#if>
+		  <#if page_info.max_nou_filter??><input type="hidden" name="${queries.max_nou_filter_req_name}" value="${page_info.max_nou_filter?string.computer}"></#if>
+		  <#if page_info.min_nou_filter??><input type="hidden" name="${queries.min_nou_filter_req_name}" value="${page_info.min_nou_filter?string.computer}"></#if>
 		  <input type="hidden" name="${queries.rooms_per_page_req_name}" value="${page_info.matrix_rooms_per_page?string.computer}">
 		</form> of ${page_info.max_page}
         <#if page_info.current_page_number lt page_info.max_page>
-		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number+1)?string.computer}">&gt;</a></span>
-		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}">&gt;&gt;</a></span>
+		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number+1)?string.computer}">&gt;</a>
+		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}">&gt;&gt;</a>
 		<#else>
 		<span class="link-button link-button-disabled">&gt;</span>
 		<span class="link-button link-button-disabled">&gt;&gt;</span>
@@ -39,6 +42,9 @@
 		<input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
 	    <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
 		<input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
+	    <#if page_info.server_filter??><input type="hidden" name="${queries.server_filter_req_name}" value="${page_info.server_filter}"></#if>
+		<#if page_info.max_nou_filter??><input type="hidden" name="${queries.max_nou_filter_req_name}" value="${page_info.max_nou_filter?string.computer}"></#if>
+		<#if page_info.min_nou_filter??><input type="hidden" name="${queries.min_nou_filter_req_name}" value="${page_info.min_nou_filter?string.computer}"></#if>
         <datalist id="matrix-rooms-per-page-datalist">
            <option value=5>
            <option value=20>
@@ -70,7 +76,7 @@
 	  <div class="matrix-room-ga-elm ${lineVariationClass}"><#if room.guestCanJoin>yes<#else>no</#if></div>
 	  <div class="matrix-room-wr-elm ${lineVariationClass}"><#if room.worldReadable>yes<#else>no</#if></div>
 	  <div class="matrix-room-server-elm ${lineVariationClass}"><a href="${serverList[room.serverId].apiUrl}">${serverList[room.serverId].name}</a></div>
-	  <#if room.topic??><div id="matrix-room-topic-elm-${room?index}" class="matrix-room-topic-elm ${lineVariationClass}">${room.topic}</div></#if>
+	  <#if room.topic??><div id="matrix-room-topic-elm-${room?index}" class="matrix-room-topic-elm ${lineVariationClass}" lang="">${room.topic}</div></#if>
 	  </#list>
 	</div>
     <script src="/static/js/roommap-client-js-matrix-rooms-page-native.js"></script>

@@ -6,6 +6,9 @@ const val MATRIX_ROOMS_PAGE_SORTER_REQ_NAME = "sorter"
 const val MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME = "sorter_direction"
 const val MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME = "ga_filter"
 const val MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME = "wr_filter"
+const val MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME = "server_filter"
+const val MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME = "max_nou_filter"
+const val MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME = "min_nou_filter"
 
 const val MATRIX_ROOMS_PAGE_DEFAULT_PAGE = 1
 const val MATRIX_ROOMS_PAGE_DEFAULT_ROOMS_PER_PAGE = 20
