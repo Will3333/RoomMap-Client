@@ -1,31 +1,38 @@
 
 :root {
     --page-bg-color: #404040;
+    --page-text-color: #e1e1e1;
 }
 
 body {
     background-color: var(--page-bg-color);
-    color: #e1e1e1;
+    color: var(--page-text-color);
 }
 
-.button {
+.link-button {
     background-color: #222222;
     border: 0.1em solid #222222;
+    border-radius: 4px;
     transition-duration: 0.4s;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    color: #e1e1e1;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    color: var(--page-text-color);
     text-decoration: none;
-    font-weight: bold;
 }
 
-.button:hover {
+.link-button a {
+    text-decoration: none;
+    color: var(--page-text-color);
+}
+
+
+.link-button-enabled:hover {
     background-color: var(--page-bg-color);
 }
 
-.button-disabled {
+.link-button-disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }

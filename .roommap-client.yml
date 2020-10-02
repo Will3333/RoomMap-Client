@@ -5,3 +5,4 @@ client_backend:
 api_url: http://127.0.0.1:9999
 resource_directory: D:\.RoomMapResources
 freemarker_template_version: 2.3.30
+website_name: Room Map

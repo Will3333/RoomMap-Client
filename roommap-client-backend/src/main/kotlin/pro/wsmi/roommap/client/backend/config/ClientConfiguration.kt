@@ -20,5 +20,7 @@ data class ClientConfiguration (
     @Serializable(with = FileSerializer::class)
     val resourceDirectory: File,
     @SerialName("freemarker_template_version")
-    val freeMarkerTemplateVersion: String
+    val freeMarkerTemplateVersion: String,
+    @SerialName("website_name")
+    val websiteName: String
 )

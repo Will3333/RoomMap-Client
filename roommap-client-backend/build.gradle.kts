@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":roommap-client-lib"))
     implementation("pro.wsmi:roommap-lib:${rootProject.extra["ROOMMAP_LIB_VERSION"]}")
     implementation("pro.wsmi:kwsmilib:${rootProject.extra["KWSMILIB_VERSION"]}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.extra["COROUTINES_VERSION"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${rootProject.extra["SERIALIZATION_VERSION"]}")
     implementation("com.charleskorn.kaml:kaml:$KAML_VERSION")
     implementation("com.github.ajalt.clikt:clikt:$CLIKT_VERSION")
@@ -21,3 +22,6 @@ dependencies {
     implementation("org.http4k:http4k-server-jetty:$HTTP4K_VERSION")
     implementation("org.http4k:http4k-client-apache:$HTTP4K_VERSION")
 }
+
+val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
+compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()

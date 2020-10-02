@@ -7,7 +7,12 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import freemarker.template.Configuration
 import freemarker.template.Version
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import org.http4k.client.ApacheClient
 import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters
 import org.http4k.filter.ServerFilters
@@ -17,16 +22,14 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
-import pro.wsmi.roommap.client.backend.api.handleMatrixRoomListReq
-import pro.wsmi.roommap.client.backend.api.handleMatrixServerListReq
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.http4k.APPLICATION_JS
 import pro.wsmi.roommap.client.backend.http4k.TEXT_CSS
 import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageReq
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
-import pro.wsmi.roommap.client.lib.api.ClientAPIRoomListReq
-import pro.wsmi.roommap.client.lib.api.ClientAPIServerListReq
+import pro.wsmi.roommap.client.lib.USER_AGENT
+import pro.wsmi.roommap.lib.api.*
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -65,7 +68,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
     private val debugModeCLA by option("--debug", help = "Turn on the debug mode").flag()
 
     @ExperimentalSerializationApi
-    override fun run() {
+    override fun run() = runBlocking {
 
         print("Loading of client configuration ... ")
 
@@ -110,6 +113,8 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
 
         println("OK")
 
+        print("Checking template of rooms page ... ")
+
         val matrixRoomsPageTemplateFile = File(ftlhDir, MATRIX_ROOMS_PAGE_TEMPLATE_FILE_NAME)
         if (!matrixRoomsPageTemplateFile.exists() || !matrixRoomsPageTemplateFile.isFile) {
             println("FAILED")
@@ -122,6 +127,69 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             exitProcess(11)
         }
 
+        println("OK")
+
+
+        val matrixServers = mutableMapOf<String, MatrixServer>()
+        val matrixRooms = mutableListOf<MatrixRoom>()
+
+        val apiHttpClient = ApacheClient()
+        val apiHttpReqBase = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
+
+        val jsonSerializer = Json {
+            prettyPrint = debugModeCLA
+        }
+
+        val apiServerListReq = apiHttpReqBase
+            .uri(apiHttpReqBase.uri.path(APIServerListReq.REQ_PATH))
+            .method(Method.GET)
+
+        val apiRoomListReq = apiHttpReqBase
+            .uri(apiHttpReqBase.uri.path(APIRoomListReq.REQ_PATH))
+            .method(Method.POST)
+            .body(jsonSerializer.encodeToString(APIRoomListReq.serializer(), APIRoomListReq()))
+
+        launch {
+            while (true)
+            {
+                print("Requesting Matrix servers to API ... ")
+
+                val apiServerListReqHttpResponse = apiHttpClient(apiServerListReq)
+
+                if (apiServerListReqHttpResponse.status == Status.OK)
+                {
+                    val apiServerListReqResponse = jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), apiServerListReqHttpResponse.bodyString())
+                    matrixServers.clear()
+                    matrixServers.putAll(apiServerListReqResponse.servers)
+
+                    println("OK")
+
+                    print("Requesting Matrix rooms to API ... ")
+
+                    val apiRoomListReqHttpResponse = apiHttpClient(apiRoomListReq)
+
+                    if (apiRoomListReqHttpResponse.status == Status.OK)
+                    {
+                        val apiRoomListReqResponse = jsonSerializer.decodeFromString(APIRoomListReqResponse.serializer(), apiRoomListReqHttpResponse.bodyString())
+                        matrixRooms.clear()
+                        matrixRooms.addAll(apiRoomListReqResponse.rooms)
+
+                        println("OK")
+                    }
+                    else {
+                        println("Failed")
+                        println("API HTTP error code: ${apiRoomListReqHttpResponse.status.code}")
+                    }
+                }
+                else {
+                    println("Failed")
+                    println("API HTTP error code: ${apiServerListReqHttpResponse.status.code}")
+                }
+
+                delay(300000)
+            }
+        }
+
         print("Http server starting ... ")
 
         val freemarkerCfg = Configuration(Version(clientCfg.freeMarkerTemplateVersion))
@@ -132,9 +200,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath), Pair("css", ContentType.TEXT_CSS)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath), Pair("js", ContentType.APPLICATION_JS), Pair("js.map", ContentType.TEXT_PLAIN)),
-            ClientAPIRoomListReq.REQ_PATH bind Method.GET to handleMatrixRoomListReq(debugModeCLA, clientCfg),
-            ClientAPIServerListReq.REQ_PATH bind Method.GET to handleMatrixServerListReq(debugModeCLA, clientCfg),
-            "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile)
+            "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile, matrixServers, matrixRooms)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 

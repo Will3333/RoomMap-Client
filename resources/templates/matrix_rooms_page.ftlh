@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Hello World</title>
+    <title>${website_info.name} - Matrix room list</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/matrix_rooms_page.css">
   </head>
@@ -10,17 +10,35 @@
     <h1>Rooms</h1>
     <menu class="matrix-rooms-page-management" type="toolbar">
       <span class="matrix-rooms-current-page-management">
-        <span class="button button-disabled"><#if page_info.current_page_number gt 1><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1"></#if>&lt;&lt;<#if page_info.current_page_number gt 1></a></#if></span>
-        <#if page_info.current_page_number gt 1><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}"></#if>&lt;<#if page_info.current_page_number gt 1></a></#if>
+        <#if page_info.current_page_number gt 1>
+		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1">&lt;&lt;</a></span>
+		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}">&lt;</a></span>
+		<#else>
+		<span class="link-button link-button-disabled">&lt;&lt;</span>
+		<span class="link-button link-button-disabled">&lt;</span>
+		</#if>
         <form method="get">
 		  Page <input type="number" name="${queries.page_req_name}" value="${page_info.current_page_number?string.computer}" min="1" max="${page_info.max_page?string.computer}">
+		  <input type="hidden" name="${queries.sorter_req_name}" value="${page_info.sorter}">
+		  <input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
+		  <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
+		  <input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
 		  <input type="hidden" name="${queries.rooms_per_page_req_name}" value="${page_info.matrix_rooms_per_page?string.computer}">
 		</form> of ${page_info.max_page}
-        <#if page_info.current_page_number lt page_info.max_page><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number+1)?string.computer}"></#if>&gt;<#if page_info.current_page_number lt page_info.max_page></a></#if>
-        <#if page_info.current_page_number lt page_info.max_page><a href="?${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}"></#if>&gt;&gt;<#if page_info.current_page_number lt page_info.max_page></a></#if>
+        <#if page_info.current_page_number lt page_info.max_page>
+		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number+1)?string.computer}">&gt;</a></span>
+		<span class="link-button link-button-enabled"><a href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}">&gt;&gt;</a></span>
+		<#else>
+		<span class="link-button link-button-disabled">&gt;</span>
+		<span class="link-button link-button-disabled">&gt;&gt;</span>
+		</#if>
       </span>
       <span class="matrix-rooms-per-page-management"><form method="get">
         Display <input type="number" name="${queries.rooms_per_page_req_name}" list="matrix-rooms-per-page-datalist" value="${page_info.matrix_rooms_per_page?string.computer}" min="1"> rooms per page
+        <input type="hidden" name="${queries.sorter_req_name}" value="${page_info.sorter}">
+		<input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
+	    <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
+		<input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
         <datalist id="matrix-rooms-per-page-datalist">
            <option value=5>
            <option value=20>
