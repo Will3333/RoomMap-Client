@@ -10,41 +10,41 @@
     <h1>Rooms</h1>
     <menu class="matrix-rooms-page-management" type="toolbar">
       <span class="matrix-rooms-current-page-management">
-        <#if page_info.current_page_number gt 1>
-		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=1">&lt;&lt;</a>
-		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number-1)?string.computer}">&lt;</a>
+        <#if query_parameters.page gt 1>
+		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(1).toUrlFormat()}">&lt;&lt;</a>
+		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(query_parameters.page-1).toUrlFormat()}">&lt;</a>
 		<#else>
 		<span class="link-button link-button-disabled">&lt;&lt;</span>
 		<span class="link-button link-button-disabled">&lt;</span>
 		</#if>
         <form method="get">
-		  Page <input type="number" name="${queries.page_req_name}" value="${page_info.current_page_number?string.computer}" min="1" max="${page_info.max_page?string.computer}">
-		  <input type="hidden" name="${queries.sorter_req_name}" value="${page_info.sorter}">
-		  <input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
-		  <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
-		  <input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
-		  <#if page_info.server_filter??><input type="hidden" name="${queries.server_filter_req_name}" value="${page_info.server_filter}"></#if>
-		  <#if page_info.max_nou_filter??><input type="hidden" name="${queries.max_nou_filter_req_name}" value="${page_info.max_nou_filter?string.computer}"></#if>
-		  <#if page_info.min_nou_filter??><input type="hidden" name="${queries.min_nou_filter_req_name}" value="${page_info.min_nou_filter?string.computer}"></#if>
-		  <input type="hidden" name="${queries.rooms_per_page_req_name}" value="${page_info.matrix_rooms_per_page?string.computer}">
+		  Page <input type="number" name="${query_parameters.pageReqName}" value="${query_parameters.page?string.computer}" min="1" max="${page_info.max_page?string.computer}">
+		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
+		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
+		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
+		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
+		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
+		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
+		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
 		</form> of ${page_info.max_page}
-        <#if page_info.current_page_number lt page_info.max_page>
-		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${(page_info.current_page_number+1)?string.computer}">&gt;</a>
-		<a class="link-button link-button-enabled" href="?${queries.sorter_req_name}=${page_info.sorter}&${queries.sorter_direction_req_name}=${page_info.sorter_direction?c}&${queries.ga_filter_req_name}=${page_info.ga_filter}&${queries.wr_filter_req_name}=${page_info.wr_filter}<#if page_info.server_filter??>&${queries.server_filter_req_name}=${page_info.server_filter}</#if><#if page_info.max_nou_filter??>&${queries.max_nou_filter_req_name}=${page_info.max_nou_filter?string.computer}</#if><#if page_info.min_nou_filter??>&${queries.min_nou_filter_req_name}=${page_info.min_nou_filter?string.computer}</#if>&${queries.rooms_per_page_req_name}=${page_info.matrix_rooms_per_page?string.computer}&${queries.page_req_name}=${page_info.max_page?string.computer}">&gt;&gt;</a>
+        <#if query_parameters.page lt page_info.max_page>
+		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(query_parameters.page+1).toUrlFormat()}">&gt;</a>
+		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(page_info.max_page).toUrlFormat()}">&gt;&gt;</a>
 		<#else>
 		<span class="link-button link-button-disabled">&gt;</span>
 		<span class="link-button link-button-disabled">&gt;&gt;</span>
 		</#if>
       </span>
       <span class="matrix-rooms-per-page-management"><form method="get">
-        Display <input type="number" name="${queries.rooms_per_page_req_name}" list="matrix-rooms-per-page-datalist" value="${page_info.matrix_rooms_per_page?string.computer}" min="1"> rooms per page
-        <input type="hidden" name="${queries.sorter_req_name}" value="${page_info.sorter}">
-		<input type="hidden" name="${queries.sorter_direction_req_name}" value="${page_info.sorter_direction?c}">
-	    <input type="hidden" name="${queries.ga_filter_req_name}" value="${page_info.ga_filter}">
-		<input type="hidden" name="${queries.wr_filter_req_name}" value="${page_info.wr_filter}">
-	    <#if page_info.server_filter??><input type="hidden" name="${queries.server_filter_req_name}" value="${page_info.server_filter}"></#if>
-		<#if page_info.max_nou_filter??><input type="hidden" name="${queries.max_nou_filter_req_name}" value="${page_info.max_nou_filter?string.computer}"></#if>
-		<#if page_info.min_nou_filter??><input type="hidden" name="${queries.min_nou_filter_req_name}" value="${page_info.min_nou_filter?string.computer}"></#if>
+        Display <input type="number" name="${query_parameters.roomsPerPageReqName}" list="matrix-rooms-per-page-datalist" value="${query_parameters.roomsPerPage?string.computer}" min="1"> rooms per page
+        <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
+		<#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
+	    <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
+		<#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
+	    <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		<#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
+		<#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
         <datalist id="matrix-rooms-per-page-datalist">
            <option value=5>
            <option value=20>
@@ -60,17 +60,26 @@
       </form></span>
     </menu>
     <div id="matrix-rooms-container">
-	  <div class="matrix-rooms-name-header">Name</div>
-	  <div class="matrix-rooms-nou-header">Users</div>
+	  <div class="matrix-rooms-name-header">
+	    <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "ROOM_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('ROOM_NAME', true).toUrlFormat()}">Name<#if query_parameters.sorter?? && query_parameters.sorter == "ROOM_NAME"> &#x25BD;</#if></a>
+		<#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('ROOM_NAME', false).toUrlFormat()}">Name &#x25B3;</a></#if>
+	  </div>
+	  <div class="matrix-rooms-nou-header">
+	    <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">Users<#if query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B3;</#if></a>
+	    <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', true).toUrlFormat()}">Users &#x25BD;</a></#if>
+	  </div>
 	  <div class="matrix-rooms-ga-header">Guest access</div>
 	  <div class="matrix-rooms-wr-header">World readable</div>
-	  <div class="matrix-rooms-server-header">Server</div>
+	  <div class="matrix-rooms-server-header">
+	    <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "SERVER_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', true).toUrlFormat()}">Server<#if query_parameters.sorter?? && query_parameters.sorter == "SERVER_NAME"> &#x25BD;</#if></a>
+		<#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', false).toUrlFormat()}">Server &#x25B3;</a></#if>
+	  </div>
 	  <#list roomList as room>
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
 	  <div class="matrix-room-name-elm-container ${lineVariationClass}">
 	    <#if room.topic??><div class="matrix-room-name-arrow-container" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')"><span id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow matrix-room-name-right-arrow"></span></div>
 		<#else><div class="matrix-room-name-arrow-container"><span hidden></span></div></#if>
-		<div class="<#if room.topic??>matrix-room-name-elm<#else>matrix-room-name-elm-without-arrow</#if>"><#if room.name??>${room.name}<#else>${room.roomId}</#if></div>
+		<div class="<#if room.topic??>matrix-room-name-elm<#else>matrix-room-name-elm-without-arrow</#if>"><#if room.name?has_content>${room.name}<#else>${room.roomId}</#if></div>
 	  </div>
 	  <div class="matrix-room-nou-elm ${lineVariationClass}">${room.numJoinedMembers}</div>
 	  <div class="matrix-room-ga-elm ${lineVariationClass}"><#if room.guestCanJoin>yes<#else>no</#if></div>

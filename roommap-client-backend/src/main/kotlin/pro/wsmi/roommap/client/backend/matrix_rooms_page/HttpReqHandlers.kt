@@ -27,29 +27,29 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     val initialMatrixRoomList = matrixRoomFullList.toList()
 
 
-    val sortingReq = rootReqSorterQuery(req) ?: MatrixRoomListSortingElement.NUM_JOINED_MEMBERS
-    val sortingDirectionReq = rootReqSorterDirectionQuery(req) ?: false
+    val sortingReq = rootReqSorterQuery(req)
+    val sortingDirectionReq = rootReqSorterDirectionQuery(req)
 
     val sortedMatrixRoomList = when(sortingReq)
     {
         MatrixRoomListSortingElement.ROOM_NAME -> {
-            if (sortingDirectionReq) initialMatrixRoomList.sortedBy { room ->
-                room.name ?: room.roomId
-            }
-            else initialMatrixRoomList.sortedByDescending { room ->
-                room.name ?: room.roomId
-            }
+            if (sortingDirectionReq != null && sortingDirectionReq) initialMatrixRoomList.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { room ->
+                if (room.name.isNullOrBlank()) room.roomId else room.name!!
+            })
+            else initialMatrixRoomList.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { room ->
+                if (room.name.isNullOrBlank()) room.roomId else room.name!!
+            })
         }
         MatrixRoomListSortingElement.SERVER_NAME -> {
-            if (sortingDirectionReq) initialMatrixRoomList.sortedBy { room ->
-                initialMatrixServerList[room.serverId]?.name
-            }
-            else initialMatrixRoomList.sortedByDescending { room ->
-                initialMatrixServerList[room.serverId]?.name
-            }
+            if (sortingDirectionReq != null && sortingDirectionReq) initialMatrixRoomList.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { room ->
+                initialMatrixServerList.getValue(room.serverId).name
+            })
+            else initialMatrixRoomList.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { room ->
+                initialMatrixServerList.getValue(room.serverId).name
+            })
         }
         else -> {
-            if (sortingDirectionReq) initialMatrixRoomList.sortedBy { room ->
+            if (sortingDirectionReq != null && sortingDirectionReq) initialMatrixRoomList.sortedBy { room ->
                 room.numJoinedMembers
             }
             else initialMatrixRoomList.sortedByDescending { room ->
@@ -59,8 +59,8 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     }
 
 
-    val gaFilteringReq = rootReqGAFilterQuery(req) ?: MatrixRoomGuestCanJoinFilter.NO_FILTER
-    val wrFilteringReq = rootReqWRFilterQuery(req) ?: MatrixRoomWorldReadableFilter.NO_FILTER
+    val gaFilteringReq = rootReqGAFilterQuery(req)
+    val wrFilteringReq = rootReqWRFilterQuery(req)
     val serverFilteringReq = rootReqServerFilterQuery(req)?.split("+", ignoreCase = true)
     val maxNOUFilteringReq = rootReqMaxNOUFilterQuery(req)
     val minNOUFilteringReq = rootReqMinNOUFilterQuery(req)
@@ -141,38 +141,39 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     ))
 
 
+
     val freemarkerModel = mapOf(
         "debug_mode" to debugMode,
         "website_info" to mapOf("name" to clientCfg.websiteName),
-        "queries" to mapOf(
-            "sorter_req_name" to MATRIX_ROOMS_PAGE_SORTER_REQ_NAME,
-            "sorter_direction_req_name" to MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME,
-            "ga_filter_req_name" to MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME,
-            "wr_filter_req_name" to MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME,
-            "server_filter_req_name" to MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME,
-            "max_nou_filter_req_name" to MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME,
-            "min_nou_filter_req_name" to MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME,
-            "rooms_per_page_req_name" to MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME,
-            "page_req_name" to MATRIX_ROOMS_PAGE_PAGE_REQ_NAME
-        ),
         "page_info" to mapOf(
-            "current_page_number" to pageReq,
             "max_page" to maxPage,
             "max_page_length" to maxPage.toString().length,
-            "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size,
-            "matrix_rooms_per_page" to elmPerPage,
-            "sorter" to sortingReq,
-            "sorter_direction" to sortingDirectionReq,
-            "ga_filter" to gaFilteringReq,
-            "wr_filter" to wrFilteringReq,
-            "server_filter" to serverFilteringReq,
-            "max_nou_filter" to maxNOUFilteringReq,
-            "min_nou_filter" to minNOUFilteringReq
+            "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
         ),
         "serverList" to initialMatrixServerList.mapValues { server ->
             mapOf("name" to server.value.name, "apiUrl" to server.value.apiURL.toString(), "updateFreq" to server.value.updateFreq)
         },
-        "roomList" to slicedFilteredSortedMatrixRoomList
+        "roomList" to slicedFilteredSortedMatrixRoomList,
+        "query_parameters" to QueryParameters(
+            sorterReqName = MATRIX_ROOMS_PAGE_SORTER_REQ_NAME,
+            sorterDirectionReqName = MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME,
+            gaFilterReqName = MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME,
+            wrFilterReqName = MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME,
+            serverFilterReqName = MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME,
+            maxNOUFilterReqName = MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME,
+            minNOUFilterReqName = MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME,
+            roomsPerPageReqName = MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME,
+            pageReqName = MATRIX_ROOMS_PAGE_PAGE_REQ_NAME,
+            sorter = sortingReq?.toString(),
+            sorterDirection = sortingDirectionReq,
+            gaFilter = gaFilteringReq?.toString(),
+            wrFilter = wrFilteringReq?.toString(),
+            serverFilter = serverFilteringReq?.joinToString(separator = "+"),
+            maxNOUFilter = maxNOUFilteringReq?.toString(),
+            minNOUFilter = minNOUFilteringReq?.toString(),
+            roomsPerPage = elmPerPage,
+            page = pageReq
+        )
     )
 
     val mainPageTemplate = freemarkerCfg.getTemplate(mainPageTemplateFile.name)
