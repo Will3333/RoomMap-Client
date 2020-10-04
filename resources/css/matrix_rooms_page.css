@@ -9,6 +9,33 @@ body {
     color: var(--page-text-color);
 }
 
+.button {
+    background-color: #222222;
+    border: 0.1em solid #222222;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    color: var(--page-text-color);
+    white-space: nowrap;
+}
+.button:hover {
+    background-color: var(--page-bg-color);
+}
+.button-enabled:hover {
+    background-color: var(--page-bg-color);
+}
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.button-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .link-button {
     background-color: #222222;
     border: 0.1em solid #222222;
@@ -22,17 +49,13 @@ body {
     text-decoration: none;
     white-space: nowrap;
 }
-
 .link-button a {
     text-decoration: none;
     color: var(--page-text-color);
 }
-
-
 .link-button-enabled:hover {
     background-color: var(--page-bg-color);
 }
-
 .link-button-disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -101,10 +124,11 @@ body {
 }
 
 .matrix-room-name-arrow {
-    border: solid #eeeeee;
-    border-width: 0 3px 3px 0;
     display: inline-block;
-    padding: 3px;
+    padding-top: 0.025em;
+    padding-bottom: 0.025em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
 }
 .matrix-room-name-right-arrow {
     transform: rotate(-45deg);
@@ -132,10 +156,13 @@ body {
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
         padding-left: 0.5em;
         padding-right: 0.5em;
+    }
+
+    .matrix-rooms-ga-header-title {
+        white-space: normal;
+        margin-right: 0.2em;
     }
 
     .matrix-rooms-wr-header {
@@ -147,27 +174,11 @@ body {
         padding-right: 0.5em;
     }
 
-    .matrix-room-name-arrow-container {
-        display: inline-block;
-        padding-left: 0.3em;
-        padding-right: 0.3em;
-        padding-top: 0.2em;
-        padding-bottom: 0.2em;
-    }
-
     .matrix-room-name-elm {
         display: inline-block;
         padding-top: 0.4em;
         padding-bottom: 0.4em;
         padding-left: 0.1em;
-        padding-right: 0.2em;
-        white-space: normal;
-    }
-    .matrix-room-name-elm-without-arrow {
-        display: inline-block;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
-        padding-left: 0.65em;
         padding-right: 0.2em;
         white-space: normal;
     }
@@ -200,21 +211,32 @@ body {
     }
 
     .matrix-room-server-elm {
-        grid-column: 1;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
-        padding-left: 1.5em;
-        padding-right: 0.2em;
+        display: none;
     }
 
-    .matrix-room-topic-elm {
+    .matrix-room-details {
         grid-column: 1 / 6;
         display: none;
+        grid-template-columns: min-content auto;
+        row-gap: 0.3em;
+        column-gap: 0.2em;
+        justify-items: start;
         padding-top: 0.4em;
         padding-bottom: 0.4em;
-        padding-left: 0.7em;
-        padding-right: 1em;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
         background-color: #393939;
+    }
+
+    .matrix-room-details-server-title {
+        grid-column: 1;
+        justify-self: end;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .matrix-room-details-server {
+        grid-column: 2;
     }
 }
 
@@ -238,10 +260,13 @@ body {
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
         padding-left: 1em;
         padding-right: 1em;
+    }
+
+    .matrix-rooms-ga-header-title {
+        white-space: nowrap;
+        margin-right: 0.2em;
     }
 
     .matrix-rooms-wr-header {
@@ -253,27 +278,11 @@ body {
         padding-right: 1em;
     }
 
-    .matrix-room-name-arrow-container {
-        display: inline-block;
-        padding-left: 0.3em;
-        padding-right: 1em;
-        padding-top: 0.2em;
-        padding-bottom: 0.2em;
-    }
-
     .matrix-room-name-elm {
         display: inline-block;
         padding-top: 0.4em;
         padding-bottom: 0.4em;
         padding-left: 0.4em;
-        padding-right: 0.4em;
-        white-space: normal;
-    }
-    .matrix-room-name-elm-without-arrow {
-        display: inline-block;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
-        padding-left: 0.95em;
         padding-right: 0.4em;
         white-space: normal;
     }
@@ -313,13 +322,55 @@ body {
         padding-right: 1em;
     }
 
-    .matrix-room-topic-elm {
+    .matrix-room-details {
         grid-column: 1 / 6;
         display: none;
+        grid-template-columns: min-content auto;
+        row-gap: 0.3em;
+        column-gap: 0.4em;
+        justify-items: start;
         padding-top: 0.4em;
         padding-bottom: 0.4em;
-        padding-left: 1.3em;
+        padding-left: 1em;
         padding-right: 1em;
         background-color: #393939;
     }
+
+    .matrix-room-details-server-title {
+        display: none;
+    }
+
+    .matrix-room-details-server {
+        display: none;
+    }
+}
+
+.matrix-rooms-ga-header-title-container {
+    white-space: nowrap;
+}
+
+.matrix-rooms-ga-header-filter {
+    display: none;
+}
+
+.matrix-room-details-alias-title {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.matrix-room-details-alias {
+    grid-column: 2;
+}
+
+.matrix-room-details-topic-title {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.matrix-room-details-topic {
+    grid-column: 2;
 }
