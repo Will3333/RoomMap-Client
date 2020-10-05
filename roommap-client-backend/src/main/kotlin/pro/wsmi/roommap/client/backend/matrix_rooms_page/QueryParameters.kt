@@ -15,8 +15,8 @@ data class QueryParameters(
     val gaFilter: String?,
     val wrFilter: String?,
     val serverFilter: String?,
-    val maxNOUFilter: String?,
-    val minNOUFilter: String?,
+    val maxNOUFilter: Int?,
+    val minNOUFilter: Int?,
     val roomsPerPage: Int,
     val page: Int
 )

@@ -65,8 +65,30 @@
 		<#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('ROOM_NAME', false).toUrlFormat()}">Name &#x25B2;</a></#if>
 	  </div>
 	  <div class="matrix-rooms-nou-header">
-	    <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">Users<#if query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B2;</#if></a>
-	    <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', true).toUrlFormat()}">Users &#x25BC;</a></#if>
+	    <div class="matrix-rooms-nou-header-title-container">
+	      <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">Users<#if query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B2;</#if></a>
+	      <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', true).toUrlFormat()}">Users &#x25BC;</a></#if>
+		  <button id="matrix-rooms-nou-filters-display-button" class="button">&#x22EE;</button>
+	    </div>
+		<form method="get" id="matrix-rooms-nou-header-filters-block" class="matrix-rooms-nou-header-filters">
+		  <div>
+		    <input type="checkbox" id="matrix-rooms-max-nou-filter-checkbox"<#if query_parameters.maxNOUFilter??> checked</#if>>
+			<label for="matrix-rooms-max-nou-filter-checkbox">max : </label>
+			<input type="number" id="matrix-rooms-max-nou-filter-textfield" name="${query_parameters.maxNOUFilterReqName}"<#if query_parameters.maxNOUFilter??> value=${query_parameters.maxNOUFilter?string.computer}</#if><#if query_parameters.minNOUFilter??>  min=${query_parameters.minNOUFilter?string.computer}</#if><#if !query_parameters.maxNOUFilter??> disabled</#if> required>
+		  </div>
+		  <div>
+		    <input type="checkbox" id="matrix-rooms-min-nou-filter-checkbox"<#if query_parameters.minNOUFilter??> checked</#if>>
+			<label for="matrix-rooms-min-nou-filter-checkbox">min : </label>
+			<input type="number" id="matrix-rooms-min-nou-filter-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
+		  </div>
+		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
+		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
+		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
+		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
+		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  <button type="submit" class="button" id="matrix-rooms-nou-filters-validation-button">Filter</button>
+		</form>
 	  </div>
 	  <div class="matrix-rooms-ga-header">
 	    <div class="matrix-rooms-ga-header-title-container"><span class="matrix-rooms-ga-header-title">Guest access</span><button id="matrix-rooms-ga-filter-display-button" class="button">&#x22EE;</button></div>
@@ -140,6 +162,8 @@
 	  </#list>
 	</div>
 	<script>
+	  const MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME = '${query_parameters.maxNOUFilterReqName}';
+	  const MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME = '${query_parameters.minNOUFilterReqName}';
 	  const MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME = '${query_parameters.gaFilterReqName}';
 	  const MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME = '${query_parameters.wrFilterReqName}';
 	</script>

@@ -12,11 +12,11 @@ import java.io.StringWriter
 
 private val rootReqSorterQuery = Query.enum<MatrixRoomListSortingElement>().optional(MATRIX_ROOMS_PAGE_SORTER_REQ_NAME)
 private val rootReqSorterDirectionQuery = Query.boolean().optional(MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME)
+private val rootReqMaxNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME)
+private val rootReqMinNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME)
 private val rootReqGAFilterQuery = Query.enum<MatrixRoomGuestCanJoinFilter>().optional(MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME)
 private val rootReqWRFilterQuery = Query.enum<MatrixRoomWorldReadableFilter>().optional(MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME)
 private val rootReqServerFilterQuery = Query.string().optional(MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME)
-private val rootReqMaxNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME)
-private val rootReqMinNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME)
 private val rootReqPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_PAGE_REQ_NAME)
 private val rootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME)
 
@@ -169,8 +169,8 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             gaFilter = gaFilteringReq?.toString(),
             wrFilter = wrFilteringReq?.toString(),
             serverFilter = serverFilteringReq?.joinToString(separator = "+"),
-            maxNOUFilter = maxNOUFilteringReq?.toString(),
-            minNOUFilter = minNOUFilteringReq?.toString(),
+            maxNOUFilter = maxNOUFilteringReq,
+            minNOUFilter = minNOUFilteringReq,
             roomsPerPage = elmPerPage,
             page = pageReq
         )

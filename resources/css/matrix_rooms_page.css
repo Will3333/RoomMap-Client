@@ -132,9 +132,17 @@ body {
 }
 .matrix-room-name-right-arrow {
     transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
 }
 .matrix-room-name-down-arrow {
     transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
 }
 
 @media only screen and (max-width: 480px)
@@ -349,6 +357,15 @@ body {
     .matrix-room-details-server {
         display: none;
     }
+}
+
+.matrix-rooms-nou-header-title-container {
+    white-space: nowrap;
+}
+
+.matrix-rooms-nou-header-filters {
+    display: none;
+    text-align: left;
 }
 
 .matrix-rooms-ga-header-title-container {
