@@ -93,7 +93,31 @@
 		  <button type="submit" class="button">Filter</button>
 		</form>
 	  </div>
-	  <div class="matrix-rooms-wr-header">World readable</div>
+	  <div class="matrix-rooms-wr-header">
+	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">World readable</span><button id="matrix-rooms-wr-filter-display-button" class="button">&#x22EE;</button></div>
+	    <form method="get" id="matrix-rooms-wr-header-filter-block" class="matrix-rooms-wr-header-filter">
+		  <div>
+		    <input type="radio" id="matrix-rooms-wr-filter-all-radio" name="${query_parameters.wrFilterReqName}" value="NO_FILTER"<#if !query_parameters.wrFilter?? || (query_parameters.wrFilter?? && query_parameters.wrFilter == "NO_FILTER")> checked</#if>>
+			<label for="matrix-rooms-wr-filter-all-radio">All</label>
+		  </div>
+		  <div>
+		    <input type="radio" id="matrix-rooms-wr-filter-yes-radio" name="${query_parameters.wrFilterReqName}" value="IS_WORLD_READABLE"<#if query_parameters.wrFilter?? && query_parameters.wrFilter == "IS_WORLD_READABLE"> checked</#if>>
+			<label for="matrix-rooms-wr-filter-yes-radio">Yes</label>
+		  </div>
+		  <div>
+		    <input type="radio" id="matrix-rooms-wr-filter-no-radio" name="${query_parameters.wrFilterReqName}" value="IS_NOT_WORLD_READABLE"<#if query_parameters.wrFilter?? && query_parameters.wrFilter == "IS_NOT_WORLD_READABLE"> checked</#if>>
+			<label for="matrix-rooms-wr-filter-no-radio">No</label>
+		  </div>
+		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
+		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
+		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
+		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
+		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
+		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  <button type="submit" class="button">Filter</button>
+		</form>
+	  </div>
 	  <div class="matrix-rooms-server-header">
 	    <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "SERVER_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', true).toUrlFormat()}">Server<#if query_parameters.sorter?? && query_parameters.sorter == "SERVER_NAME"> &#x25BC;</#if></a>
 		<#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', false).toUrlFormat()}">Server &#x25B2;</a></#if>

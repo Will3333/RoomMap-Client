@@ -157,7 +157,7 @@ body {
         grid-column: 3;
         grid-row: 1;
         padding-left: 0.5em;
-        padding-right: 0.5em;
+        padding-right: 0.25em;
     }
 
     .matrix-rooms-ga-header-title {
@@ -168,10 +168,13 @@ body {
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
-        padding-left: 0.5em;
+        padding-left: 0.25em;
         padding-right: 0.5em;
+    }
+
+    .matrix-rooms-wr-header-title {
+        white-space: normal;
+        margin-right: 0.2em;
     }
 
     .matrix-room-name-elm {
@@ -261,7 +264,7 @@ body {
         grid-column: 3;
         grid-row: 1;
         padding-left: 1em;
-        padding-right: 1em;
+        padding-right: 0.5em;
     }
 
     .matrix-rooms-ga-header-title {
@@ -272,10 +275,13 @@ body {
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
-        padding-left: 1em;
+        padding-left: 0.5em;
         padding-right: 1em;
+    }
+
+    .matrix-rooms-wr-header-title {
+        white-space: nowrap;
+        margin-right: 0.2em;
     }
 
     .matrix-room-name-elm {
@@ -351,7 +357,18 @@ body {
 
 .matrix-rooms-ga-header-filter {
     display: none;
+    text-align: left;
 }
+
+.matrix-rooms-wr-header-title-container {
+    white-space: nowrap;
+}
+
+.matrix-rooms-wr-header-filter {
+    display: none;
+    text-align: left;
+}
+
 
 .matrix-room-details-alias-title {
     grid-column: 1;
