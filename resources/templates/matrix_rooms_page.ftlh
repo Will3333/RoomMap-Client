@@ -79,12 +79,12 @@
 		  <div>
 		    <input type="checkbox" id="matrix-rooms-max-nou-filter-checkbox"<#if query_parameters.maxNOUFilter??> checked</#if>>
 			<label for="matrix-rooms-max-nou-filter-checkbox">max : </label>
-			<input type="number" id="matrix-rooms-max-nou-filter-textfield" name="${query_parameters.maxNOUFilterReqName}"<#if query_parameters.maxNOUFilter??> value=${query_parameters.maxNOUFilter?string.computer}</#if><#if query_parameters.minNOUFilter??>  min=${query_parameters.minNOUFilter?string.computer}</#if><#if !query_parameters.maxNOUFilter??> disabled</#if> required>
+			<input type="number" id="matrix-rooms-max-nou-filter-textfield" class="matrix-rooms-current-page-textfield" name="${query_parameters.maxNOUFilterReqName}"<#if query_parameters.maxNOUFilter??> value=${query_parameters.maxNOUFilter?string.computer}</#if><#if query_parameters.minNOUFilter??>  min=${query_parameters.minNOUFilter?string.computer}</#if><#if !query_parameters.maxNOUFilter??> disabled</#if> required>
 		  </div>
 		  <div>
 		    <input type="checkbox" id="matrix-rooms-min-nou-filter-checkbox"<#if query_parameters.minNOUFilter??> checked</#if>>
 			<label for="matrix-rooms-min-nou-filter-checkbox">min : </label>
-			<input type="number" id="matrix-rooms-min-nou-filter-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
+			<input type="number" id="matrix-rooms-min-nou-filter-textfield" class="matrix-rooms-current-page-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
 		  </div>
 		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
 		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
