@@ -19,6 +19,7 @@ kotlin {
     dependencies {
         implementation(kotlin("stdlib-js"))
         implementation(project(":roommap-client-lib"))
+        /*
         implementation("pro.wsmi:roommap-lib:${rootProject.extra["ROOMMAP_LIB_VERSION"]}")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.extra["COROUTINES_VERSION"]}")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${rootProject.extra["COROUTINES_VERSION"]}")
@@ -27,5 +28,6 @@ kotlin {
         implementation("io.ktor:ktor-client-core:${rootProject.extra["KTOR_VERSION"]}")
         implementation("io.ktor:ktor-client-js:${rootProject.extra["KTOR_VERSION"]}")
         implementation("org.jetbrains.kotlinx:kotlinx-html-js:${rootProject.extra["KHTML_VERSION"]}")
+         */
     }
 }

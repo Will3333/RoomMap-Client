@@ -18,11 +18,13 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-html:${rootProject.extra["KHTML_VERSION"]}")
             }
         }
+        /*
         val jsMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-core:${rootProject.extra["KTOR_VERSION"]}")
                 implementation("io.ktor:ktor-client-js:${rootProject.extra["KTOR_VERSION"]}")
             }
         }
+         */
     }
 }
