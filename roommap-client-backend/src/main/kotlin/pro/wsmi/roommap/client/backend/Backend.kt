@@ -160,7 +160,9 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
                 {
                     val apiServerListReqResponse = jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), apiServerListReqHttpResponse.bodyString())
                     matrixServers.clear()
-                    matrixServers.putAll(apiServerListReqResponse.servers)
+                    matrixServers.putAll(apiServerListReqResponse.servers.toSortedMap(compareBy { serverId ->
+                        apiServerListReqResponse.servers.getValue(serverId).name
+                    }))
 
                     println("OK")
 

@@ -2,6 +2,8 @@
 :root {
     --page-bg-color: #404040;
     --page-text-color: #e1e1e1;
+    --main-component-bg-color: #222222;
+    --secondary-component-bg-color: #2a2a2a;
 }
 
 body {
@@ -9,9 +11,20 @@ body {
     color: var(--page-text-color);
 }
 
+a {
+    text-decoration: none;
+    color: var(--page-text-color);
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: var(--page-text-color);
+}
+
 .button {
-    background-color: #222222;
-    border: 0.1em solid #222222;
+    background-color: var(--main-component-bg-color);
+    border: 0.1em solid var(--main-component-bg-color);
     border-radius: 4px;
     transition-duration: 0.4s;
     padding-top: 0.2em;
@@ -37,8 +50,8 @@ body {
 }
 
 .link-button {
-    background-color: #222222;
-    border: 0.1em solid #222222;
+    background-color: var(--main-component-bg-color);
+    border: 0.1em solid var(--main-component-bg-color);
     border-radius: 4px;
     transition-duration: 0.4s;
     padding-top: 0.2em;
@@ -50,7 +63,6 @@ body {
     white-space: nowrap;
 }
 .link-button a {
-    text-decoration: none;
     color: var(--page-text-color);
 }
 .link-button-enabled:hover {
@@ -78,7 +90,7 @@ body {
     border-style: solid;
     border-width: 0.2em;
     border-radius: 5px;
-    border-color: #222222;
+    border-color: var(--main-component-bg-color);
     white-space: nowrap;
 }
 
@@ -99,7 +111,7 @@ body {
     border-style: solid;
     border-width: 0.2em;
     border-radius: 5px;
-    border-color: #222222;
+    border-color: var(--main-component-bg-color);
     white-space: nowrap;
 }
 
@@ -111,11 +123,11 @@ body {
 }
 
 .matrix-room-elm-line-var1 {
-    background-color: #2a2a2a;
+    background-color: var(--secondary-component-bg-color);
 }
 
 .matrix-room-elm-line-var2 {
-    background-color: #222222;
+    background-color: var(--main-component-bg-color);
 }
 
 .matrix-room-name-elm-container {
@@ -147,10 +159,6 @@ body {
 
 @media only screen and (max-width: 480px)
 {
-    .matrix-rooms-server-header {
-        display: none;
-    }
-
     .matrix-rooms-name-header {
         grid-column: 1;
         grid-row: 1;
@@ -184,6 +192,11 @@ body {
         white-space: normal;
         margin-right: 0.2em;
     }
+
+    .matrix-rooms-server-header {
+        display: none;
+    }
+
 
     .matrix-room-name-elm {
         display: inline-block;
@@ -253,11 +266,6 @@ body {
 
 @media not screen, (min-width: 481px)
 {
-    .matrix-rooms-server-header {
-        grid-column: 5;
-        grid-row: 1;
-    }
-
     .matrix-rooms-name-header {
         grid-column: 1;
         grid-row: 1;
@@ -284,12 +292,18 @@ body {
         grid-column: 4;
         grid-row: 1;
         padding-left: 0.5em;
-        padding-right: 1em;
+        padding-right: 0.5em;
     }
 
     .matrix-rooms-wr-header-title {
         white-space: nowrap;
         margin-right: 0.2em;
+    }
+
+    .matrix-rooms-server-header {
+        grid-column: 5;
+        grid-row: 1;
+        padding-left: 0.5em;
     }
 
     .matrix-room-name-elm {
@@ -386,6 +400,10 @@ body {
     text-align: left;
 }
 
+.matrix-rooms-server-header-filter {
+    display: none;
+    text-align: left;
+}
 
 .matrix-room-details-alias-title {
     grid-column: 1;

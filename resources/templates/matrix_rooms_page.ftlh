@@ -23,7 +23,9 @@
 		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
 		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
 		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
+		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
+		  </#list></#if>
 		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
 		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
 		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
@@ -42,7 +44,9 @@
 		<#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
 	    <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
 		<#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-	    <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+	    <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
+		<input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
+		</#list></#if>
 		<#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
 		<#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
         <datalist id="matrix-rooms-per-page-datalist">
@@ -85,7 +89,9 @@
 		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
 		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
 		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
+		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
+		  </#list></#if>
 		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
 		  <button type="submit" class="button" id="matrix-rooms-nou-filters-validation-button">Filter</button>
 		</form>
@@ -108,7 +114,9 @@
 		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
 		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
 		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
+		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
+		  </#list></#if>
 		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
 		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
 		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
@@ -133,7 +141,9 @@
 		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
 		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
 		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		  <#if query_parameters.serverFilter??><input type="hidden" name="${query_parameters.serverFilterReqName}" value="${query_parameters.serverFilter}"></#if>
+		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
+		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
+		  </#list></#if>
 		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
 		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
 		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
@@ -141,8 +151,26 @@
 		</form>
 	  </div>
 	  <div class="matrix-rooms-server-header">
-	    <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "SERVER_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', true).toUrlFormat()}">Server<#if query_parameters.sorter?? && query_parameters.sorter == "SERVER_NAME"> &#x25BC;</#if></a>
-		<#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', false).toUrlFormat()}">Server &#x25B2;</a></#if>
+	    <div class="matrix-rooms-server-header-title-container">
+	      <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "SERVER_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', true).toUrlFormat()}">Server<#if query_parameters.sorter?? && query_parameters.sorter == "SERVER_NAME"> &#x25BC;</#if></a>
+		  <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', false).toUrlFormat()}">Server &#x25B2;</a></#if>
+		  <button id="matrix-rooms-server-filter-display-button" class="button">&#x22EE;</button>
+	    </div>
+		<form method="get" id="matrix-rooms-server-header-filter-block" class="matrix-rooms-server-header-filter">
+		  <select name="${query_parameters.serverFilterReqName}" multiple>
+		    <#list serverList as serverId, server>
+			<option value="${serverId}">${server.name}</option>
+			</#list>
+		  </select>
+		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
+		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
+		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
+		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
+		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
+		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
+		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  <button type="submit" class="button" id="matrix-rooms-server-filter-validation-button">Filter</button>
+		</form>
 	  </div>
 	  <#list roomList as room>
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
@@ -166,6 +194,7 @@
 	  const MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME = '${query_parameters.minNOUFilterReqName}';
 	  const MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME = '${query_parameters.gaFilterReqName}';
 	  const MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME = '${query_parameters.wrFilterReqName}';
+	  const MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME = '${query_parameters.serverFilterReqName}';
 	</script>
     <script src="/static/js/roommap-client-js-matrix-rooms-page-native.js"></script>
   </body>

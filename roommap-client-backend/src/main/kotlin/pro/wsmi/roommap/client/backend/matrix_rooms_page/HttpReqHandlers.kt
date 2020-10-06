@@ -16,7 +16,7 @@ private val rootReqMaxNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MA
 private val rootReqMinNOUFilterQuery = Query.int().optional(MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME)
 private val rootReqGAFilterQuery = Query.enum<MatrixRoomGuestCanJoinFilter>().optional(MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME)
 private val rootReqWRFilterQuery = Query.enum<MatrixRoomWorldReadableFilter>().optional(MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME)
-private val rootReqServerFilterQuery = Query.string().optional(MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME)
+private val rootReqServerFilterQueries = Query.multi.optional(MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME)
 private val rootReqPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_PAGE_REQ_NAME)
 private val rootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME)
 
@@ -61,7 +61,7 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
 
     val gaFilteringReq = rootReqGAFilterQuery(req)
     val wrFilteringReq = rootReqWRFilterQuery(req)
-    val serverFilteringReq = rootReqServerFilterQuery(req)?.split("+", ignoreCase = true)
+    val serverFilteringReq = rootReqServerFilterQueries(req)
     val maxNOUFilteringReq = rootReqMaxNOUFilterQuery(req)
     val minNOUFilteringReq = rootReqMinNOUFilterQuery(req)
 
@@ -89,9 +89,9 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
         if (serverFilteringReq != null)
         {
             val newList = mutableListOf<MatrixRoom>()
-            serverFilteringReq.forEach { serverName ->
+            serverFilteringReq.forEach { serverId ->
                 newList.addAll(it.filter { room ->
-                    initialMatrixServerList[room.serverId]?.name == serverName
+                    room.serverId == serverId
                 })
             }
             newList.toList()
@@ -168,7 +168,7 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             sorterDirection = sortingDirectionReq,
             gaFilter = gaFilteringReq?.toString(),
             wrFilter = wrFilteringReq?.toString(),
-            serverFilter = serverFilteringReq?.joinToString(separator = "+"),
+            serverFilter = serverFilteringReq,
             maxNOUFilter = maxNOUFilteringReq,
             minNOUFilter = minNOUFilteringReq,
             roomsPerPage = elmPerPage,

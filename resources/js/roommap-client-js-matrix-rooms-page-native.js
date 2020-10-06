@@ -38,6 +38,13 @@ function showWRFilterBlock() {
 function hideWRFilterBlock() {
 	wrFilterBlock.style.display = "none";
 }
+function showServerFilterBlock() {
+	serverFilterBlock.style.display = "block";
+}
+function hideServerFilterBlock() {
+	serverFilterBlock.style.display = "none";
+}
+
 
 const nouFiltersDisplayButton = document.getElementById("matrix-rooms-nou-filters-display-button");
 const maxNOUFilterCheckbox = document.getElementById("matrix-rooms-max-nou-filter-checkbox");
@@ -46,15 +53,18 @@ const minNOUFilterCheckbox = document.getElementById("matrix-rooms-min-nou-filte
 const minNOUFilterTextField = document.getElementById("matrix-rooms-min-nou-filter-textfield");
 const gaFilterDisplayButton = document.getElementById("matrix-rooms-ga-filter-display-button");
 const wrFilterDisplayButton = document.getElementById("matrix-rooms-wr-filter-display-button");
+const serverFilterDisplayButton = document.getElementById("matrix-rooms-server-filter-display-button");
 const nouFiltersBlock = document.getElementById("matrix-rooms-nou-header-filters-block");
 const gaFilterBlock = document.getElementById("matrix-rooms-ga-header-filter-block");
 const wrFilterBlock = document.getElementById("matrix-rooms-wr-header-filter-block");
+const serverFilterBlock = document.getElementById("matrix-rooms-server-header-filter-block");
 
 const urlParams = new URLSearchParams(window.location.search);
 const maxNOUFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_MAX_NOU_FILTER_REQ_NAME);
 const minNOUFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME);
 const gaFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME);
 const wrFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME);
+const serverFilterUrlParam = urlParams.getAll(MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME);
 
 
 maxNOUFilterCheckbox.addEventListener('change', (event) => {
@@ -119,6 +129,12 @@ wrFilterDisplayButton.addEventListener('click', (event) => {
 	else
 		hideWRFilterBlock();
 });
+serverFilterDisplayButton.addEventListener('click', (event) => {
+	if (!serverFilterBlock.style.display || serverFilterBlock.style.display == "none")
+		showServerFilterBlock();
+	else
+		hideServerFilterBlock();
+});
 
 if (maxNOUFilterUrlParam != null || minNOUFilterUrlParam != null)
 	showNOUFiltersBlock();
@@ -126,3 +142,5 @@ if (gaFilterUrlParam != null && gaFilterUrlParam != 'NO_FILTER')
 	showGAFilterBlock();
 if (wrFilterUrlParam != null && wrFilterUrlParam != 'NO_FILTER')
 	showWRFilterBlock();
+if (serverFilterUrlParam != null && serverFilterUrlParam.length > 0)
+	showServerFilterBlock();

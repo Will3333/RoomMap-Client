@@ -14,7 +14,7 @@ data class QueryParameters(
     val sorterDirection: Boolean?,
     val gaFilter: String?,
     val wrFilter: String?,
-    val serverFilter: String?,
+    val serverFilter: List<String>?,
     val maxNOUFilter: Int?,
     val minNOUFilter: Int?,
     val roomsPerPage: Int,
@@ -35,7 +35,13 @@ data class QueryParameters(
         else it
     }.let {
         if (this.serverFilter != null)
-            if(it.isNotEmpty()) "$it&" else {""} + "${this.serverFilterReqName}=${this.serverFilter}"
+        {
+            it + this.serverFilter.joinToString(separator = "") { server ->
+                if (server.isNotEmpty())
+                    "&${this.serverFilterReqName}=$server"
+                else ""
+            }
+        }
         else it
     }.let {
         if (this.maxNOUFilter != null)
