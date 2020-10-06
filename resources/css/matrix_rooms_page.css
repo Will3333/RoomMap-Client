@@ -100,6 +100,10 @@ a:visited {
     display: inline-block;
 }
 
+.matrix-rooms-current-page-textfield {
+    width: 4.5em;
+}
+
 .matrix-rooms-per-page-management {
     display: inline-block;
     margin-top: 0.25em;
@@ -115,6 +119,10 @@ a:visited {
     border-radius: 5px;
     border-color: var(--main-component-bg-color);
     white-space: nowrap;
+}
+
+.matrix-rooms-per-page-textfield {
+    width: 4.5em;
 }
 
 #matrix-rooms-container {
