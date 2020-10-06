@@ -9,6 +9,7 @@ import pro.wsmi.roommap.client.matrix_rooms_page.*
 import pro.wsmi.roommap.lib.api.*
 import java.io.File
 import java.io.StringWriter
+import java.util.*
 
 private val rootReqSorterQuery = Query.enum<MatrixRoomListSortingElement>().optional(MATRIX_ROOMS_PAGE_SORTER_REQ_NAME)
 private val rootReqSorterDirectionQuery = Query.boolean().optional(MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME)
@@ -141,9 +142,9 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     ))
 
 
-
     val freemarkerModel = mapOf(
         "debug_mode" to debugMode,
+        "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale("fr")),
         "website_info" to mapOf("name" to clientCfg.websiteName),
         "page_info" to mapOf(
             "max_page" to maxPage,

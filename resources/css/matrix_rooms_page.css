@@ -167,6 +167,12 @@ a:visited {
         align-self: end;
     }
 
+    .matrix-rooms-nou-header-filters {
+        display: none;
+        text-align: left;
+        white-space: normal;
+    }
+
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
@@ -180,6 +186,12 @@ a:visited {
         margin-right: 0.2em;
     }
 
+    .matrix-rooms-ga-header-filter {
+        display: none;
+        text-align: left;
+        white-space: normal;
+    }
+
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
@@ -191,6 +203,12 @@ a:visited {
     .matrix-rooms-wr-header-title {
         white-space: normal;
         margin-right: 0.2em;
+    }
+
+    .matrix-rooms-wr-header-filter {
+        display: none;
+        text-align: left;
+        white-space: normal;
     }
 
     .matrix-rooms-server-header {
@@ -276,6 +294,12 @@ a:visited {
         align-self: end;
     }
 
+    .matrix-rooms-nou-header-filters {
+        display: none;
+        text-align: left;
+        white-space: nowrap;
+    }
+
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
@@ -289,6 +313,12 @@ a:visited {
         margin-right: 0.2em;
     }
 
+    .matrix-rooms-ga-header-filter {
+        display: none;
+        text-align: left;
+        white-space: nowrap;
+    }
+
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
@@ -300,6 +330,12 @@ a:visited {
     .matrix-rooms-wr-header-title {
         white-space: nowrap;
         margin-right: 0.2em;
+    }
+
+    .matrix-rooms-wr-header-filter {
+        display: none;
+        text-align: left;
+        white-space: nowrap;
     }
 
     .matrix-rooms-server-header {
@@ -378,27 +414,12 @@ a:visited {
     white-space: nowrap;
 }
 
-.matrix-rooms-nou-header-filters {
-    display: none;
-    text-align: left;
-}
-
 .matrix-rooms-ga-header-title-container {
     white-space: nowrap;
 }
 
-.matrix-rooms-ga-header-filter {
-    display: none;
-    text-align: left;
-}
-
 .matrix-rooms-wr-header-title-container {
     white-space: nowrap;
-}
-
-.matrix-rooms-wr-header-filter {
-    display: none;
-    text-align: left;
 }
 
 .matrix-rooms-server-header-filter {
