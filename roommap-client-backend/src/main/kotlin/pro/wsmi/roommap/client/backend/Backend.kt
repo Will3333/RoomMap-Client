@@ -37,6 +37,7 @@ import kotlin.system.exitProcess
 val DEFAULT_CFG_FILE_DIR = File(System.getProperty("user.home"))
 const val DEFAULT_CFG_FILE_NAME = ".roommap-client.yml"
 const val FTLH_FILES_DIR_NAME = "templates"
+const val IMG_FILES_DIR_NAME = "img"
 const val CSS_FILES_DIR_NAME = "css"
 const val JS_FILES_DIR_NAME = "js"
 const val MATRIX_ROOMS_PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
@@ -108,6 +109,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         }
 
         val ftlhDir = File(resourceDir, FTLH_FILES_DIR_NAME)
+        val imgDir = File(resourceDir, IMG_FILES_DIR_NAME)
         val cssDir = File(resourceDir, CSS_FILES_DIR_NAME)
         val jsDir = File(resourceDir, JS_FILES_DIR_NAME)
 
@@ -200,8 +202,9 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
 
 
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
-            "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath), Pair("css", ContentType.TEXT_CSS)),
-            "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath), Pair("js", ContentType.APPLICATION_JS), Pair("js.map", ContentType.TEXT_PLAIN)),
+            "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
+            "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
+            "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
             "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile, matrixServers, matrixRooms)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 

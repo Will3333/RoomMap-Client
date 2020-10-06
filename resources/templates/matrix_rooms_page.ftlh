@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="/static/css/matrix_rooms_page.css">
   </head>
   <body>
-    <h1>Rooms</h1>
+    <h1>${website_info.name}</h1>
+	<p>Here you find a list of <a href="https://matrix.org">Matrix</a> rooms that is automaticly updated via the API of listed servers.</p>
     <menu class="matrix-rooms-page-management" type="toolbar">
       <span class="matrix-rooms-current-page-management">
         <#if query_parameters.page gt 1>
@@ -175,7 +176,7 @@
 	  <#list roomList as room>
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
 	  <div class="matrix-room-name-elm-container ${lineVariationClass}">
-		<span id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow matrix-room-name-right-arrow" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">&#x251B;</span>
+		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="static/img/icon-arrows-collapse.svg" width="20em" height="20em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
 		<span class="matrix-room-name-elm"><#if room.name?has_content>${room.name}<#else>${room.roomId}</#if></span>
 	  </div>
 	  <div class="matrix-room-nou-elm ${lineVariationClass}">${room.numJoinedMembers}</div>

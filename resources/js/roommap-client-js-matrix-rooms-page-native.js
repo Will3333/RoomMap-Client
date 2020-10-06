@@ -5,16 +5,14 @@ function handleMatrixRoomArrowClickEvent(arrowElmId)
 	
 	if (detailsBlock != null)
 	{
-		if (arrowBlock.classList.contains('matrix-room-name-down-arrow'))
+		if (arrowBlock.src.endsWith("icon-arrows-expand.svg"))
 		{
-			arrowBlock.classList.remove('matrix-room-name-down-arrow');
-			arrowBlock.classList.add('matrix-room-name-right-arrow');
+			arrowBlock.src = "static/img/icon-arrows-collapse.svg";
 			detailsBlock.style.display = 'none';
 		} 
 		else 
 		{
-			arrowBlock.classList.remove('matrix-room-name-right-arrow');
-			arrowBlock.classList.add('matrix-room-name-down-arrow');
+			arrowBlock.src = "static/img/icon-arrows-expand.svg";
 			detailsBlock.style.display = 'grid';
 		}
 	}

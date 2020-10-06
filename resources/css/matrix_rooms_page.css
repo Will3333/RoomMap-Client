@@ -14,6 +14,7 @@ body {
 a {
     text-decoration: none;
     color: var(--page-text-color);
+    font-style: italic;
 }
 a:hover {
     text-decoration: underline;
@@ -60,6 +61,7 @@ a:visited {
     padding-right: 0.3em;
     color: var(--page-text-color);
     text-decoration: none;
+    font-style: normal;
     white-space: nowrap;
 }
 .link-button a {
@@ -118,7 +120,7 @@ a:visited {
 #matrix-rooms-container {
     display: grid;
     grid-template-columns: auto min-content min-content min-content min-content;
-    align-items: stretch;
+    align-items: center;
     row-gap: 0.3em;
 }
 
@@ -133,28 +135,14 @@ a:visited {
 .matrix-room-name-elm-container {
     grid-column: 1;
     white-space: nowrap;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 }
 
 .matrix-room-name-arrow {
     display: inline-block;
-    padding-top: 0.025em;
-    padding-bottom: 0.025em;
     padding-right: 0.5em;
     padding-left: 0.5em;
-}
-.matrix-room-name-right-arrow {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    -moz-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-}
-.matrix-room-name-down-arrow {
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
 }
 
 @media only screen and (max-width: 480px)
@@ -162,16 +150,19 @@ a:visited {
     .matrix-rooms-name-header {
         grid-column: 1;
         grid-row: 1;
+        align-self: end;
     }
 
     .matrix-rooms-nou-header {
         grid-column: 2;
         grid-row: 1;
+        align-self: end;
     }
 
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
+        align-self: end;
         padding-left: 0.5em;
         padding-right: 0.25em;
     }
@@ -184,6 +175,7 @@ a:visited {
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
+        align-self: end;
         padding-left: 0.25em;
         padding-right: 0.5em;
     }
@@ -200,8 +192,6 @@ a:visited {
 
     .matrix-room-name-elm {
         display: inline-block;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
         padding-left: 0.1em;
         padding-right: 0.2em;
         white-space: normal;
@@ -269,16 +259,19 @@ a:visited {
     .matrix-rooms-name-header {
         grid-column: 1;
         grid-row: 1;
+        align-self: end;
     }
 
     .matrix-rooms-nou-header {
         grid-column: 2;
         grid-row: 1;
+        align-self: end;
     }
 
     .matrix-rooms-ga-header {
         grid-column: 3;
         grid-row: 1;
+        align-self: end;
         padding-left: 1em;
         padding-right: 0.5em;
     }
@@ -291,6 +284,7 @@ a:visited {
     .matrix-rooms-wr-header {
         grid-column: 4;
         grid-row: 1;
+        align-self: end;
         padding-left: 0.5em;
         padding-right: 0.5em;
     }
@@ -303,13 +297,12 @@ a:visited {
     .matrix-rooms-server-header {
         grid-column: 5;
         grid-row: 1;
+        align-self: end;
         padding-left: 0.5em;
     }
 
     .matrix-room-name-elm {
         display: inline-block;
-        padding-top: 0.4em;
-        padding-bottom: 0.4em;
         padding-left: 0.4em;
         padding-right: 0.4em;
         white-space: normal;
