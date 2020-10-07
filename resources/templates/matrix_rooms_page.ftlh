@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${website_info.main_lang.bcp47}">
   <head>
     <meta charset="UTF-8">
     <title>${website_info.name} - Matrix room list</title>
@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="/static/css/matrix_rooms_page.css">
   </head>
   <body>
-    <h1>${website_info.name}</h1>
-	<p>${texts.getString('intro_txt')?no_esc}</p>
-    <menu class="matrix-rooms-page-management" type="toolbar">
+    <nav class="lang-menu">
+	  <#if website_info.main_lang == "ENG"><span class="link-button link-button-disabled lang-item">Eng</span><#else><a class="link-button link-button-enabled lang-item" href="/eng/?${query_parameters.toUrlFormat()}">Eng</a></#if>
+	  <#if website_info.main_lang == "FRA"><span class="link-button link-button-disabled lang-item">Fra</span><#else><a class="link-button link-button-enabled lang-item" href="/fra/?${query_parameters.toUrlFormat()}">Fra</a></#if>
+	</nav>
+    <div>
+	    <h1>${website_info.name}</h1>
+		<p>${texts.getString('intro_txt')?no_esc}</p>
+	</div>
+    <nav class="matrix-rooms-page-management">
       <span class="matrix-rooms-current-page-management">
         <#if query_parameters.page gt 1>
 		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(1).toUrlFormat()}">&lt;&lt;</a>
@@ -63,7 +69,7 @@
            <option value=10000>
         </datalist>
       </form></span>
-    </menu>
+    </nav>
     <div id="matrix-rooms-container">
 	  <div class="matrix-rooms-name-header">
 	    <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "ROOM_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('ROOM_NAME', true).toUrlFormat()}">${texts.getString('name_elm_header_title')?no_esc}<#if query_parameters.sorter?? && query_parameters.sorter == "ROOM_NAME"> &#x25BC;</#if></a>
@@ -71,7 +77,7 @@
 	  </div>
 	  <div class="matrix-rooms-nou-header">
 	    <div class="matrix-rooms-nou-header-title-container">
-	      <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">${texts.getString('users_elm_header_title')?no_esc}<#if query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B2;</#if></a>
+	      <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">${texts.getString('users_elm_header_title')?no_esc}<#if !query_parameters.sorter?? || query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B2;</#if></a>
 	      <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', true).toUrlFormat()}">${texts.getString('users_elm_header_title')?no_esc} &#x25BC;</a></#if>
 		  <button id="matrix-rooms-nou-filters-display-button" class="button">&#x22EE;</button>
 	    </div>
@@ -160,7 +166,7 @@
 		<form method="get" id="matrix-rooms-server-header-filter-block" class="matrix-rooms-server-header-filter">
 		  <select name="${query_parameters.serverFilterReqName}" multiple>
 		    <#list serverList as serverId, server>
-			<option value="${serverId}">${server.name}</option>
+			<option value="${serverId}"<#if query_parameters.serverFilter?seq_contains(serverId)> selected</#if>>${server.name}</option>
 			</#list>
 		  </select>
 		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
@@ -176,7 +182,7 @@
 	  <#list roomList as room>
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
 	  <div class="matrix-room-name-elm-container ${lineVariationClass}">
-		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="static/img/icon-arrows-collapse.svg" width="20em" height="20em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
+		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="/static/img/icon-arrows-collapse.svg" width="20em" height="20em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
 		<span class="matrix-room-name-elm"><#if room.name?has_content>${room.name}<#else>${room.roomId}</#if></span>
 	  </div>
 	  <div class="matrix-room-nou-elm ${lineVariationClass}">${room.numJoinedMembers}</div>

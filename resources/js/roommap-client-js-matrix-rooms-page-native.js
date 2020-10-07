@@ -7,7 +7,7 @@ function handleMatrixRoomArrowClickEvent(arrowElmId)
 	{
 		if (arrowBlock.src.endsWith("icon-arrows-expand.svg"))
 		{
-			arrowBlock.src = "static/img/icon-arrows-collapse.svg";
+			arrowBlock.src = "/static/img/icon-arrows-collapse.svg";
 			detailsBlock.style.display = 'none';
 		} 
 		else 

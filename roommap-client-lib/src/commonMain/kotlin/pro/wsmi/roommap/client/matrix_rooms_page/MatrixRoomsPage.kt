@@ -1,5 +1,7 @@
 package pro.wsmi.roommap.client.matrix_rooms_page
 
+const val MATRIX_ROOMS_PAGE_MAIN_LANG_COOKIE_NAME = "main_lang"
+const val MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_COOKIE_NAME = "room_per_page"
 const val MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME = "matrix_rooms_per_page"
 const val MATRIX_ROOMS_PAGE_PAGE_REQ_NAME = "page"
 const val MATRIX_ROOMS_PAGE_SORTER_REQ_NAME = "sorter"

@@ -75,6 +75,18 @@ a:visited {
     cursor: not-allowed;
 }
 
+
+.lang-menu {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+}
+
+.lang-item {
+    display: block;
+    margin-top: 0.2em;
+}
+
 .matrix-rooms-page-management {
     white-space: normal;
     text-align: center;
@@ -126,6 +138,7 @@ a:visited {
 }
 
 #matrix-rooms-container {
+    margin-top: 0.5em;
     display: grid;
     grid-template-columns: auto min-content min-content min-content min-content;
     align-items: center;
