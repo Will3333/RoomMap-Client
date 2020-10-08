@@ -24,18 +24,9 @@
 		<span class="link-button link-button-disabled">&lt;&lt;</span>
 		<span class="link-button link-button-disabled">&lt;</span>
 		</#if>
-        <form method="get">
-		  ${texts.getString('current_page_management_page_txt')?no_esc} <input type="number" class="matrix-rooms-current-page-textfield" name="${query_parameters.pageReqName}" value="${query_parameters.page?string.computer}" min="1" max="${page_info.max_page?string.computer}">
-		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
-		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
-		  </#list></#if>
-		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
-		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
-		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+        ${texts.getString('current_page_management_page_txt')?no_esc} <form method="get">
+		  <input type="number" class="matrix-rooms-current-page-textfield" name="${query_parameters.pageReqName}" value="${query_parameters.page?string.computer}" min="1" max="${page_info.max_page?string.computer}">
+		  ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, false, false, false, false, false)?no_esc}
 		</form> ${texts.getString('current_page_management_of_txt')?no_esc} ${page_info.max_page}
         <#if query_parameters.page lt page_info.max_page>
 		<a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewPage(query_parameters.page+1).toUrlFormat()}">&gt;</a>
@@ -47,15 +38,7 @@
       </span>
       <span class="matrix-rooms-per-page-management"><form method="get">
         ${texts.getString('rooms_per_page_management_display_txt')?no_esc} <input type="number" class="matrix-rooms-per-page-textfield" name="${query_parameters.roomsPerPageReqName}" list="matrix-rooms-per-page-datalist" value="${query_parameters.roomsPerPage?string.computer}" min="1"> ${texts.getString('rooms_per_page_management_rooms_per_page_txt')?no_esc}
-        <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		<#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-	    <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		<#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-	    <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
-		<input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
-		</#list></#if>
-		<#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
-		<#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
+        ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, true, false, false, false, false)?no_esc}
         <datalist id="matrix-rooms-per-page-datalist">
            <option value=5>
            <option value=20>
@@ -92,14 +75,7 @@
 			<label for="matrix-rooms-min-nou-filter-checkbox">min : </label>
 			<input type="number" id="matrix-rooms-min-nou-filter-textfield" class="matrix-rooms-current-page-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
 		  </div>
-		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
-		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
-		  </#list></#if>
-		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, false, true, false, false, false)?no_esc}
 		  <button type="submit" class="button" id="matrix-rooms-nou-filters-validation-button">${texts.getString('filter_button_name')?no_esc}</button>
 		</form>
 	  </div>
@@ -118,15 +94,7 @@
 		    <input type="radio" id="matrix-rooms-ga-filter-no-radio" name="${query_parameters.gaFilterReqName}" value="CAN_NOT_JOIN"<#if query_parameters.gaFilter?? && query_parameters.gaFilter == "CAN_NOT_JOIN"> checked</#if>>
 			<label for="matrix-rooms-ga-filter-no-radio">${texts.getString('filter_selection_disallowed_txt')?no_esc}</label>
 		  </div>
-		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
-		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
-		  </#list></#if>
-		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
-		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
-		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, false, false, true, false, false)?no_esc}
 		  <button type="submit" class="button">${texts.getString('filter_button_name')?no_esc}</button>
 		</form>
 	  </div>
@@ -145,15 +113,7 @@
 		    <input type="radio" id="matrix-rooms-wr-filter-no-radio" name="${query_parameters.wrFilterReqName}" value="IS_NOT_WORLD_READABLE"<#if query_parameters.wrFilter?? && query_parameters.wrFilter == "IS_NOT_WORLD_READABLE"> checked</#if>>
 			<label for="matrix-rooms-wr-filter-no-radio">${texts.getString('filter_selection_no_txt')?no_esc}</label>
 		  </div>
-		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		  <#if query_parameters.serverFilter??><#list query_parameters.serverFilter as filter>
-		  <input type="hidden" name="${query_parameters.serverFilterReqName}" value="${filter}">
-		  </#list></#if>
-		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
-		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
-		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, false, false, false, true, false)?no_esc}
 		  <button type="submit" class="button">${texts.getString('filter_button_name')?no_esc}</button>
 		</form>
 	  </div>
@@ -166,16 +126,10 @@
 		<form method="get" id="matrix-rooms-server-header-filter-block" class="matrix-rooms-server-header-filter">
 		  <select name="${query_parameters.serverFilterReqName}" multiple>
 		    <#list serverList as serverId, server>
-			<option value="${serverId}"<#if query_parameters.serverFilter?seq_contains(serverId)> selected</#if>>${server.name}</option>
+			<option value="${serverId}"<#if query_parameters.serverFilter?? && query_parameters.serverFilter?seq_contains(serverId)> selected</#if>>${server.name}</option>
 			</#list>
 		  </select>
-		  <#if query_parameters.sorter??><input type="hidden" name="${query_parameters.sorterReqName}" value="${query_parameters.sorter}"></#if>
-		  <#if query_parameters.sorterDirection??><input type="hidden" name="${query_parameters.sorterDirectionReqName}" value="${query_parameters.sorterDirection?c}"></#if>
-		  <#if query_parameters.maxNOUFilter??><input type="hidden" name="${query_parameters.maxNOUFilterReqName}" value="${query_parameters.maxNOUFilter?string.computer}"></#if>
-		  <#if query_parameters.minNOUFilter??><input type="hidden" name="${query_parameters.minNOUFilterReqName}" value="${query_parameters.minNOUFilter?string.computer}"></#if>
-		  <#if query_parameters.gaFilter??><input type="hidden" name="${query_parameters.gaFilterReqName}" value="${query_parameters.gaFilter}"></#if>
-		  <#if query_parameters.wrFilter??><input type="hidden" name="${query_parameters.wrFilterReqName}" value="${query_parameters.wrFilter}"></#if>
-		  <input type="hidden" name="${query_parameters.roomsPerPageReqName}" value="${query_parameters.roomsPerPage?string.computer}">
+		  ${query_parameters.toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">', true, false, false, false, false, true)?no_esc}
 		  <button type="submit" class="button" id="matrix-rooms-server-filter-validation-button">${texts.getString('filter_button_name')?no_esc}</button>
 		</form>
 	  </div>
