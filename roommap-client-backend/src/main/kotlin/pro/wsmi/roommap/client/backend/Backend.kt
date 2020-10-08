@@ -23,8 +23,6 @@ import org.http4k.routing.static
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
-import pro.wsmi.roommap.client.backend.http4k.APPLICATION_JS
-import pro.wsmi.roommap.client.backend.http4k.TEXT_CSS
 import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageReq
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
@@ -40,7 +38,7 @@ const val FTLH_FILES_DIR_NAME = "templates"
 const val IMG_FILES_DIR_NAME = "img"
 const val CSS_FILES_DIR_NAME = "css"
 const val JS_FILES_DIR_NAME = "js"
-const val MATRIX_ROOMS_PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
+const val GLOBAL_TEMPLATE_FILE_NAME = "global_template.ftlh"
 
 @ExperimentalSerializationApi
 fun configureServerGlobalHttpFilter(debugMode: Boolean, clientCfg: ClientConfiguration) : Filter =
@@ -117,15 +115,15 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
 
         print("Checking template of rooms page ... ")
 
-        val matrixRoomsPageTemplateFile = File(ftlhDir, MATRIX_ROOMS_PAGE_TEMPLATE_FILE_NAME)
-        if (!matrixRoomsPageTemplateFile.exists() || !matrixRoomsPageTemplateFile.isFile) {
+        val globalTemplateFile = File(ftlhDir, GLOBAL_TEMPLATE_FILE_NAME)
+        if (!globalTemplateFile.exists() || !globalTemplateFile.isFile) {
             println("FAILED")
-            println("The main page file ${matrixRoomsPageTemplateFile.canonicalFile} does not exist.")
+            println("The main page file ${globalTemplateFile.canonicalFile} does not exist.")
             exitProcess(10)
         }
-        if (!matrixRoomsPageTemplateFile.canRead()) {
+        if (!globalTemplateFile.canRead()) {
             println("FAILED")
-            println("The main page file ${matrixRoomsPageTemplateFile.canonicalFile} is not readable.")
+            println("The main page file ${globalTemplateFile.canonicalFile} is not readable.")
             exitProcess(11)
         }
 
@@ -199,14 +197,15 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         val freemarkerCfg = Configuration(Version(clientCfg.freeMarkerTemplateVersion))
         freemarkerCfg.setDirectoryForTemplateLoading(ftlhDir)
         freemarkerCfg.defaultEncoding = "UTF-8"
+        val freemarkerTemplate = freemarkerCfg.getTemplate(globalTemplateFile.name)
 
 
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "/{mainLang}/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile, matrixServers, matrixRooms),
-            "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerCfg, matrixRoomsPageTemplateFile, matrixServers, matrixRooms)
+            "/{mainLang}/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerTemplate, matrixServers, matrixRooms),
+            "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerTemplate, matrixServers, matrixRooms)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 

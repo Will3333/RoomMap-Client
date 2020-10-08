@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="${website_info.main_lang.bcp47}">
-  <head>
-    <meta charset="UTF-8">
-    <title>${website_info.name} - Matrix room list</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/matrix_rooms_page.css">
-  </head>
-  <body>
-    <nav class="lang-menu">
-	  <#if website_info.main_lang == "ENG"><span class="link-button link-button-disabled lang-item">Eng</span><#else><a class="link-button link-button-enabled lang-item" href="/eng/?${query_parameters.toUrlFormat()}">Eng</a></#if>
-	  <#if website_info.main_lang == "FRA"><span class="link-button link-button-disabled lang-item">Fra</span><#else><a class="link-button link-button-enabled lang-item" href="/fra/?${query_parameters.toUrlFormat()}">Fra</a></#if>
-	</nav>
     <div>
 	    <h1>${website_info.name}</h1>
 		<p>${texts.getString('intro_txt')?no_esc}</p>
@@ -158,5 +145,4 @@
 	  const MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME = '${query_parameters.serverFilterReqName}';
 	</script>
     <script src="/static/js/roommap-client-js-matrix-rooms-page-native.js"></script>
-  </body>
-</html>
+	

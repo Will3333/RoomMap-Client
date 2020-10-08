@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.backend.matrix_rooms_page
 
-import freemarker.template.Configuration
+import freemarker.template.Template
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.http4k.core.*
 import org.http4k.core.cookie.Cookie
@@ -13,7 +13,6 @@ import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.http4k.asResult
 import pro.wsmi.roommap.client.matrix_rooms_page.*
 import pro.wsmi.roommap.lib.api.*
-import java.io.File
 import java.io.StringWriter
 import java.util.*
 
@@ -28,7 +27,7 @@ private val getRootReqPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_PAGE_RE
 private val getRootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME).asResult()
 
 @ExperimentalSerializationApi
-fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerCfg: Configuration, mainPageTemplateFile: File, matrixServerFullList: MutableMap<String, MatrixServer>, matrixRoomFullList: MutableList<MatrixRoom>) : (Request) -> Response = { req ->
+fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, matrixServerFullList: MutableMap<String, MatrixServer>, matrixRoomFullList: MutableList<MatrixRoom>) : (Request) -> Response = { req ->
 
     val initialMatrixServerList = matrixServerFullList.toMap()
     val initialMatrixRoomList = matrixRoomFullList.toList()
@@ -197,10 +196,15 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
         "debug_mode" to debugMode,
         "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale(pageMainLang.bcp47)),
         "website_info" to mapOf(
-            "name" to clientCfg.websiteName,
-            "main_lang" to pageMainLang
+            "name" to clientCfg.websiteName
         ),
         "page_info" to mapOf(
+            "name" to "Matrix room list",
+            "main_lang" to pageMainLang,
+            "css_files" to listOf(
+                "matrix_rooms_page.css"
+            ),
+            "template_file" to "matrix_rooms_page.ftlh",
             "max_page" to maxPage,
             "max_page_length" to maxPage.toString().length,
             "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
@@ -230,10 +234,9 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             page = pageReq
         )
     )
-
-    val mainPageTemplate = freemarkerCfg.getTemplate(mainPageTemplateFile.name)
+    
     val stringWriter = StringWriter()
-    mainPageTemplate.process(freemarkerModel, stringWriter)
+    freemarkerTemplate.process(freemarkerModel, stringWriter)
 
     val responseMainLangCookie = if (pageMainLang == mainLangReqByPath && pageMainLang != mainLangReqByCookie)
         Cookie(name = MATRIX_ROOMS_PAGE_MAIN_LANG_COOKIE_NAME, value = pageMainLang.iso639_3, maxAge = 16329600L, path = "/")

@@ -1,0 +1,87 @@
+:root {
+    --page-bg-color: #404040;
+    --page-text-color: #e1e1e1;
+    --main-component-bg-color: #222222;
+    --secondary-component-bg-color: #2a2a2a;
+}
+
+body {
+    background-color: var(--page-bg-color);
+    color: var(--page-text-color);
+}
+
+a {
+    text-decoration: none;
+    color: var(--page-text-color);
+    font-style: italic;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: var(--page-text-color);
+}
+
+.button {
+    background-color: var(--main-component-bg-color);
+    border: 0.1em solid var(--main-component-bg-color);
+    border-radius: 4px;
+    transition-duration: 0.4s;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    color: var(--page-text-color);
+    white-space: nowrap;
+}
+.button:hover {
+    background-color: var(--page-bg-color);
+}
+.button-enabled:hover {
+    background-color: var(--page-bg-color);
+}
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.button-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.link-button {
+    background-color: var(--main-component-bg-color);
+    border: 0.1em solid var(--main-component-bg-color);
+    border-radius: 4px;
+    transition-duration: 0.4s;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    color: var(--page-text-color);
+    text-decoration: none;
+    font-style: normal;
+    white-space: nowrap;
+}
+.link-button a {
+    color: var(--page-text-color);
+}
+.link-button-enabled:hover {
+    background-color: var(--page-bg-color);
+}
+.link-button-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+.lang-menu {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+}
+
+.lang-item {
+    display: block;
+    margin-top: 0.2em;
+}
