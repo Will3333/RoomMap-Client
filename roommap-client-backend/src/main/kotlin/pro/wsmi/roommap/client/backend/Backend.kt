@@ -130,9 +130,6 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         println("OK")
 
 
-        val matrixServers = mutableMapOf<String, MatrixServer>()
-        val matrixRooms = mutableListOf<MatrixRoom>()
-
         val apiHttpClient = ApacheClient()
         val apiHttpReqBase = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
 
@@ -149,6 +146,8 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             .method(Method.POST)
             .body(jsonSerializer.encodeToString(APIRoomListReq.serializer(), APIRoomListReq()))
 
+        val businessData = BusinessData()
+
         launch {
             while (true)
             {
@@ -159,10 +158,9 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
                 if (apiServerListReqHttpResponse.status == Status.OK)
                 {
                     val apiServerListReqResponse = jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), apiServerListReqHttpResponse.bodyString())
-                    matrixServers.clear()
-                    matrixServers.putAll(apiServerListReqResponse.servers.toSortedMap(compareBy { serverId ->
+                    businessData.matrixServers = apiServerListReqResponse.servers.toSortedMap(compareBy { serverId ->
                         apiServerListReqResponse.servers.getValue(serverId).name
-                    }))
+                    })
 
                     println("OK")
 
@@ -173,8 +171,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
                     if (apiRoomListReqHttpResponse.status == Status.OK)
                     {
                         val apiRoomListReqResponse = jsonSerializer.decodeFromString(APIRoomListReqResponse.serializer(), apiRoomListReqHttpResponse.bodyString())
-                        matrixRooms.clear()
-                        matrixRooms.addAll(apiRoomListReqResponse.rooms)
+                        businessData.matrixRooms = apiRoomListReqResponse.rooms
 
                         println("OK")
                     }
@@ -204,8 +201,8 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "/{mainLang}/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerTemplate, matrixServers, matrixRooms),
-            "/" bind Method.GET to handleMatrixRoomsPageReq(debugModeCLA, clientCfg, freemarkerTemplate, matrixServers, matrixRooms)
+            "/{mainLang}/" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData),
+            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 

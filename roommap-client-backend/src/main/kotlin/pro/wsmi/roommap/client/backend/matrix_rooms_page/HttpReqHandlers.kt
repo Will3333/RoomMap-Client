@@ -6,15 +6,17 @@ import org.http4k.core.*
 import org.http4k.core.cookie.Cookie
 import org.http4k.core.cookie.cookie
 import org.http4k.lens.*
-import org.http4k.routing.path
 import pro.wsmi.kwsmilib.language.Language
-import pro.wsmi.kwsmilib.net.http.convertRawAcceptLanguageHeaderToBCP47LanguageTags
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.http4k.asResult
-import pro.wsmi.roommap.client.matrix_rooms_page.*
+import pro.wsmi.roommap.client.lib.matrix_rooms_page.*
 import pro.wsmi.roommap.lib.api.*
 import java.io.StringWriter
 import java.util.*
+
+
+private const val PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
+private const val PAGE_CSS_FILE_NAME = "matrix_rooms_page.css"
 
 private val getRootReqSorterQuery = Query.enum<MatrixRoomListSortingElement>().optional(MATRIX_ROOMS_PAGE_SORTER_REQ_NAME).asResult()
 private val getRootReqSorterDirectionQuery = Query.boolean().optional(MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME).asResult()
@@ -26,13 +28,10 @@ private val getRootReqServerFilterQueries = Query.multi.optional(MATRIX_ROOMS_PA
 private val getRootReqPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_PAGE_REQ_NAME).asResult()
 private val getRootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME).asResult()
 
+
 @ExperimentalSerializationApi
-fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, matrixServerFullList: MutableMap<String, MatrixServer>, matrixRoomFullList: MutableList<MatrixRoom>) : (Request) -> Response = { req ->
-
-    val initialMatrixServerList = matrixServerFullList.toMap()
-    val initialMatrixRoomList = matrixRoomFullList.toList()
-
-
+fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, freemarkerTemplate: Template, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
+{
     val sortingReq = getRootReqSorterQuery(req).getOrNull()
     val sortingDirectionReq = getRootReqSorterDirectionQuery(req).getOrNull()
     val gaFilteringReq = getRootReqGAFilterQuery(req).getOrNull()
@@ -42,7 +41,7 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     val minNOUFilteringReq = getRootReqMinNOUFilterQuery(req).getOrNull()
 
 
-    val filteredSortedMatrixRoomList = initialMatrixRoomList.let {
+    val filteredSortedMatrixRoomList = matrixRoomList.let {
         if (serverFilteringReq != null)
         {
             val newList = mutableListOf<MatrixRoom>()
@@ -67,10 +66,10 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             }
             MatrixRoomListSortingElement.SERVER_NAME -> {
                 if (sortingDirectionReq != null && sortingDirectionReq) it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { room ->
-                    initialMatrixServerList.getValue(room.serverId).name
+                    matrixServerList.getValue(room.serverId).name
                 })
                 else it.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { room ->
-                    initialMatrixServerList.getValue(room.serverId).name
+                    matrixServerList.getValue(room.serverId).name
                 })
             }
             else -> {
@@ -151,47 +150,6 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
     ))
 
 
-    val httpReqAcceptLanguageHeader = req.header("Accept-Language")
-    val httpReqAcceptedLanguageTags = if (httpReqAcceptLanguageHeader != null)
-        convertRawAcceptLanguageHeaderToBCP47LanguageTags(httpReqAcceptLanguageHeader)
-    else null
-
-    val mainLangReqByHttp = if (httpReqAcceptedLanguageTags != null)
-    {
-        var lang : Language? = null
-        for (tag in httpReqAcceptedLanguageTags)
-        {
-            if (tag.lang == Language.ENG || tag.lang == Language.FRA)
-            {
-                lang = tag.lang
-                break
-            }
-        }
-        lang
-    }
-    else null
-
-    val mainLangReqByCookie = when(req.cookie(MATRIX_ROOMS_PAGE_MAIN_LANG_COOKIE_NAME)?.value?.toLowerCase()) {
-        Language.FRA.iso639_3 -> Language.FRA
-        Language.ENG.iso639_3 -> Language.ENG
-        else -> null
-    }
-    val mainLangReqByPath = when (req.path("mainLang")?.toLowerCase())
-    {
-        Language.FRA.iso639_3 -> Language.FRA
-        Language.ENG.iso639_3 -> Language.ENG
-        else -> null
-    }
-
-    val pageMainLang = when {
-        mainLangReqByPath != null -> mainLangReqByPath
-        mainLangReqByCookie != null -> mainLangReqByCookie
-        mainLangReqByHttp != null -> mainLangReqByHttp
-        else -> Language.ENG
-    }
-
-
-
     val freemarkerModel = mapOf(
         "debug_mode" to debugMode,
         "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale(pageMainLang.bcp47)),
@@ -199,17 +157,17 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             "name" to clientCfg.websiteName
         ),
         "page_info" to mapOf(
-            "name" to "Matrix room list",
+            "path_name" to "/",
             "main_lang" to pageMainLang,
             "css_files" to listOf(
-                "matrix_rooms_page.css"
+                PAGE_CSS_FILE_NAME
             ),
-            "template_file" to "matrix_rooms_page.ftlh",
+            "template_file" to PAGE_TEMPLATE_FILE_NAME,
             "max_page" to maxPage,
             "max_page_length" to maxPage.toString().length,
             "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
         ),
-        "serverList" to initialMatrixServerList.mapValues { server ->
+        "serverList" to matrixServerList.mapValues { server ->
             mapOf("name" to server.value.name, "apiUrl" to server.value.apiURL.toString(), "updateFreq" to server.value.updateFreq)
         },
         "roomList" to slicedFilteredSortedMatrixRoomList,
@@ -234,27 +192,19 @@ fun handleMatrixRoomsPageReq(debugMode: Boolean, clientCfg: ClientConfiguration,
             page = pageReq
         )
     )
-    
+
     val stringWriter = StringWriter()
     freemarkerTemplate.process(freemarkerModel, stringWriter)
 
-    val responseMainLangCookie = if (pageMainLang == mainLangReqByPath && pageMainLang != mainLangReqByCookie)
-        Cookie(name = MATRIX_ROOMS_PAGE_MAIN_LANG_COOKIE_NAME, value = pageMainLang.iso639_3, maxAge = 16329600L, path = "/")
-    else null
 
     val responseElmPerPageCookie = if (elmPerPage == elmPerPageReqByQuery && elmPerPage != elmPerPageReqByCookie)
         Cookie(name = MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_COOKIE_NAME, value = elmPerPage.toString(), maxAge = 16329600L, path = "/")
     else null
 
 
-    Response(Status.OK)
+    return Response(Status.OK)
         .body(stringWriter.toString())
         .header("Content-Type", ContentType.TEXT_HTML.toHeaderValue())
-        .let {
-            if (responseMainLangCookie != null)
-                it.cookie(responseMainLangCookie)
-            else it
-        }
         .let {
             if (responseElmPerPageCookie != null)
                 it.cookie(responseElmPerPageCookie)

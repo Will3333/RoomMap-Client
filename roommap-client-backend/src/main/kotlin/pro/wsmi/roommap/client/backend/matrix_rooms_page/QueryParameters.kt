@@ -1,6 +1,6 @@
 package pro.wsmi.roommap.client.backend.matrix_rooms_page
 
-data class QueryParameters(
+data class QueryParameters (
     val sorterReqName: String,
     val sorterDirectionReqName: String,
     val gaFilterReqName: String,
@@ -17,12 +17,11 @@ data class QueryParameters(
     val serverFilter: List<String>?,
     val maxNOUFilter: Int?,
     val minNOUFilter: Int?,
-    val roomsPerPage: Int,
-    val page: Int
-)
+    val roomsPerPage: Int?,
+    val page: Int?
+) : pro.wsmi.roommap.client.backend.QueryParameters
 {
-    @Suppress("unused")
-    fun toUrlFormat(): String = if (this.sorter != null) "${this.sorterReqName}=${this.sorter}" else {""}.let {
+    override fun toUrlFormat(): String = if (this.sorter != null) "${this.sorterReqName}=${this.sorter}" else {""}.let {
         if (this.sorterDirection != null)
             if(it.isNotEmpty()) "$it&" else {""} + "${this.sorterDirectionReqName}=${this.sorterDirection}"
         else it
@@ -53,19 +52,17 @@ data class QueryParameters(
             if(it.isNotEmpty()) "$it&" else {""} + "${this.minNOUFilterReqName}=${this.minNOUFilter}"
         else it
     }.let {
-        if(it.isNotEmpty()) "$it&" else {""} + "${this.roomsPerPageReqName}=${this.roomsPerPage}&${this.pageReqName}=${this.page}"
+        if (this.roomsPerPage != null)
+            if(it.isNotEmpty()) "$it&" else {""} + "${this.roomsPerPageReqName}=${this.roomsPerPage}"
+        else it
+    }.let {
+        if (this.page != null)
+            if(it.isNotEmpty()) "$it&" else {""} + "${this.pageReqName}=${this.page}"
+        else it
     }
 
     @Suppress("unused")
-    fun toOwnFormat (
-        pattern: String,
-        ignorePage: Boolean = false,
-        ignoreRoomsPerPage: Boolean = false,
-        ignoreNOUFilter: Boolean = false,
-        ignoreGAFilter: Boolean = false,
-        ignoreWRFilter: Boolean = false,
-        ignoreServerFilter: Boolean = false
-    ): String =
+    override fun toOwnFormat (pattern: String): String =
         if (this.sorter != null)
             pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.sorterReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.sorter.toString())
         else {
@@ -75,15 +72,15 @@ data class QueryParameters(
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.sorterDirectionReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.sorterDirection.toString())
             else it
         }.let {
-            if (!ignoreGAFilter && this.gaFilter != null)
+            if (this.gaFilter != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.gaFilterReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.gaFilter.toString())
             else it
         }.let {
-            if (!ignoreWRFilter && this.wrFilter != null)
+            if (this.wrFilter != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.wrFilterReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.wrFilter.toString())
             else it
         }.let {
-            if (!ignoreServerFilter && this.serverFilter != null)
+            if (this.serverFilter != null)
             {
                 it + this.serverFilter.joinToString(separator = "") { server ->
                     if (server.isNotEmpty())
@@ -93,19 +90,19 @@ data class QueryParameters(
             }
             else it
         }.let {
-            if (!ignoreNOUFilter && this.maxNOUFilter != null)
+            if (this.maxNOUFilter != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.maxNOUFilterReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.maxNOUFilter.toString())
             else it
         }.let {
-            if (!ignoreNOUFilter && this.minNOUFilter != null)
+            if (this.minNOUFilter != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.minNOUFilterReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.minNOUFilter.toString())
             else it
         }.let {
-            if (!ignorePage)
+            if (this.page != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.pageReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.page.toString())
             else it
         }.let {
-            if (!ignoreRoomsPerPage)
+            if (this.roomsPerPage != null)
                 if(it.isNotEmpty()) "$it\n" else {""} + pattern.replace(oldValue = PATTERN_NAME_TAG, newValue = this.roomsPerPageReqName).replace(oldValue = PATTERN_VALUE_TAG, newValue = this.roomsPerPage.toString())
             else it
         }
@@ -114,6 +111,39 @@ data class QueryParameters(
     fun copyWithNewPage(newPage: Int) : QueryParameters = this.copy(page = newPage)
     @Suppress("unused")
     fun copyWithNewSorter(newSorter: String, newDirection: Boolean) : QueryParameters = this.copy(sorter = newSorter, sorterDirection = newDirection)
+    @Suppress("unused")
+    fun copyDeleting (
+        deletePage: Boolean = false,
+        deleteRoomsPerPage: Boolean = false,
+        deleteNOUFilter: Boolean = false,
+        deleteGAFilter: Boolean = false,
+        deleteWRFilter: Boolean = false,
+        deleteServerFilter: Boolean = false
+    ) : QueryParameters = this.let {
+        if (deletePage)
+            it.copy(page = null)
+        else it
+    }.let {
+        if (deleteRoomsPerPage)
+            it.copy(roomsPerPage = null)
+        else it
+    }.let {
+        if (deleteNOUFilter)
+            it.copy(maxNOUFilter = null, minNOUFilter = null)
+        else it
+    }.let {
+        if (deleteGAFilter)
+            it.copy(gaFilter = null)
+        else it
+    }.let {
+        if (deleteWRFilter)
+            it.copy(wrFilter = null)
+        else it
+    }.let {
+        if (deleteServerFilter)
+            it.copy(serverFilter = null)
+        else it
+    }
 
     companion object {
         const val PATTERN_NAME_TAG= "£{name}£"

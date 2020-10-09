@@ -12,7 +12,7 @@ function handleMatrixRoomArrowClickEvent(arrowElmId)
 		} 
 		else 
 		{
-			arrowBlock.src = "static/img/icon-arrows-expand.svg";
+			arrowBlock.src = "/static/img/icon-arrows-expand.svg";
 			detailsBlock.style.display = 'grid';
 		}
 	}
