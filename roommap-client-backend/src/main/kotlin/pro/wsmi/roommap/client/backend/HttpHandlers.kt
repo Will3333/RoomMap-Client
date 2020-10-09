@@ -53,9 +53,6 @@ fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageM
 @ExperimentalSerializationApi
 fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, businessData: BusinessData) : HttpHandler = { req ->
 
-    val frozenMatrixServerList = businessData.matrixServers
-    val frozenMatrixRoomList = businessData.matrixRooms
-
     val httpReqAcceptLanguageHeader = req.header("Accept-Language")
     val httpReqAcceptedLanguageTags = if (httpReqAcceptLanguageHeader != null)
         convertRawAcceptLanguageHeaderToBCP47LanguageTags(httpReqAcceptLanguageHeader)
@@ -100,10 +97,15 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
         else -> defaultLang
     }
 
+
     val requestedPagePath = if (mainLangReqByPath != null)
         req.uri.path.replace(Regex("^\\/${mainLangReqByPath.iso639_3}\\/?"), "/")
     else
         req.uri.path
+
+
+    val frozenMatrixServerList = businessData.matrixServers
+    val frozenMatrixRoomList = businessData.matrixRooms
 
     when {
         requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, debugMode, clientCfg, pageMainLang, freemarkerTemplate, frozenMatrixServerList, frozenMatrixRoomList)
