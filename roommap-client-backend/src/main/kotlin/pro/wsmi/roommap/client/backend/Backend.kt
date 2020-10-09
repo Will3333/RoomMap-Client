@@ -23,7 +23,6 @@ import org.http4k.routing.static
 import org.http4k.server.Jetty
 import org.http4k.server.asServer
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
-import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageReq
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
 import pro.wsmi.roommap.client.lib.USER_AGENT
