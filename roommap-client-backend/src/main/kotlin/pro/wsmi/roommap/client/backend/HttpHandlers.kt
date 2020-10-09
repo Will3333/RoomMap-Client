@@ -12,6 +12,7 @@ import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageRe
 import pro.wsmi.roommap.client.lib.MAIN_LANG_COOKIE_NAME
 import java.io.StringWriter
 import java.util.*
+import java.util.concurrent.locks.ReentrantLock
 
 
 @ExperimentalSerializationApi
@@ -51,7 +52,7 @@ fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageM
 }
 
 @ExperimentalSerializationApi
-fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, businessData: BusinessData) : HttpHandler = { req ->
+fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, businessData: BusinessData, businessDataLock: ReentrantLock) : HttpHandler = { req ->
 
     val httpReqAcceptLanguageHeader = req.header("Accept-Language")
     val httpReqAcceptedLanguageTags = if (httpReqAcceptLanguageHeader != null)
@@ -104,8 +105,10 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
         req.uri.path
 
 
+    businessDataLock.lock()
     val frozenMatrixServerList = businessData.matrixServers
     val frozenMatrixRoomList = businessData.matrixRooms
+    businessDataLock.unlock()
 
     when {
         requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, debugMode, clientCfg, pageMainLang, freemarkerTemplate, frozenMatrixServerList, frozenMatrixRoomList)

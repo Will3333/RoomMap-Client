@@ -28,6 +28,7 @@ import pro.wsmi.roommap.client.lib.APP_VERSION
 import pro.wsmi.roommap.client.lib.USER_AGENT
 import pro.wsmi.roommap.lib.api.*
 import java.io.File
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.system.exitProcess
 
 
@@ -145,6 +146,8 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             .method(Method.POST)
             .body(jsonSerializer.encodeToString(APIRoomListReq.serializer(), APIRoomListReq()))
 
+
+        val businessDataLock = ReentrantLock()
         val businessData = BusinessData()
 
         launch {
@@ -202,10 +205,12 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
                                     {
                                         println("OK")
 
+                                        businessDataLock.lock()
                                         businessData.matrixServers = apiServerListReqResponse.servers.toSortedMap(compareBy { serverId ->
                                             apiServerListReqResponse.servers.getValue(serverId).name
                                         })
                                         businessData.matrixRooms = apiRoomListReqResponse.rooms
+                                        businessDataLock.unlock()
                                     }
                                     else {
                                         println("FAILED")
@@ -253,7 +258,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData)
+            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData, businessDataLock)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 
