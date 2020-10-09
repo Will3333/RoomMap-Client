@@ -1,5 +1,6 @@
 package pro.wsmi.roommap.client.backend
 
+import freemarker.template.Configuration
 import freemarker.template.Template
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.http4k.core.*
@@ -10,6 +11,7 @@ import pro.wsmi.kwsmilib.net.http.convertRawAcceptLanguageHeaderToBCP47LanguageT
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.backend.matrix_rooms_page.handleMatrixRoomsPageReq
 import pro.wsmi.roommap.client.lib.MAIN_LANG_COOKIE_NAME
+import java.io.File
 import java.io.StringWriter
 import java.util.*
 import java.util.concurrent.locks.ReentrantLock
@@ -24,21 +26,23 @@ val availableLang = setOf(
 val defaultLang = Language.ENG
 
 private const val PAGE_404_TEMPLATE_FILE_NAME = "404_page.ftlh"
+private const val PAGE_404_CSS_FILE_NAME = "404_page.css"
 
 @ExperimentalSerializationApi
-fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, freemarkerTemplate: Template) : Response
+fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, globalBundle: ResourceBundle, freemarkerTemplate: Template) : Response
 {
     val freemarkerModel = mapOf(
         "debug_mode" to debugMode,
-        "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.Page404Texts", Locale(pageMainLang.bcp47)),
         "website_info" to mapOf(
-            "name" to clientCfg.websiteName
+            "name" to clientCfg.websiteName,
+            "texts" to globalBundle,
         ),
         "page_info" to mapOf(
             "path_name" to "",
             "main_lang" to pageMainLang,
-            "css_files" to listOf<String>(),
-            "template_file" to PAGE_404_TEMPLATE_FILE_NAME
+            "css_files" to listOf(PAGE_404_CSS_FILE_NAME),
+            "template_file" to PAGE_404_TEMPLATE_FILE_NAME,
+            "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.Page404UITexts", Locale(pageMainLang.bcp47)),
         ),
         "query_parameters" to Page404QueryParameters()
     )
@@ -52,7 +56,7 @@ fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageM
 }
 
 @ExperimentalSerializationApi
-fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerTemplate: Template, businessData: BusinessData, businessDataLock: ReentrantLock) : HttpHandler = { req ->
+fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerCfg: Configuration, globalTemplateFile: File, businessData: BusinessData, businessDataLock: ReentrantLock) : HttpHandler = { req ->
 
     val httpReqAcceptLanguageHeader = req.header("Accept-Language")
     val httpReqAcceptedLanguageTags = if (httpReqAcceptLanguageHeader != null)
@@ -110,9 +114,12 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
     val frozenMatrixRoomList = businessData.matrixRooms
     businessDataLock.unlock()
 
+    val globalBundle = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.GlobalUITexts", Locale(pageMainLang.bcp47))
+    val freemarkerTemplate = freemarkerCfg.getTemplate(globalTemplateFile.name)
+
     when {
-        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, debugMode, clientCfg, pageMainLang, freemarkerTemplate, frozenMatrixServerList, frozenMatrixRoomList)
-        else -> get404HttpResponse(debugMode, clientCfg, pageMainLang, freemarkerTemplate)
+        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, debugMode, clientCfg, pageMainLang, globalBundle, freemarkerTemplate, frozenMatrixServerList, frozenMatrixRoomList)
+        else -> get404HttpResponse(debugMode, clientCfg, pageMainLang, globalBundle, freemarkerTemplate)
     }.let { response: Response ->
         if (pageMainLang == mainLangReqByPath && pageMainLang != mainLangReqByCookie)
             response.cookie(Cookie(name = MAIN_LANG_COOKIE_NAME, value = pageMainLang.iso639_3, maxAge = 16329600L, path = "/"))

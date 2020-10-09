@@ -248,17 +248,17 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
 
         print("Http server starting ... ")
 
+
         val freemarkerCfg = Configuration(Version(clientCfg.freeMarkerTemplateVersion))
         freemarkerCfg.setDirectoryForTemplateLoading(ftlhDir)
         freemarkerCfg.defaultEncoding = "UTF-8"
-        val freemarkerTemplate = freemarkerCfg.getTemplate(globalTemplateFile.name)
 
 
         configureServerGlobalHttpFilter(debugModeCLA, clientCfg).then(routes(
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData, businessDataLock)
+            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerCfg, globalTemplateFile, businessData, businessDataLock)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 

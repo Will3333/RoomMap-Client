@@ -30,7 +30,7 @@ private val getRootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_R
 
 
 @ExperimentalSerializationApi
-fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, freemarkerTemplate: Template, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
+fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, globalBundle: ResourceBundle, freemarkerTemplate: Template, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
 {
     val sortingReq = getRootReqSorterQuery(req).getOrNull()
     val sortingDirectionReq = getRootReqSorterDirectionQuery(req).getOrNull()
@@ -150,11 +150,11 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
     ))
 
 
-    val freemarkerModel = mapOf(
+    val freemarkerModel = mapOf (
         "debug_mode" to debugMode,
-        "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale(pageMainLang.bcp47)),
-        "website_info" to mapOf(
-            "name" to clientCfg.websiteName
+        "website_info" to mapOf (
+            "name" to clientCfg.websiteName,
+            "texts" to globalBundle,
         ),
         "page_info" to mapOf(
             "path_name" to "/",
@@ -163,6 +163,7 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
                 PAGE_CSS_FILE_NAME
             ),
             "template_file" to PAGE_TEMPLATE_FILE_NAME,
+            "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale(pageMainLang.bcp47)),
             "max_page" to maxPage,
             "max_page_length" to maxPage.toString().length,
             "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
