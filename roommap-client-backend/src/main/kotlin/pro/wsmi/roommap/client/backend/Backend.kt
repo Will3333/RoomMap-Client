@@ -201,7 +201,6 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "/{mainLang}/" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData),
             "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerTemplate, businessData)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 

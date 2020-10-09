@@ -5,7 +5,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import org.http4k.core.*
 import org.http4k.core.cookie.Cookie
 import org.http4k.core.cookie.cookie
-import org.http4k.routing.path
 import pro.wsmi.kwsmilib.language.Language
 import pro.wsmi.kwsmilib.net.http.convertRawAcceptLanguageHeaderToBCP47LanguageTags
 import pro.wsmi.roommap.client.backend.config.ClientConfiguration
@@ -86,16 +85,13 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
         else null
     }
 
-    val gettingLangPathResult = req.path("mainLang")?.toLowerCase().let {
-        if (it != null) {
+    val mainLangReqByPath = req.uri.path.let { path ->
+        Regex("^\\/([a-z]{3})((\\/.*)?)$").find(path)?.groupValues?.get(1)?.let {
             val lang = Language.getFromISO639_3(it)
-            if (availableLang.contains(lang)) Pair(lang, false)
-            else Pair<Language?, Boolean>(null, true)
+            if (availableLang.contains(lang)) lang
+            else null
         }
-        else Pair<Language?, Boolean>(null, false)
     }
-    val mainLangReqByPath = gettingLangPathResult.first
-    val wrongLangPath = gettingLangPathResult.second
 
     val pageMainLang = when {
         mainLangReqByPath != null -> mainLangReqByPath
