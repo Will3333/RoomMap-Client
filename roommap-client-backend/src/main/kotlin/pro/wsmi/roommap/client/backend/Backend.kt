@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
 import org.http4k.client.ApacheClient
 import org.http4k.core.*
 import org.http4k.filter.DebuggingFilters
@@ -133,19 +132,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         val apiHttpClient = ApacheClient()
         val apiHttpReqBase = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
 
-        val jsonSerializer = Json {
-            prettyPrint = debugModeCLA
-        }
-
-        val apiServerListReq = apiHttpReqBase
-            .uri(apiHttpReqBase.uri.path(APIServerListReq.REQ_PATH))
-            .method(Method.GET)
-
-        val apiRoomListReq = apiHttpReqBase
-            .uri(apiHttpReqBase.uri.path(APIRoomListReq.REQ_PATH))
-            .method(Method.POST)
-            .body(jsonSerializer.encodeToString(APIRoomListReq.serializer(), APIRoomListReq()))
-
+        val apiMatrixRoomListReq = APIRoomListReq()
 
         val businessDataLock = ReentrantLock()
         val businessData = BusinessData()
@@ -153,94 +140,50 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         launch {
             while (true)
             {
-                print("Requesting Matrix servers to API ... ")
-
                 val firstCall = businessData.matrixServers.isEmpty() && businessData.matrixRooms.isEmpty()
 
-                val apiServerListReqHttpResponse = apiHttpClient(apiServerListReq)
 
-                if (apiServerListReqHttpResponse.status == Status.OK)
+                print("Requesting Matrix servers to API ... ")
+
+                val matrixServerListResult = getMatrixServerList(apiHttpClient, apiHttpReqBase)
+                val matrixServerList = matrixServerListResult.getOrElse {
+                    println("FAILED")
+                    if (this@BaseLineCmd.debugModeCLA) it.printStackTrace()
+                    else println(it.localizedMessage)
+                    if (firstCall)
+                        exitProcess(20)
+                    null
+                }
+
+                if (matrixServerList != null)
                 {
-                    val apiServerListReqResponse = try {
-                        jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), apiServerListReqHttpResponse.bodyString())
-                    } catch (e: Exception)
-                    {
+                    println("OK")
+
+                    print("Requesting Matrix rooms to API ... ")
+
+                    val matrixRoomListResult = getMatrixRoomList(apiHttpClient, apiHttpReqBase, apiMatrixRoomListReq)
+                    val matrixRoomList = matrixRoomListResult.getOrElse {
                         println("FAILED")
-                        println("Unable to parse the HTTP response body.")
-                        if (this@BaseLineCmd.debugModeCLA) e.printStackTrace()
-                        else println(e.localizedMessage)
+                        if (this@BaseLineCmd.debugModeCLA) it.printStackTrace()
+                        else println(it.localizedMessage)
                         if (firstCall)
-                            exitProcess(21)
+                            exitProcess(24)
                         null
                     }
 
-                    if (apiServerListReqResponse != null)
+                    if (matrixRoomList != null)
                     {
-                        if (apiServerListReqResponse.servers.isNotEmpty())
-                        {
-                            println("OK")
+                        println("OK")
 
-                            print("Requesting Matrix rooms to API ... ")
-
-                            val apiRoomListReqHttpResponse = apiHttpClient(apiRoomListReq)
-
-                            if (apiRoomListReqHttpResponse.status == Status.OK)
-                            {
-                                val apiRoomListReqResponse = try {
-                                    jsonSerializer.decodeFromString(APIRoomListReqResponse.serializer(), apiRoomListReqHttpResponse.bodyString())
-                                } catch (e: Exception)
-                                {
-                                    println("FAILED")
-                                    println("Unable to parse the HTTP response body.")
-                                    if (this@BaseLineCmd.debugModeCLA) e.printStackTrace()
-                                    else println(e.localizedMessage)
-                                    if (firstCall)
-                                        exitProcess(24)
-                                    null
-                                }
-
-                                if (apiRoomListReqResponse != null)
-                                {
-                                    if (apiRoomListReqResponse.rooms.isNotEmpty())
-                                    {
-                                        println("OK")
-
-                                        businessDataLock.lock()
-                                        businessData.matrixServers = apiServerListReqResponse.servers.toSortedMap(compareBy { serverId ->
-                                            apiServerListReqResponse.servers.getValue(serverId).name
-                                        })
-                                        businessData.matrixRooms = apiRoomListReqResponse.rooms
-                                        businessDataLock.unlock()
-                                    }
-                                    else {
-                                        println("FAILED")
-                                        println("Matrix room list of HTTP response is empty.")
-                                        if (firstCall)
-                                            exitProcess(25)
-                                    }
-                                }
-                            }
-                            else {
-                                println("Failed")
-                                println("API HTTP error code: ${apiRoomListReqHttpResponse.status.code}")
-                                if (firstCall)
-                                    exitProcess(23)
-                            }
-                        }
-                        else {
-                            println("FAILED")
-                            println("Matrix server list of HTTP response is empty.")
-                            if (firstCall)
-                                exitProcess(22)
-                        }
+                        businessDataLock.lock()
+                        businessData.matrixServers = matrixServerList.toSortedMap(compareBy { serverId ->
+                            matrixServerList.getValue(serverId).name
+                        })
+                        businessData.matrixRooms = matrixRoomList
+                        businessDataLock.unlock()
                     }
                 }
-                else {
-                    println("Failed")
-                    println("API HTTP error code: ${apiServerListReqHttpResponse.status.code}")
-                    if (firstCall)
-                        exitProcess(20)
-                }
+
 
                 delay(300000)
             }

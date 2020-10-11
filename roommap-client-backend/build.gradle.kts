@@ -24,4 +24,10 @@ dependencies {
 }
 
 val compileKotlin: org.jetbrains.kotlin.gradle.tasks.KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+compileKotlin.kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
+    freeCompilerArgs = freeCompilerArgs.toMutableList().let {
+        it.add("-Xallow-result-return-type")
+        it
+    }.toList()
+}
