@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.4.10"
     kotlin("plugin.serialization") version "1.4.10"
+    application
 }
 
 val KAML_VERSION = "0.21.0"
@@ -30,4 +31,8 @@ compileKotlin.kotlinOptions {
         it.add("-Xallow-result-return-type")
         it
     }.toList()
+}
+
+application {
+    mainClassName = "pro.wsmi.roommap.client.backend.BackendKt"
 }
