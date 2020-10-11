@@ -64,6 +64,7 @@ const gaFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME);
 const wrFilterUrlParam = urlParams.get(MATRIX_ROOMS_PAGE_WR_FILTER_REQ_NAME);
 const serverFilterUrlParam = urlParams.getAll(MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME);
 
+/*
 
 maxNOUFilterCheckbox.addEventListener('change', (event) => {
 	if (maxNOUFilterCheckbox.checked)
@@ -109,6 +110,8 @@ minNOUFilterCheckbox.addEventListener('change', (event) => {
 minNOUFilterTextField.addEventListener('change', (event) => {
 	maxNOUFilterTextField.min = minNOUFilterTextField.value;
 });
+*/
+
 nouFiltersDisplayButton.addEventListener('click', (event) => {
 	if (!nouFiltersBlock.style.display || nouFiltersBlock.style.display == "none")
 		showNOUFiltersBlock();

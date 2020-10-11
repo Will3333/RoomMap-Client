@@ -14,3 +14,15 @@ const val MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME = "min_nou_filter"
 const val MATRIX_ROOMS_PAGE_DEFAULT_PAGE = 1
 const val MATRIX_ROOMS_PAGE_DEFAULT_ROOMS_PER_PAGE = 20
 
+const val NOU_FILTERS_DISPLAY_BUTTON_ID = "matrix-rooms-nou-filters-display-button"
+const val MAX_NOU_FILTER_CHECKBOX_ID = "matrix-rooms-max-nou-filter-checkbox"
+const val MAX_NOU_FILTER_TEXTFIELD_ID = "matrix-rooms-max-nou-filter-textfield"
+const val MIN_NOU_FILTER_CHECKBOX_ID = "matrix-rooms-min-nou-filter-checkbox"
+const val MIN_NOU_FILTER_TEXTFIELD_ID = "matrix-rooms-min-nou-filter-textfield"
+const val GA_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-ga-filter-display-button"
+const val WR_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-wr-filter-display-button"
+const val SERVER_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-server-filter-display-button"
+const val NOU_FILTERS_BLOCK_ID = "matrix-rooms-nou-header-filters-block"
+const val GA_FILTER_BLOCK_ID = "matrix-rooms-ga-header-filter-block"
+const val WR_FILTER_BLOCK_ID = "matrix-rooms-wr-header-filter-block"
+const val SERVER_FILTER_BLOCK_ID = "matrix-rooms-server-header-filter-block"

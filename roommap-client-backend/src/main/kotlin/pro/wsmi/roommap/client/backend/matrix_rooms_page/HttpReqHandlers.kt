@@ -168,6 +168,20 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
             "max_page_length" to maxPage.toString().length,
             "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
         ),
+        "html_element_ids" to mapOf (
+            "NOU_FILTERS_DISPLAY_BUTTON_ID" to NOU_FILTERS_DISPLAY_BUTTON_ID,
+            "MAX_NOU_FILTER_CHECKBOX_ID" to MAX_NOU_FILTER_CHECKBOX_ID,
+            "MAX_NOU_FILTER_TEXTFIELD_ID" to MAX_NOU_FILTER_TEXTFIELD_ID,
+            "MIN_NOU_FILTER_CHECKBOX_ID" to MIN_NOU_FILTER_CHECKBOX_ID,
+            "MIN_NOU_FILTER_TEXTFIELD_ID" to MIN_NOU_FILTER_TEXTFIELD_ID,
+            "GA_FILTER_DISPLAY_BUTTON_ID" to GA_FILTER_DISPLAY_BUTTON_ID,
+            "WR_FILTER_DISPLAY_BUTTON_ID" to WR_FILTER_DISPLAY_BUTTON_ID,
+            "SERVER_FILTER_DISPLAY_BUTTON_ID" to SERVER_FILTER_DISPLAY_BUTTON_ID,
+            "NOU_FILTERS_BLOCK_ID" to NOU_FILTERS_BLOCK_ID,
+            "GA_FILTER_BLOCK_ID" to GA_FILTER_BLOCK_ID,
+            "WR_FILTER_BLOCK_ID" to WR_FILTER_BLOCK_ID,
+            "SERVER_FILTER_BLOCK_ID" to SERVER_FILTER_BLOCK_ID
+        ),
         "serverList" to matrixServerList.mapValues { server ->
             mapOf("name" to server.value.name, "apiUrl" to server.value.apiURL.toString(), "updateFreq" to server.value.updateFreq)
         },

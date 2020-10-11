@@ -27,7 +27,7 @@ kotlin {
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${rootProject.extra["SERIALIZATION_VERSION"]}")
         implementation("io.ktor:ktor-client-core:${rootProject.extra["KTOR_VERSION"]}")
         implementation("io.ktor:ktor-client-js:${rootProject.extra["KTOR_VERSION"]}")
+        */
         implementation("org.jetbrains.kotlinx:kotlinx-html-js:${rootProject.extra["KHTML_VERSION"]}")
-         */
     }
 }

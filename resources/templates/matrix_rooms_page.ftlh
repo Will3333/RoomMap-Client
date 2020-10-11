@@ -49,26 +49,26 @@
 	    <div class="matrix-rooms-nou-header-title-container">
 	      <#if (query_parameters.sorter?? && query_parameters.sorter != "NUM_JOINED_MEMBERS") || (query_parameters.sorterDirection?? && query_parameters.sorterDirection)><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', false).toUrlFormat()}">${page_info.texts.getString('users_elm_header_title')?no_esc}<#if !query_parameters.sorter?? || query_parameters.sorter == "NUM_JOINED_MEMBERS"> &#x25B2;</#if></a>
 	      <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('NUM_JOINED_MEMBERS', true).toUrlFormat()}">${page_info.texts.getString('users_elm_header_title')?no_esc} &#x25BC;</a></#if>
-		  <button id="matrix-rooms-nou-filters-display-button" class="button">&#x22EE;</button>
+		  <button id="${html_element_ids.NOU_FILTERS_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button>
 	    </div>
-		<form method="get" id="matrix-rooms-nou-header-filters-block" class="matrix-rooms-nou-header-filters">
+		<form method="get" id="${html_element_ids.NOU_FILTERS_BLOCK_ID}" class="matrix-rooms-nou-header-filters">
 		  <div>
-		    <input type="checkbox" id="matrix-rooms-max-nou-filter-checkbox"<#if query_parameters.maxNOUFilter??> checked</#if>>
-			<label for="matrix-rooms-max-nou-filter-checkbox">max : </label>
-			<input type="number" id="matrix-rooms-max-nou-filter-textfield" class="matrix-rooms-current-page-textfield" name="${query_parameters.maxNOUFilterReqName}"<#if query_parameters.maxNOUFilter??> value=${query_parameters.maxNOUFilter?string.computer}</#if><#if query_parameters.minNOUFilter??>  min=${query_parameters.minNOUFilter?string.computer}</#if><#if !query_parameters.maxNOUFilter??> disabled</#if> required>
+		    <input type="checkbox" id="${html_element_ids.MAX_NOU_FILTER_CHECKBOX_ID}"<#if query_parameters.maxNOUFilter??> checked</#if>>
+			<label for="${html_element_ids.MAX_NOU_FILTER_CHECKBOX_ID}">max : </label>
+			<input type="number" id="${html_element_ids.MAX_NOU_FILTER_TEXTFIELD_ID}" class="matrix-rooms-current-page-textfield" name="${query_parameters.maxNOUFilterReqName}"<#if query_parameters.maxNOUFilter??> value=${query_parameters.maxNOUFilter?string.computer}</#if><#if query_parameters.minNOUFilter??>  min=${query_parameters.minNOUFilter?string.computer}</#if><#if !query_parameters.maxNOUFilter??> disabled</#if> required>
 		  </div>
 		  <div>
-		    <input type="checkbox" id="matrix-rooms-min-nou-filter-checkbox"<#if query_parameters.minNOUFilter??> checked</#if>>
-			<label for="matrix-rooms-min-nou-filter-checkbox">min : </label>
-			<input type="number" id="matrix-rooms-min-nou-filter-textfield" class="matrix-rooms-current-page-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
+		    <input type="checkbox" id="${html_element_ids.MIN_NOU_FILTER_CHECKBOX_ID}"<#if query_parameters.minNOUFilter??> checked</#if>>
+			<label for="${html_element_ids.MIN_NOU_FILTER_CHECKBOX_ID}">min : </label>
+			<input type="number" id="${html_element_ids.MIN_NOU_FILTER_TEXTFIELD_ID}" class="matrix-rooms-current-page-textfield" name="${query_parameters.minNOUFilterReqName}"<#if query_parameters.minNOUFilter??> value=${query_parameters.minNOUFilter?string.computer}</#if> min=1<#if query_parameters.maxNOUFilter??>  max=${query_parameters.maxNOUFilter?string.computer}</#if><#if !query_parameters.minNOUFilter??> disabled</#if> required>
 		  </div>
 		  ${query_parameters.copyDeleting(true, false, true, false, false, false).toOwnFormat('<input type="hidden" name="£{name}£" value="£{value}£">')?no_esc}
 		  <button type="submit" class="button" id="matrix-rooms-nou-filters-validation-button">${page_info.texts.getString('filter_button_name')?no_esc}</button>
 		</form>
 	  </div>
 	  <div class="matrix-rooms-ga-header">
-	    <div class="matrix-rooms-ga-header-title-container"><span class="matrix-rooms-ga-header-title" title="${page_info.texts.getString('ga_elm_header_tooltip')?no_esc}">${page_info.texts.getString('ga_elm_header_title')?no_esc}</span><button id="matrix-rooms-ga-filter-display-button" class="button">&#x22EE;</button></div>
-		<form method="get" id="matrix-rooms-ga-header-filter-block" class="matrix-rooms-ga-header-filter">
+	    <div class="matrix-rooms-ga-header-title-container"><span class="matrix-rooms-ga-header-title" title="${page_info.texts.getString('ga_elm_header_tooltip')?no_esc}">${page_info.texts.getString('ga_elm_header_title')?no_esc}</span><button id="${html_element_ids.GA_FILTER_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button></div>
+		<form method="get" id="${html_element_ids.GA_FILTER_BLOCK_ID}" class="matrix-rooms-ga-header-filter">
 		  <div>
 		    <input type="radio" id="matrix-rooms-ga-filter-all-radio" name="${query_parameters.gaFilterReqName}" value="NO_FILTER"<#if !query_parameters.gaFilter?? || (query_parameters.gaFilter?? && query_parameters.gaFilter == "NO_FILTER")> checked</#if>>
 			<label for="matrix-rooms-ga-filter-all-radio">${page_info.texts.getString('filter_selection_no_filter_txt')?no_esc}</label>
@@ -86,8 +86,8 @@
 		</form>
 	  </div>
 	  <div class="matrix-rooms-wr-header">
-	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">${page_info.texts.getString('wr_elm_header_title')?no_esc}</span><button id="matrix-rooms-wr-filter-display-button" class="button">&#x22EE;</button></div>
-	    <form method="get" id="matrix-rooms-wr-header-filter-block" class="matrix-rooms-wr-header-filter">
+	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">${page_info.texts.getString('wr_elm_header_title')?no_esc}</span><button id="${html_element_ids.WR_FILTER_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button></div>
+	    <form method="get" id="${html_element_ids.WR_FILTER_BLOCK_ID}" class="matrix-rooms-wr-header-filter">
 		  <div>
 		    <input type="radio" id="matrix-rooms-wr-filter-all-radio" name="${query_parameters.wrFilterReqName}" value="NO_FILTER"<#if !query_parameters.wrFilter?? || (query_parameters.wrFilter?? && query_parameters.wrFilter == "NO_FILTER")> checked</#if>>
 			<label for="matrix-rooms-wr-filter-all-radio">${page_info.texts.getString('filter_selection_no_filter_txt')?no_esc}</label>
@@ -108,9 +108,9 @@
 	    <div class="matrix-rooms-server-header-title-container">
 	      <#if !query_parameters.sorter?? || (query_parameters.sorter?? && query_parameters.sorter != "SERVER_NAME") || (query_parameters.sorterDirection?? && !(query_parameters.sorterDirection))><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', true).toUrlFormat()}">${page_info.texts.getString('server_elm_header_title')?no_esc}<#if query_parameters.sorter?? && query_parameters.sorter == "SERVER_NAME"> &#x25BC;</#if></a>
 		  <#else><a class="link-button link-button-enabled" href="?${query_parameters.copyWithNewSorter('SERVER_NAME', false).toUrlFormat()}">${page_info.texts.getString('server_elm_header_title')?no_esc} &#x25B2;</a></#if>
-		  <button id="matrix-rooms-server-filter-display-button" class="button">&#x22EE;</button>
+		  <button id="${html_element_ids.SERVER_FILTER_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button>
 	    </div>
-		<form method="get" id="matrix-rooms-server-header-filter-block" class="matrix-rooms-server-header-filter">
+		<form method="get" id="${html_element_ids.SERVER_FILTER_BLOCK_ID}" class="matrix-rooms-server-header-filter">
 		  <select name="${query_parameters.serverFilterReqName}" multiple>
 		    <#list serverList as serverId, server>
 			<option value="${serverId}"<#if query_parameters.serverFilter?? && query_parameters.serverFilter?seq_contains(serverId)> selected</#if>>${server.name}</option>
@@ -145,4 +145,5 @@
 	  const MATRIX_ROOMS_PAGE_SERVER_FILTER_REQ_NAME = '${query_parameters.serverFilterReqName}';
 	</script>
     <script src="/static/js/roommap-client-js-matrix-rooms-page-native.js"></script>
+	<script src="/static/js/roommap-client-js-matrix-rooms-page.js"></script>
 	
