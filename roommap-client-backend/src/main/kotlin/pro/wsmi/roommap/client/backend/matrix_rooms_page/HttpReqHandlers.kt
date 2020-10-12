@@ -182,6 +182,18 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
             "WR_FILTER_BLOCK_ID" to WR_FILTER_BLOCK_ID,
             "SERVER_FILTER_BLOCK_ID" to SERVER_FILTER_BLOCK_ID
         ),
+        "html_element_classes" to mapOf (
+            "NOU_FILTERS_BLOCK_DISPLAYED_CLASS" to NOU_FILTERS_BLOCK_DISPLAYED_CLASS,
+            "NOU_FILTERS_BLOCK_HIDDEN_CLASS" to NOU_FILTERS_BLOCK_HIDDEN_CLASS,
+            "GA_FILTER_BLOCK_DISPLAYED_CLASS" to GA_FILTER_BLOCK_DISPLAYED_CLASS,
+            "GA_FILTER_BLOCK_HIDDEN_CLASS" to GA_FILTER_BLOCK_HIDDEN_CLASS,
+            "WR_FILTER_BLOCK_DISPLAYED_CLASS" to WR_FILTER_BLOCK_DISPLAYED_CLASS,
+            "WR_FILTER_BLOCK_HIDDEN_CLASS" to WR_FILTER_BLOCK_HIDDEN_CLASS,
+            "SERVER_FILTER_BLOCK_DISPLAYED_CLASS" to SERVER_FILTER_BLOCK_DISPLAYED_CLASS,
+            "SERVER_FILTER_BLOCK_HIDDEN_CLASS" to SERVER_FILTER_BLOCK_HIDDEN_CLASS,
+            "MATRIX_ROOM_DETAILS_DISPLAYED_CLASS" to MATRIX_ROOM_DETAILS_DISPLAYED_CLASS,
+            "MATRIX_ROOM_DETAILS_HIDDEN_CLASS" to MATRIX_ROOM_DETAILS_HIDDEN_CLASS
+        ),
         "serverList" to matrixServerList.mapValues { server ->
             mapOf("name" to server.value.name, "apiUrl" to server.value.apiURL.toString(), "updateFreq" to server.value.updateFreq)
         },

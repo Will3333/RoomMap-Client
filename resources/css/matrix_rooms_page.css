@@ -92,7 +92,6 @@
     }
 
     .matrix-rooms-nou-header-filters {
-        display: none;
         text-align: left;
         white-space: normal;
     }
@@ -111,7 +110,6 @@
     }
 
     .matrix-rooms-ga-header-filter {
-        display: none;
         text-align: left;
         white-space: normal;
     }
@@ -130,7 +128,6 @@
     }
 
     .matrix-rooms-wr-header-filter {
-        display: none;
         text-align: left;
         white-space: normal;
     }
@@ -180,7 +177,6 @@
 
     .matrix-room-details {
         grid-column: 1 / 6;
-        display: none;
         grid-template-columns: min-content auto;
         row-gap: 0.3em;
         column-gap: 0.2em;
@@ -219,7 +215,6 @@
     }
 
     .matrix-rooms-nou-header-filters {
-        display: none;
         text-align: left;
         white-space: nowrap;
     }
@@ -238,7 +233,6 @@
     }
 
     .matrix-rooms-ga-header-filter {
-        display: none;
         text-align: left;
         white-space: nowrap;
     }
@@ -257,7 +251,6 @@
     }
 
     .matrix-rooms-wr-header-filter {
-        display: none;
         text-align: left;
         white-space: nowrap;
     }
@@ -313,7 +306,6 @@
 
     .matrix-room-details {
         grid-column: 1 / 6;
-        display: none;
         grid-template-columns: min-content auto;
         row-gap: 0.3em;
         column-gap: 0.4em;
@@ -338,17 +330,52 @@
     white-space: nowrap;
 }
 
+.matrix-rooms-nou-header-filters-displayed {
+        display: block;
+}
+.matrix-rooms-nou-header-filters-hidden {
+        display: none;
+}
+
 .matrix-rooms-ga-header-title-container {
     white-space: nowrap;
+}
+
+.matrix-rooms-ga-header-filter-displayed {
+        display: block;
+}
+.matrix-rooms-ga-header-filter-hidden {
+        display: none;
 }
 
 .matrix-rooms-wr-header-title-container {
     white-space: nowrap;
 }
 
+.matrix-rooms-wr-header-filter-displayed {
+        display: block;
+}
+.matrix-rooms-wr-header-filter-hidden {
+        display: none;
+}
+
 .matrix-rooms-server-header-filter {
-    display: none;
     text-align: left;
+}
+
+.matrix-rooms-server-header-filter-displayed {
+        display: block;
+}
+.matrix-rooms-server-header-filter-hidden {
+        display: none;
+}
+
+.matrix-room-details-displayed {
+    display: grid;
+}
+
+.matrix-room-details-hidden {
+    display: none;
 }
 
 .matrix-room-details-alias-title {
