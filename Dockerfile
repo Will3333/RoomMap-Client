@@ -9,7 +9,7 @@ RUN curl -L https://github.com/Will3333/RoomMap-Client/releases/download/v0.1.0-
     tar -xvf resources.tar && rm -f resources.tar && \
     mv resources /data/resources
 
-WORKDIR /root/roommap-api
+WORKDIR /root/roommap-client
 
 EXPOSE 80
 
