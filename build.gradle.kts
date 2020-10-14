@@ -8,7 +8,7 @@
  *  See the License for the specific language governing permissions and limitations under the License.
  */
 
-extra["ROOMMAP_LIB_VERSION"] = "0.1.0"
+extra["ROOMMAP_LIB_VERSION"] = "0.1.1-beta"
 extra["COROUTINES_VERSION"] = "1.3.9"
 extra["SERIALIZATION_VERSION"] = "1.0.0-RC"
 extra["KWSMILIB_VERSION"] = "0.8.3"
