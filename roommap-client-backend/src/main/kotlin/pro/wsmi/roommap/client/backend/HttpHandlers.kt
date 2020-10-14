@@ -124,7 +124,9 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
     val frozenMatrixRoomList = businessData.matrixRooms
     businessDataLock.unlock()
 
-    val globalBundle = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.GlobalUITexts", Locale(pageMainLang.bcp47))
+    val pageMainLocale = Locale(pageMainLang.bcp47)
+    val globalBundle = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.GlobalUITexts", pageMainLocale)
+    freemarkerCfg.locale = pageMainLocale
     val freemarkerTemplate = freemarkerCfg.getTemplate(globalTemplateFile.name)
 
     when {
