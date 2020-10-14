@@ -18,7 +18,7 @@ extra["KTOR_VERSION"] = "1.4.0"
 subprojects {
 
     group = "pro.wsmi"
-    version = "0.1.0"
+    version = "0.1.0-beta"
 
     repositories {
         mavenCentral()
