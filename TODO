@@ -1,5 +1,6 @@
 Features :
   - Modify details icon
+  - Deal with freemarker locale
   - HTML Metas
   - room invitation links
   - Matrix rooms Searching
