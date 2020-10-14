@@ -7,7 +7,7 @@ RUN curl -L https://github.com/Will3333/RoomMap-Client/releases/download/v0.1.0-
     mv roommap-client-backend-0.1.0-beta roommap-client && \
     curl -L https://github.com/Will3333/RoomMap-Client/releases/download/v0.1.0-BETA/resources-0.1.0-beta.tar --output resources.tar && \
     tar -xvf resources.tar && rm -f resources.tar && \
-    mv resources /data/resources
+    mv resources roommap-client/resources
 
 WORKDIR /root/roommap-client
 
