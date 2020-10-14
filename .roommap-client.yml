@@ -2,7 +2,7 @@ instance_name: RoomMap.org
 client_backend:
   port: 80
   compression: true
-api_url: http://127.0.0.1:9999
+api_url: https://api.roommap.org:9999
 resource_directory: D:\.RoomMapResources
 freemarker_template_version: 2.3.30
 website_name: Room Map
