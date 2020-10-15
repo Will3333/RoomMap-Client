@@ -71,12 +71,6 @@
     padding-bottom: 0.2em;
 }
 
-.matrix-room-name-arrow {
-    display: inline-block;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
-}
-
 @media only screen and (max-width: 480px)
 {
     .matrix-rooms-name-header {
@@ -136,6 +130,11 @@
         display: none;
     }
 
+    .matrix-room-name-arrow {
+        display: inline-block;
+        padding-right: 0.05em;
+        padding-left: 0.1em;
+    }
 
     .matrix-room-name-elm {
         display: inline-block;
@@ -260,6 +259,12 @@
         grid-row: 1;
         align-self: end;
         padding-left: 0.5em;
+    }
+
+    .matrix-room-name-arrow {
+        display: inline-block;
+        padding-right: 0.1em;
+        padding-left: 0.3em;
     }
 
     .matrix-room-name-elm {

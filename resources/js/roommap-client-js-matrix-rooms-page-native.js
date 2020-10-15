@@ -5,14 +5,14 @@ function handleMatrixRoomArrowClickEvent(arrowElmId)
 	
 	if (detailsBlock != null)
 	{
-		if (arrowBlock.src.endsWith("icon-arrows-expand.svg"))
+		if (arrowBlock.src.endsWith("icon-expanded.svg"))
 		{
-			arrowBlock.src = "/static/img/icon-arrows-collapse.svg";
+			arrowBlock.src = "/static/img/icon-collapsed.svg";
 			detailsBlock.classList.replace(MATRIX_ROOM_DETAILS_DISPLAYED_CLASS, MATRIX_ROOM_DETAILS_HIDDEN_CLASS);
 		} 
 		else 
 		{
-			arrowBlock.src = "/static/img/icon-arrows-expand.svg";
+			arrowBlock.src = "/static/img/icon-expanded.svg";
 			detailsBlock.classList.replace(MATRIX_ROOM_DETAILS_HIDDEN_CLASS, MATRIX_ROOM_DETAILS_DISPLAYED_CLASS);
 		}
 	}

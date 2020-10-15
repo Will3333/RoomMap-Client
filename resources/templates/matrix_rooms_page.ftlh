@@ -123,7 +123,7 @@
 	  <#list roomList as room>
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
 	  <div class="matrix-room-name-elm-container ${lineVariationClass}">
-		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="/static/img/icon-arrows-collapse.svg" width="20em" height="20em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
+		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="/static/img/icon-collapsed.svg" width="17.5em" height="17.5em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
 		<span class="matrix-room-name-elm"><#if room.name?has_content>${room.name}<#else>${room.roomId}</#if></span>
 	  </div>
 	  <div class="matrix-room-nou-elm ${lineVariationClass}">${room.numJoinedMembers}</div>
