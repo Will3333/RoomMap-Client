@@ -86,7 +86,7 @@
 		</form>
 	  </div>
 	  <div class="matrix-rooms-wr-header">
-	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">${page_info.texts.getString('wr_elm_header_title')?no_esc}</span><button id="${html_element_ids.WR_FILTER_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button></div>
+	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title" title="${page_info.texts.getString('wr_elm_header_tooltip')?no_esc}">${page_info.texts.getString('wr_elm_header_title')?no_esc}</span><button id="${html_element_ids.WR_FILTER_DISPLAY_BUTTON_ID}" class="button">&#x22EE;</button></div>
 	    <form method="get" id="${html_element_ids.WR_FILTER_BLOCK_ID}" class="matrix-rooms-wr-header-filter <#if query_parameters.wrFilter??>${html_element_classes.WR_FILTER_BLOCK_DISPLAYED_CLASS}<#else>${html_element_classes.WR_FILTER_BLOCK_HIDDEN_CLASS}</#if>">
 		  <div>
 		    <input type="radio" id="matrix-rooms-wr-filter-all-radio" name="${query_parameters.wrFilterReqName}" value="NO_FILTER"<#if !query_parameters.wrFilter?? || (query_parameters.wrFilter?? && query_parameters.wrFilter == "NO_FILTER")> checked</#if>>

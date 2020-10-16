@@ -1,7 +1,5 @@
-Issues to fix :
-  - Increase the distinction between the users and guest columns
-
 Features :
+  - Replace title attribute used as tooltip by explicit question mark
   - HTML Metas
   - room invitation links
   - Matrix rooms Searching
