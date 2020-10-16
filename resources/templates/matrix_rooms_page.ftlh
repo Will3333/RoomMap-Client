@@ -131,7 +131,8 @@
 	  <div class="matrix-room-wr-elm ${lineVariationClass}"><#if room.worldReadable>${page_info.texts.getString('wr_elm_yes_value_txt')?no_esc}<#else>${page_info.texts.getString('wr_elm_no_value_txt')?no_esc}</#if></div>
 	  <div class="matrix-room-server-elm ${lineVariationClass}"><a href="${serverList[room.serverId].apiUrl}">${serverList[room.serverId].name}</a></div>
 	  <div id="matrix-room-details-${room?index}" class="matrix-room-details ${html_element_classes.MATRIX_ROOM_DETAILS_HIDDEN_CLASS}">
-	    <#if room.canonicalAlias??><span class="matrix-room-details-alias-title">${page_info.texts.getString('details_elm_alias_title')?no_esc} :</span><span class="matrix-room-details-alias">${room.canonicalAlias}</span></#if>
+	    <#if room.canonicalAlias??><span class="matrix-room-details-alias-title">${page_info.texts.getString('details_elm_alias_title')?no_esc} :</span><span class="matrix-room-details-alias">${room.canonicalAlias}</span>
+	    <#else><span class="matrix-room-details-room-id-title">${page_info.texts.getString('details_elm_room_id_title')?no_esc} :</span><span class="matrix-room-details-room-id">${room.roomId}</span></#if>
 		<span class="matrix-room-details-server-title">${page_info.texts.getString('details_elm_server_title')?no_esc} :</span><span class="matrix-room-details-server"><a href="${serverList[room.serverId].apiUrl}">${serverList[room.serverId].name}</a></span>
 		<#if room.topic??><span class="matrix-room-details-topic-title">${page_info.texts.getString('details_elm_topic_title')?no_esc} :</span><span class="matrix-room-details-topic" lang="">${room.topic}</span></#if>
 	  </div>

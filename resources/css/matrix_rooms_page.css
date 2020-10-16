@@ -394,6 +394,17 @@
     grid-column: 2;
 }
 
+.matrix-room-details-room-id-title {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.matrix-room-details-room-id {
+    grid-column: 2;
+}
+
 .matrix-room-details-topic-title {
     grid-column: 1;
     justify-self: end;
