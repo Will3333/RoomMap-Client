@@ -5,6 +5,7 @@
     <title>${globalData.websiteName}<#if texts.containsKey('page_title')> - ${texts.getString('page_title')?no_esc}</#if></title>
 	<#if texts.containsKey('meta_page_description')><meta name="description" content="${texts.getString('meta_page_description')?no_esc}"></#if>
 	<#if robotsMeta??>${robotsMeta.toHTMLFormat()?no_esc}</#if>
+	<meta name="generator" content="RoomMap-Client-Backend">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/global.css">
 	<#if cssFileNames??><#list cssFileNames as css_file>
