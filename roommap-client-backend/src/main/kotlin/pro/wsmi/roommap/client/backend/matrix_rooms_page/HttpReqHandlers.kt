@@ -141,7 +141,7 @@ fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMar
     }
 
     val maxPage = (filteredSortedMatrixRoomList.size / elmPerPage).let {
-        if ((filteredSortedMatrixRoomList.size % elmPerPage) != 0) it + 1
+        if (filteredSortedMatrixRoomList.size % elmPerPage != 0) it + 1
         else it
     }
 

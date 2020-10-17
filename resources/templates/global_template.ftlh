@@ -19,7 +19,7 @@
     <#include templateFileName>
 	<hr class="page-footer-separator">
 	<footer class="footer">
-	  <p class="footer-copyright">${globalData.texts.getString('copyright_txt')?no_esc}</p>
+	  <p>${globalData.texts.getString('copyright_txt')?no_esc}</p>
 	  <p class="footer-license-details">${globalData.texts.getString('copyright_details_txt')?no_esc}</p>
 	</footer>
     <script>
