@@ -1,4 +1,6 @@
 Features :
   - HTML Metas
   - Matrix rooms Searching
+  - Matrix room tags attribution and filtration system
+  - Matrix room languages attribution and filtration system
   - Matrix server listing request
