@@ -336,10 +336,10 @@
 }
 
 .matrix-rooms-nou-header-filters-displayed {
-        display: block;
+    display: block;
 }
 .matrix-rooms-nou-header-filters-hidden {
-        display: none;
+    display: none;
 }
 
 .matrix-rooms-ga-header-title-container {
@@ -347,10 +347,10 @@
 }
 
 .matrix-rooms-ga-header-filter-displayed {
-        display: block;
+    display: block;
 }
 .matrix-rooms-ga-header-filter-hidden {
-        display: none;
+    display: none;
 }
 
 .matrix-rooms-wr-header-title-container {
@@ -358,10 +358,10 @@
 }
 
 .matrix-rooms-wr-header-filter-displayed {
-        display: block;
+    display: block;
 }
 .matrix-rooms-wr-header-filter-hidden {
-        display: none;
+    display: none;
 }
 
 .matrix-rooms-server-header-filter {
@@ -369,10 +369,10 @@
 }
 
 .matrix-rooms-server-header-filter-displayed {
-        display: block;
+    display: block;
 }
 .matrix-rooms-server-header-filter-hidden {
-        display: none;
+    display: none;
 }
 
 .matrix-room-details-displayed {

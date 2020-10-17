@@ -35,30 +35,20 @@ val availableLang = setOf(
 @ExperimentalSerializationApi
 val defaultLang = Language.ENG
 
-private const val PAGE_404_TEMPLATE_FILE_NAME = "404_page.ftlh"
+internal const val PAGE_404_TEMPLATE_FILE_NAME = "404_page.ftlh"
 private const val PAGE_404_CSS_FILE_NAME = "404_page.css"
 
 @ExperimentalSerializationApi
-fun get404HttpResponse(debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, globalBundle: ResourceBundle, freemarkerTemplate: Template) : Response
+fun get404HttpResponse(freemarkerTemplate: Template, freeMarkerGlobalModelData: GlobalFreeMarkerDataModel) : Response
 {
-    val freemarkerModel = mapOf(
-        "debug_mode" to debugMode,
-        "website_info" to mapOf(
-            "name" to clientCfg.websiteName,
-            "texts" to globalBundle,
-        ),
-        "page_info" to mapOf(
-            "path_name" to "",
-            "main_lang" to pageMainLang,
-            "css_files" to listOf(PAGE_404_CSS_FILE_NAME),
-            "template_file" to PAGE_404_TEMPLATE_FILE_NAME,
-            "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.Page404UITexts", Locale(pageMainLang.bcp47)),
-        ),
-        "query_parameters" to Page404QueryParameters()
+    val freeMarkerModelData = Page404FreeMarkerDataModel(
+        globalData = freeMarkerGlobalModelData,
+        cssFileNames = listOf(PAGE_404_CSS_FILE_NAME),
+        texts = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.Page404UITexts", freeMarkerGlobalModelData.texts.locale)
     )
 
     val stringWriter = StringWriter()
-    freemarkerTemplate.process(freemarkerModel, stringWriter)
+    freemarkerTemplate.process(freeMarkerModelData, stringWriter)
 
     return Response(Status.NOT_FOUND)
         .body(stringWriter.toString())
@@ -129,9 +119,17 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
     freemarkerCfg.locale = pageMainLocale
     val freemarkerTemplate = freemarkerCfg.getTemplate(globalTemplateFile.name)
 
+
+    val freeMarkerGlobalModelData = GlobalFreeMarkerDataModel(
+        debugMode = debugMode,
+        websiteName = clientCfg.websiteName,
+        mainLang = pageMainLang,
+        texts = globalBundle
+    )
+
     when {
-        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, debugMode, clientCfg, pageMainLang, globalBundle, freemarkerTemplate, frozenMatrixServerList, frozenMatrixRoomList)
-        else -> get404HttpResponse(debugMode, clientCfg, pageMainLang, globalBundle, freemarkerTemplate)
+        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, freemarkerTemplate, freeMarkerGlobalModelData, frozenMatrixServerList, frozenMatrixRoomList)
+        else -> get404HttpResponse(freemarkerTemplate, freeMarkerGlobalModelData)
     }.let { response: Response ->
         if (pageMainLang == mainLangReqByPath && pageMainLang != mainLangReqByCookie)
             response.cookie(Cookie(name = MAIN_LANG_COOKIE_NAME, value = pageMainLang.iso639_3, maxAge = 16329600L, path = "/"))

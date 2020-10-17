@@ -10,6 +10,7 @@
 
 package pro.wsmi.roommap.client.lib.matrix_rooms_page
 
+
 const val MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_COOKIE_NAME = "room_per_page"
 const val MATRIX_ROOMS_PAGE_ROOM_PER_PAGE_REQ_NAME = "matrix_rooms_per_page"
 const val MATRIX_ROOMS_PAGE_PAGE_REQ_NAME = "page"
@@ -24,26 +25,37 @@ const val MATRIX_ROOMS_PAGE_MIN_NOU_FILTER_REQ_NAME = "min_nou_filter"
 const val MATRIX_ROOMS_PAGE_DEFAULT_PAGE = 1
 const val MATRIX_ROOMS_PAGE_DEFAULT_ROOMS_PER_PAGE = 20
 
-const val NOU_FILTERS_DISPLAY_BUTTON_ID = "matrix-rooms-nou-filters-display-button"
-const val MAX_NOU_FILTER_CHECKBOX_ID = "matrix-rooms-max-nou-filter-checkbox"
-const val MAX_NOU_FILTER_TEXTFIELD_ID = "matrix-rooms-max-nou-filter-textfield"
-const val MIN_NOU_FILTER_CHECKBOX_ID = "matrix-rooms-min-nou-filter-checkbox"
-const val MIN_NOU_FILTER_TEXTFIELD_ID = "matrix-rooms-min-nou-filter-textfield"
-const val GA_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-ga-filter-display-button"
-const val WR_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-wr-filter-display-button"
-const val SERVER_FILTER_DISPLAY_BUTTON_ID = "matrix-rooms-server-filter-display-button"
-const val NOU_FILTERS_BLOCK_ID = "matrix-rooms-nou-header-filters-block"
-const val GA_FILTER_BLOCK_ID = "matrix-rooms-ga-header-filter-block"
-const val WR_FILTER_BLOCK_ID = "matrix-rooms-wr-header-filter-block"
-const val SERVER_FILTER_BLOCK_ID = "matrix-rooms-server-header-filter-block"
 
-const val NOU_FILTERS_BLOCK_DISPLAYED_CLASS = "matrix-rooms-nou-header-filters-displayed"
-const val NOU_FILTERS_BLOCK_HIDDEN_CLASS = "matrix-rooms-nou-header-filters-hidden"
-const val GA_FILTER_BLOCK_DISPLAYED_CLASS = "matrix-rooms-ga-header-filter-displayed"
-const val GA_FILTER_BLOCK_HIDDEN_CLASS = "matrix-rooms-ga-header-filter-hidden"
-const val WR_FILTER_BLOCK_DISPLAYED_CLASS = "matrix-rooms-wr-header-filter-displayed"
-const val WR_FILTER_BLOCK_HIDDEN_CLASS = "matrix-rooms-wr-header-filter-hidden"
-const val SERVER_FILTER_BLOCK_DISPLAYED_CLASS = "matrix-rooms-server-header-filter-displayed"
-const val SERVER_FILTER_BLOCK_HIDDEN_CLASS = "matrix-rooms-server-header-filter-hidden"
-const val MATRIX_ROOM_DETAILS_DISPLAYED_CLASS = "matrix-room-details-displayed"
-const val MATRIX_ROOM_DETAILS_HIDDEN_CLASS = "matrix-room-details-hidden"
+// Doesn't make these variables as const because Freemarker does not support it
+object MatrixRoomsPageHTMLElmId {
+    val NOU_FILTERS_DISPLAY_BUTTON = "matrix-rooms-nou-filters-display-button"
+    val MAX_NOU_FILTER_CHECKBOX = "matrix-rooms-max-nou-filter-checkbox"
+    val MAX_NOU_FILTER_TEXTFIELD = "matrix-rooms-max-nou-filter-textfield"
+    val MIN_NOU_FILTER_CHECKBOX = "matrix-rooms-min-nou-filter-checkbox"
+    val MIN_NOU_FILTER_TEXTFIELD = "matrix-rooms-min-nou-filter-textfield"
+    val GA_TOOLTIP_CONTAINER= "matrix-rooms-ga-header-tooltip-container"
+    val GA_TOOLTIP= "matrix-rooms-ga-header-tooltip"
+    val GA_FILTER_DISPLAY_BUTTON = "matrix-rooms-ga-filter-display-button"
+    val WR_TOOLTIP_CONTAINER= "matrix-rooms-wr-header-tooltip-container"
+    val WR_TOOLTIP= "matrix-rooms-wr-header-tooltip"
+    val WR_FILTER_DISPLAY_BUTTON = "matrix-rooms-wr-filter-display-button"
+    val SERVER_FILTER_DISPLAY_BUTTON = "matrix-rooms-server-filter-display-button"
+    val NOU_FILTERS_BLOCK = "matrix-rooms-nou-header-filters-block"
+    val GA_FILTER_BLOCK = "matrix-rooms-ga-header-filter-block"
+    val WR_FILTER_BLOCK = "matrix-rooms-wr-header-filter-block"
+    val SERVER_FILTER_BLOCK = "matrix-rooms-server-header-filter-block"
+}
+
+// Doesn't make these variables as const because Freemarker does not support it
+object MatrixRoomsPageCSSClasses {
+    val NOU_FILTERS_BLOCK_DISPLAYED = "matrix-rooms-nou-header-filters-displayed"
+    val NOU_FILTERS_BLOCK_HIDDEN = "matrix-rooms-nou-header-filters-hidden"
+    val GA_FILTER_BLOCK_DISPLAYED = "matrix-rooms-ga-header-filter-displayed"
+    val GA_FILTER_BLOCK_HIDDEN = "matrix-rooms-ga-header-filter-hidden"
+    val WR_FILTER_BLOCK_DISPLAYED = "matrix-rooms-wr-header-filter-displayed"
+    val WR_FILTER_BLOCK_HIDDEN = "matrix-rooms-wr-header-filter-hidden"
+    val SERVER_FILTER_BLOCK_DISPLAYED = "matrix-rooms-server-header-filter-displayed"
+    val SERVER_FILTER_BLOCK_HIDDEN = "matrix-rooms-server-header-filter-hidden"
+    val MATRIX_ROOM_DETAILS_DISPLAYED = "matrix-room-details-displayed"
+    val MATRIX_ROOM_DETAILS_HIDDEN = "matrix-room-details-hidden"
+}

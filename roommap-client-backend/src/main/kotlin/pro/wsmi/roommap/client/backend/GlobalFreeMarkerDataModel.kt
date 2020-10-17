@@ -8,15 +8,20 @@
  *  See the License for the specific language governing permissions and limitations under the License.
  */
 
-package pro.wsmi.roommap.client.lib
+package pro.wsmi.roommap.client.backend
 
-const val APP_NAME = "RoomMap-Client"
-const val APP_VERSION = "0.1.0"
-expect val USER_AGENT: String
-const val MAIN_LANG_COOKIE_NAME = "main_lang"
+import kotlinx.serialization.ExperimentalSerializationApi
+import pro.wsmi.kwsmilib.language.Language
+import pro.wsmi.roommap.client.lib.GlobalCSSClasses
+import java.util.*
 
-// Doesn't make these variables as const because Freemarker does not support it
-object GlobalCSSClasses {
-    val TOOLTIP_BLOCK_DISPLAYED = "tooltip-displayed"
-    val TOOLTIP_BLOCK_HIDDEN = "tooltip-hidden"
+@ExperimentalSerializationApi
+data class GlobalFreeMarkerDataModel (
+    val debugMode: Boolean,
+    val websiteName: String,
+    val mainLang: Language,
+    val texts: ResourceBundle
+)
+{
+    val cssClasses = GlobalCSSClasses
 }

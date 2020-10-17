@@ -16,8 +16,7 @@ import org.http4k.core.*
 import org.http4k.core.cookie.Cookie
 import org.http4k.core.cookie.cookie
 import org.http4k.lens.*
-import pro.wsmi.kwsmilib.language.Language
-import pro.wsmi.roommap.client.backend.config.ClientConfiguration
+import pro.wsmi.roommap.client.backend.GlobalFreeMarkerDataModel
 import pro.wsmi.roommap.client.backend.http4k.asResult
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.*
 import pro.wsmi.roommap.lib.api.*
@@ -25,8 +24,10 @@ import java.io.StringWriter
 import java.util.*
 
 
-private const val PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
+internal const val PAGE_TEMPLATE_FILE_NAME = "matrix_rooms_page.ftlh"
 private const val PAGE_CSS_FILE_NAME = "matrix_rooms_page.css"
+private const val PAGE_NATIVE_JS_FILE_NAME = "roommap-client-js-matrix-rooms-page-native.js"
+private const val PAGE_JS_FILE_NAME = "roommap-client-js-matrix-rooms-page.js"
 
 private val getRootReqSorterQuery = Query.enum<MatrixRoomListSortingElement>().optional(MATRIX_ROOMS_PAGE_SORTER_REQ_NAME).asResult()
 private val getRootReqSorterDirectionQuery = Query.boolean().optional(MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME).asResult()
@@ -40,7 +41,7 @@ private val getRootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_R
 
 
 @ExperimentalSerializationApi
-fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: ClientConfiguration, pageMainLang: Language, globalBundle: ResourceBundle, freemarkerTemplate: Template, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
+fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMarkerGlobalModelData: GlobalFreeMarkerDataModel, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
 {
     val sortingReq = getRootReqSorterQuery(req).getOrNull()
     val sortingDirectionReq = getRootReqSorterDirectionQuery(req).getOrNull()
@@ -160,55 +161,17 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
     ))
 
 
-    val freemarkerModel = mapOf (
-        "debug_mode" to debugMode,
-        "website_info" to mapOf (
-            "name" to clientCfg.websiteName,
-            "texts" to globalBundle,
+    val freeMarkerModelData = FreeMarkerDataModel (
+        globalData = freeMarkerGlobalModelData,
+        cssFileNames = listOf (
+            PAGE_CSS_FILE_NAME
         ),
-        "page_info" to mapOf(
-            "path_name" to "/",
-            "main_lang" to pageMainLang,
-            "css_files" to listOf(
-                PAGE_CSS_FILE_NAME
-            ),
-            "template_file" to PAGE_TEMPLATE_FILE_NAME,
-            "texts" to ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", Locale(pageMainLang.bcp47)),
-            "max_page" to maxPage,
-            "max_page_length" to maxPage.toString().length,
-            "matrix_rooms_total_num" to filteredSortedMatrixRoomList.size
+        jsFileNames = listOf (
+            PAGE_NATIVE_JS_FILE_NAME,
+            PAGE_JS_FILE_NAME
         ),
-        "html_element_ids" to mapOf (
-            "NOU_FILTERS_DISPLAY_BUTTON_ID" to NOU_FILTERS_DISPLAY_BUTTON_ID,
-            "MAX_NOU_FILTER_CHECKBOX_ID" to MAX_NOU_FILTER_CHECKBOX_ID,
-            "MAX_NOU_FILTER_TEXTFIELD_ID" to MAX_NOU_FILTER_TEXTFIELD_ID,
-            "MIN_NOU_FILTER_CHECKBOX_ID" to MIN_NOU_FILTER_CHECKBOX_ID,
-            "MIN_NOU_FILTER_TEXTFIELD_ID" to MIN_NOU_FILTER_TEXTFIELD_ID,
-            "GA_FILTER_DISPLAY_BUTTON_ID" to GA_FILTER_DISPLAY_BUTTON_ID,
-            "WR_FILTER_DISPLAY_BUTTON_ID" to WR_FILTER_DISPLAY_BUTTON_ID,
-            "SERVER_FILTER_DISPLAY_BUTTON_ID" to SERVER_FILTER_DISPLAY_BUTTON_ID,
-            "NOU_FILTERS_BLOCK_ID" to NOU_FILTERS_BLOCK_ID,
-            "GA_FILTER_BLOCK_ID" to GA_FILTER_BLOCK_ID,
-            "WR_FILTER_BLOCK_ID" to WR_FILTER_BLOCK_ID,
-            "SERVER_FILTER_BLOCK_ID" to SERVER_FILTER_BLOCK_ID
-        ),
-        "html_element_classes" to mapOf (
-            "NOU_FILTERS_BLOCK_DISPLAYED_CLASS" to NOU_FILTERS_BLOCK_DISPLAYED_CLASS,
-            "NOU_FILTERS_BLOCK_HIDDEN_CLASS" to NOU_FILTERS_BLOCK_HIDDEN_CLASS,
-            "GA_FILTER_BLOCK_DISPLAYED_CLASS" to GA_FILTER_BLOCK_DISPLAYED_CLASS,
-            "GA_FILTER_BLOCK_HIDDEN_CLASS" to GA_FILTER_BLOCK_HIDDEN_CLASS,
-            "WR_FILTER_BLOCK_DISPLAYED_CLASS" to WR_FILTER_BLOCK_DISPLAYED_CLASS,
-            "WR_FILTER_BLOCK_HIDDEN_CLASS" to WR_FILTER_BLOCK_HIDDEN_CLASS,
-            "SERVER_FILTER_BLOCK_DISPLAYED_CLASS" to SERVER_FILTER_BLOCK_DISPLAYED_CLASS,
-            "SERVER_FILTER_BLOCK_HIDDEN_CLASS" to SERVER_FILTER_BLOCK_HIDDEN_CLASS,
-            "MATRIX_ROOM_DETAILS_DISPLAYED_CLASS" to MATRIX_ROOM_DETAILS_DISPLAYED_CLASS,
-            "MATRIX_ROOM_DETAILS_HIDDEN_CLASS" to MATRIX_ROOM_DETAILS_HIDDEN_CLASS
-        ),
-        "serverList" to matrixServerList.mapValues { server ->
-            mapOf("name" to server.value.name, "apiUrl" to server.value.apiURL.toString(), "updateFreq" to server.value.updateFreq)
-        },
-        "roomList" to slicedFilteredSortedMatrixRoomList,
-        "query_parameters" to QueryParameters(
+        texts = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.matrix_rooms_page.UITexts", freeMarkerGlobalModelData.texts.locale),
+        queryParameters = QueryParameters (
             sorterReqName = MATRIX_ROOMS_PAGE_SORTER_REQ_NAME,
             sorterDirectionReqName = MATRIX_ROOMS_PAGE_SORTER_DIRECTION_REQ_NAME,
             gaFilterReqName = MATRIX_ROOMS_PAGE_GA_FILTER_REQ_NAME,
@@ -227,11 +190,17 @@ fun handleMatrixRoomsPageReq(req: Request, debugMode: Boolean, clientCfg: Client
             minNOUFilter = minNOUFilteringReq,
             roomsPerPage = elmPerPage,
             page = pageReq
+        ),
+        matrixRoomsData = FreeMarkerDataModel.MatrixRoomsData(
+            pageMaxNum = maxPage,
+            totalRoomsNum = filteredSortedMatrixRoomList.size,
+            serverList = matrixServerList,
+            roomList = slicedFilteredSortedMatrixRoomList
         )
     )
 
     val stringWriter = StringWriter()
-    freemarkerTemplate.process(freemarkerModel, stringWriter)
+    freemarkerTemplate.process(freeMarkerModelData, stringWriter)
 
 
     val responseElmPerPageCookie = if (elmPerPage == elmPerPageReqByQuery && elmPerPage != elmPerPageReqByCookie)
