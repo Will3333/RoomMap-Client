@@ -18,8 +18,32 @@ interface PageFreeMarkerDataModel {
     val globalData: GlobalFreeMarkerDataModel
     val templateFileName: String
     val urlPath: String
+    val robotsMeta: RobotsMeta?
     val cssFileNames: List<String>?
     val jsFileNames: List<String>?
     val texts: ResourceBundle
     val queryParameters: QueryParameters
+}
+
+data class RobotsMeta(val index: Boolean?, val followLinks: Boolean?)
+{
+    fun toHTMLFormat() : String
+    {
+        if (this.index == null && this.followLinks == null)
+            return ""
+
+        val contentAttribut = when(this.index) {
+            true -> "index"
+            false -> "noindex"
+            else -> ""
+        }.let {
+            when(this.followLinks) {
+                true -> if (it.isNotEmpty()) "$it, " else {""} + "follow"
+                false -> if (it.isNotEmpty()) "$it, " else {""} + "nofollow"
+                else -> it
+            }
+        }
+
+        return "<meta name=\"robots\" content=\"$contentAttribut\">"
+    }
 }

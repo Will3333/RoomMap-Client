@@ -22,6 +22,7 @@ data class Page404FreeMarkerDataModel (
 {
     override val templateFileName: String = PAGE_404_TEMPLATE_FILE_NAME
     override val urlPath: String = ""
+    override val robotsMeta: RobotsMeta? = null
     override val jsFileNames: List<String>? = null
     override val queryParameters = Page404QueryParameters()
 }

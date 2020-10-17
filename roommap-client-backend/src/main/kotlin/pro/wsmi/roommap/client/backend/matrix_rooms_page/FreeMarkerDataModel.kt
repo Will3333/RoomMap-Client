@@ -13,6 +13,7 @@ package pro.wsmi.roommap.client.backend.matrix_rooms_page
 import kotlinx.serialization.ExperimentalSerializationApi
 import pro.wsmi.roommap.client.backend.GlobalFreeMarkerDataModel
 import pro.wsmi.roommap.client.backend.PageFreeMarkerDataModel
+import pro.wsmi.roommap.client.backend.RobotsMeta
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.MatrixRoomsPageCSSClasses
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.MatrixRoomsPageHTMLElmId
 import pro.wsmi.roommap.lib.api.MatrixRoom
@@ -32,6 +33,7 @@ data class FreeMarkerDataModel (
 {
     override val templateFileName: String = PAGE_TEMPLATE_FILE_NAME
     override val urlPath: String = "/"
+    override val robotsMeta: RobotsMeta? = RobotsMeta(index = true, followLinks = true)
     val cssClasses = MatrixRoomsPageCSSClasses
     val htmlElmIds = MatrixRoomsPageHTMLElmId
 
