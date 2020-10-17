@@ -86,7 +86,7 @@
 		</form>
 	  </div>
 	  <div class="matrix-rooms-wr-header">
-	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">${texts.getString('wr_elm_header_title')?no_esc}</span><span id="${htmlElmIds.WR_TOOLTIP_CONTAINER}" class="tooltip-container"><span class="tooltip-question-mark">?</span><span id="${htmlElmIds.WR_TOOLTIP}" class="tooltip ${globalData.cssClasses.TOOLTIP_BLOCK_HIDDEN}">${texts.getString('wr_elm_header_tooltip')?no_esc}</span></span><button id="${htmlElmIds.WR_FILTER_DISPLAY_BUTTON}" class="button">&#x22EE;</button></div>
+	    <div class="matrix-rooms-wr-header-title-container"><span class="matrix-rooms-wr-header-title">${texts.getString('wr_elm_header_title')?no_esc}</span><span id="${htmlElmIds.WR_TOOLTIP_CONTAINER}"><span class="tooltip-question-mark">?</span><span id="${htmlElmIds.WR_TOOLTIP}" class="tooltip ${globalData.cssClasses.TOOLTIP_BLOCK_HIDDEN}">${texts.getString('wr_elm_header_tooltip')?no_esc}</span></span><button id="${htmlElmIds.WR_FILTER_DISPLAY_BUTTON}" class="button">&#x22EE;</button></div>
 	    <form method="get" id="${htmlElmIds.WR_FILTER_BLOCK}" class="matrix-rooms-wr-header-filter <#if queryParameters.wrFilter??>${cssClasses.WR_FILTER_BLOCK_DISPLAYED}<#else>${cssClasses.WR_FILTER_BLOCK_HIDDEN}</#if>">
 		  <div>
 		    <input type="radio" id="matrix-rooms-wr-filter-all-radio" name="${queryParameters.wrFilterReqName}" value="NO_FILTER"<#if !queryParameters.wrFilter?? || (queryParameters.wrFilter?? && queryParameters.wrFilter == "NO_FILTER")> checked</#if>>
