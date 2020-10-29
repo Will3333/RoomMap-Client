@@ -16,6 +16,7 @@ import org.http4k.core.*
 import org.http4k.core.cookie.Cookie
 import org.http4k.core.cookie.cookie
 import org.http4k.lens.*
+import pro.wsmi.roommap.client.backend.BusinessData
 import pro.wsmi.roommap.client.backend.GlobalFreeMarkerDataModel
 import pro.wsmi.roommap.client.backend.http4k.asResult
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.*
@@ -41,7 +42,7 @@ private val getRootReqElmPerPageQuery = Query.int().optional(MATRIX_ROOMS_PAGE_R
 
 
 @ExperimentalSerializationApi
-fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMarkerGlobalModelData: GlobalFreeMarkerDataModel, matrixServerList: Map<String, MatrixServer>, matrixRoomList: List<MatrixRoom>) : Response
+fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMarkerGlobalModelData: GlobalFreeMarkerDataModel, publicAPIData: BusinessData.PublicAPIData) : Response
 {
     val sortingReq = getRootReqSorterQuery(req).getOrNull()
     val sortingDirectionReq = getRootReqSorterDirectionQuery(req).getOrNull()
@@ -52,10 +53,10 @@ fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMar
     val minNOUFilteringReq = getRootReqMinNOUFilterQuery(req).getOrNull()
 
 
-    val filteredSortedMatrixRoomList = matrixRoomList.let {
+    val filteredSortedMatrixRoomList = publicAPIData.matrixRooms.let {
         if (serverFilteringReq != null)
         {
-            val newList = mutableListOf<MatrixRoom>()
+            val newList = mutableListOf<PublicAPIMatrixRoom>()
             serverFilteringReq.forEach { serverId ->
                 newList.addAll(it.filter { room ->
                     room.serverId == serverId
@@ -77,10 +78,10 @@ fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMar
             }
             MatrixRoomListSortingElement.SERVER_NAME -> {
                 if (sortingDirectionReq != null && sortingDirectionReq) it.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { room ->
-                    matrixServerList.getValue(room.serverId).name
+                    publicAPIData.matrixServers.getValue(room.serverId).name
                 })
                 else it.sortedWith(compareByDescending(String.CASE_INSENSITIVE_ORDER) { room ->
-                    matrixServerList.getValue(room.serverId).name
+                    publicAPIData.matrixServers.getValue(room.serverId).name
                 })
             }
             else -> {
@@ -194,7 +195,7 @@ fun handleMatrixRoomsPageReq(req: Request, freemarkerTemplate: Template, freeMar
         matrixRoomsData = FreeMarkerDataModel.MatrixRoomsData(
             pageMaxNum = maxPage,
             totalRoomsNum = filteredSortedMatrixRoomList.size,
-            serverList = matrixServerList,
+            serverList = publicAPIData.matrixServers,
             roomList = slicedFilteredSortedMatrixRoomList
         )
     )

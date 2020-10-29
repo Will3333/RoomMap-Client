@@ -17,8 +17,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import freemarker.template.Configuration
 import freemarker.template.Version
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.http4k.client.ApacheClient
@@ -35,9 +33,7 @@ import pro.wsmi.roommap.client.backend.config.ClientConfiguration
 import pro.wsmi.roommap.client.lib.APP_NAME
 import pro.wsmi.roommap.client.lib.APP_VERSION
 import pro.wsmi.roommap.client.lib.USER_AGENT
-import pro.wsmi.roommap.lib.api.*
 import java.io.File
-import java.util.concurrent.locks.ReentrantLock
 import kotlin.system.exitProcess
 
 
@@ -139,65 +135,15 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
         println("OK")
 
 
-        val apiHttpClient = ApacheClient()
-        val apiHttpReqBase = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
+        val businessData = BusinessData (
+            debugMode = debugModeCLA,
+            clientCfg = clientCfg,
+            apiHttpClient = ApacheClient(),
+            baseHttpReq = getAPIHttpRequestBase(USER_AGENT, clientCfg.apiURL)
+        )
 
-        val apiMatrixRoomListReq = APIRoomListReq()
+        businessData.startPublicAPIDataUpdateLoop()
 
-        val businessDataLock = ReentrantLock()
-        val businessData = BusinessData()
-
-        launch {
-            while (true)
-            {
-                val firstCall = businessData.matrixServers.isEmpty() && businessData.matrixRooms.isEmpty()
-
-
-                print("Requesting Matrix servers to API ... ")
-
-                val matrixServerListResult = getMatrixServerList(apiHttpClient, apiHttpReqBase)
-                val matrixServerList = matrixServerListResult.getOrElse {
-                    println("FAILED")
-                    if (this@BaseLineCmd.debugModeCLA) it.printStackTrace()
-                    else println(it.localizedMessage)
-                    if (firstCall)
-                        exitProcess(20)
-                    null
-                }
-
-                if (matrixServerList != null)
-                {
-                    println("OK")
-
-                    print("Requesting Matrix rooms to API ... ")
-
-                    val matrixRoomListResult = getMatrixRoomList(apiHttpClient, apiHttpReqBase, apiMatrixRoomListReq)
-                    val matrixRoomList = matrixRoomListResult.getOrElse {
-                        println("FAILED")
-                        if (this@BaseLineCmd.debugModeCLA) it.printStackTrace()
-                        else println(it.localizedMessage)
-                        if (firstCall)
-                            exitProcess(24)
-                        null
-                    }
-
-                    if (matrixRoomList != null)
-                    {
-                        println("OK")
-
-                        businessDataLock.lock()
-                        businessData.matrixServers = matrixServerList.toSortedMap(compareBy { serverId ->
-                            matrixServerList.getValue(serverId).name
-                        })
-                        businessData.matrixRooms = matrixRoomList
-                        businessDataLock.unlock()
-                    }
-                }
-
-
-                delay(300000)
-            }
-        }
 
         print("Http server starting ... ")
 
@@ -211,7 +157,7 @@ class BaseLineCmd : CliktCommand(name = "RoomMapClient")
             "/static/img" bind static(ResourceLoader.Directory(imgDir.canonicalPath)),
             "/static/css" bind static(ResourceLoader.Directory(cssDir.canonicalPath)),
             "/static/js" bind static(ResourceLoader.Directory(jsDir.canonicalPath)),
-            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerCfg, globalTemplateFile, businessData, businessDataLock)
+            "{path:.*}" bind Method.GET to handleMainHttpRequest(debugModeCLA, clientCfg, freemarkerCfg, globalTemplateFile, businessData)
         )).asServer(Jetty(clientCfg.clientHttpServer.port)).start()
 
 

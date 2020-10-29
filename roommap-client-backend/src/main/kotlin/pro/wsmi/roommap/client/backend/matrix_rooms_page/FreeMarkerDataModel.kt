@@ -16,8 +16,8 @@ import pro.wsmi.roommap.client.backend.PageFreeMarkerDataModel
 import pro.wsmi.roommap.client.backend.RobotsMeta
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.MatrixRoomsPageCSSClasses
 import pro.wsmi.roommap.client.lib.matrix_rooms_page.MatrixRoomsPageHTMLElmId
-import pro.wsmi.roommap.lib.api.MatrixRoom
-import pro.wsmi.roommap.lib.api.MatrixServer
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixRoom
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixServer
 import java.util.*
 
 @ExperimentalSerializationApi
@@ -40,7 +40,7 @@ data class FreeMarkerDataModel (
     data class MatrixRoomsData (
         val pageMaxNum: Int,
         val totalRoomsNum: Int,
-        val serverList: Map<String, MatrixServer>,
-        val roomList : List<MatrixRoom>
+        val serverList: Map<String, PublicAPIMatrixServer>,
+        val roomList : List<PublicAPIMatrixRoom>
     )
 }

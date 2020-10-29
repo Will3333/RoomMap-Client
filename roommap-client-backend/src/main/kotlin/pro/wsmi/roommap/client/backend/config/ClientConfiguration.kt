@@ -25,10 +25,12 @@ data class ClientConfiguration (
     @SerialName("api_url")
     val apiURL: URL,
     @SerialName("client_backend")
-    val clientHttpServer: ClientBackend,
+    val clientHttpServer: ClientHttpServerConfiguration,
     @SerialName("resource_directory")
     @Serializable(with = FileSerializer::class)
     val resourceDirectory: File,
+    @SerialName("public_api_data_update_frequency")
+    val publicAPIDataUpdateFrequency: Long,
     @SerialName("freemarker_template_version")
     val freeMarkerTemplateVersion: String,
     @SerialName("website_name")

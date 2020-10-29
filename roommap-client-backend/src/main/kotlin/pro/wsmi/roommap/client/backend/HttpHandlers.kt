@@ -24,7 +24,6 @@ import pro.wsmi.roommap.client.lib.MAIN_LANG_COOKIE_NAME
 import java.io.File
 import java.io.StringWriter
 import java.util.*
-import java.util.concurrent.locks.ReentrantLock
 
 
 @ExperimentalSerializationApi
@@ -56,7 +55,7 @@ fun get404HttpResponse(freemarkerTemplate: Template, freeMarkerGlobalModelData: 
 }
 
 @ExperimentalSerializationApi
-fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerCfg: Configuration, globalTemplateFile: File, businessData: BusinessData, businessDataLock: ReentrantLock) : HttpHandler = { req ->
+fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, freemarkerCfg: Configuration, globalTemplateFile: File, businessData: BusinessData) : HttpHandler = { req ->
 
     val httpReqAcceptLanguageHeader = req.header("Accept-Language")
     val httpReqAcceptedLanguageTags = if (httpReqAcceptLanguageHeader != null)
@@ -109,10 +108,7 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
         req.uri.path
 
 
-    businessDataLock.lock()
-    val frozenMatrixServerList = businessData.matrixServers
-    val frozenMatrixRoomList = businessData.matrixRooms
-    businessDataLock.unlock()
+    val frozenPublicAPIData = businessData.publicAPIData
 
     val pageMainLocale = Locale(pageMainLang.bcp47)
     val globalBundle = ResourceBundle.getBundle("pro.wsmi.roommap.client.backend.GlobalUITexts", pageMainLocale)
@@ -128,7 +124,7 @@ fun handleMainHttpRequest(debugMode: Boolean, clientCfg: ClientConfiguration, fr
     )
 
     when {
-        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, freemarkerTemplate, freeMarkerGlobalModelData, frozenMatrixServerList, frozenMatrixRoomList)
+        requestedPagePath == "/" -> handleMatrixRoomsPageReq(req, freemarkerTemplate, freeMarkerGlobalModelData, frozenPublicAPIData)
         else -> get404HttpResponse(freemarkerTemplate, freeMarkerGlobalModelData)
     }.let { response: Response ->
         if (pageMainLang == mainLangReqByPath && pageMainLang != mainLangReqByCookie)

@@ -20,10 +20,33 @@ import org.http4k.core.Status
 import pro.wsmi.roommap.lib.api.*
 
 @ExperimentalSerializationApi
-fun getMatrixServerList(httpHandler: HttpHandler, baseHttpReq: Request) : Result<Map<String, MatrixServer>>
+fun requestPublicMatrixRoomTagList(httpHandler: HttpHandler, baseHttpReq: Request) : Result<Map<String, PublicAPIMatrixRoomTag>>
 {
     val httpReq = baseHttpReq
-        .uri(baseHttpReq.uri.path(APIServerListReq.REQ_PATH))
+        .uri(baseHttpReq.uri.path(PublicAPIMatrixRoomTagListReq.REQ_PATH))
+        .method(Method.GET)
+
+    val httpResponse = httpHandler(httpReq)
+
+    if (httpResponse.status != Status.OK)
+        return Result.failure(Exception("The HTTP response code is : ${httpResponse.status.code}"))
+
+    val jsonSerializer = Json {}
+
+    val apiRoomTagListReqResponse = try {
+        jsonSerializer.decodeFromString(PublicAPIMatrixRoomTagListReqResponse.serializer(), httpResponse.bodyString())
+    } catch (e: SerializationException) {
+        return Result.failure(e)
+    }
+
+    return Result.success(apiRoomTagListReqResponse.tags)
+}
+
+@ExperimentalSerializationApi
+fun requestPublicMatrixServerList(httpHandler: HttpHandler, baseHttpReq: Request) : Result<Map<String, PublicAPIMatrixServer>>
+{
+    val httpReq = baseHttpReq
+        .uri(baseHttpReq.uri.path(PublicAPIMatrixServerListReq.REQ_PATH))
         .method(Method.GET)
 
     val httpResponse = httpHandler(httpReq)
@@ -34,7 +57,7 @@ fun getMatrixServerList(httpHandler: HttpHandler, baseHttpReq: Request) : Result
     val jsonSerializer = Json {}
 
     val apiServerListReqResponse = try {
-        jsonSerializer.decodeFromString(APIServerListReqResponse.serializer(), httpResponse.bodyString())
+        jsonSerializer.decodeFromString(PublicAPIMatrixServerListReqResponse.serializer(), httpResponse.bodyString())
     } catch (e: SerializationException) {
         return Result.failure(e)
     }
@@ -46,18 +69,18 @@ fun getMatrixServerList(httpHandler: HttpHandler, baseHttpReq: Request) : Result
 }
 
 @ExperimentalSerializationApi
-fun getMatrixRoomList(httpHandler: HttpHandler, baseHttpReq: Request, apiRoomListReq: APIRoomListReq) : Result<List<MatrixRoom>>
+fun requestPublicMatrixRoomList(httpHandler: HttpHandler, baseHttpReq: Request, apiRoomListReq: PublicAPIMatrixRoomListReq) : Result<List<PublicAPIMatrixRoom>>
 {
     val jsonSerializer = Json {}
 
     val reqBodyStr = try {
-        jsonSerializer.encodeToString(APIRoomListReq.serializer(), apiRoomListReq)
+        jsonSerializer.encodeToString(PublicAPIMatrixRoomListReq.serializer(), apiRoomListReq)
     } catch (e: SerializationException) {
         return Result.failure(e)
     }
 
     val httpReq = baseHttpReq
-        .uri(baseHttpReq.uri.path(APIRoomListReq.REQ_PATH))
+        .uri(baseHttpReq.uri.path(PublicAPIMatrixRoomListReq.REQ_PATH))
         .method(Method.POST)
         .body(reqBodyStr)
 
@@ -69,7 +92,7 @@ fun getMatrixRoomList(httpHandler: HttpHandler, baseHttpReq: Request, apiRoomLis
 
 
     val apiRoomListReqResponse = try {
-        jsonSerializer.decodeFromString(APIRoomListReqResponse.serializer(), httpResponse.bodyString())
+        jsonSerializer.decodeFromString(PublicAPIMatrixRoomListReqResponse.serializer(), httpResponse.bodyString())
     } catch (e: SerializationException) {
         return Result.failure(e)
     }

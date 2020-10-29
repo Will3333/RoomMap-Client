@@ -10,12 +10,74 @@
 
 package pro.wsmi.roommap.client.backend
 
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.ExperimentalSerializationApi
-import pro.wsmi.roommap.lib.api.MatrixRoom
-import pro.wsmi.roommap.lib.api.MatrixServer
+import org.http4k.core.HttpHandler
+import org.http4k.core.Request
+import pro.wsmi.roommap.client.backend.config.ClientConfiguration
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixRoom
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixRoomListReq
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixRoomTag
+import pro.wsmi.roommap.lib.api.PublicAPIMatrixServer
 
 @ExperimentalSerializationApi
 data class BusinessData (
-    var matrixServers: Map<String, MatrixServer> = mutableMapOf(),
-    var matrixRooms: List<MatrixRoom> = mutableListOf()
+    val debugMode: Boolean,
+    val clientCfg: ClientConfiguration,
+    val apiHttpClient: HttpHandler,
+    val baseHttpReq: Request,
+    var publicAPIData : PublicAPIData = PublicAPIData()
 )
+{
+    private val publicAPIDataMutex: Mutex = Mutex()
+    private var publicAPIDataUpdateJob: Job = newPublicAPIDataUpdateJob(CoroutineStart.LAZY)
+
+    private fun newPublicAPIDataUpdateJob(start: CoroutineStart = CoroutineStart.DEFAULT) : Job = GlobalScope.launch(start = start) {
+
+        this@BusinessData.publicAPIDataMutex.withLock {
+            this@BusinessData.publicAPIData = getAllPublicAPIData(this@BusinessData.apiHttpClient, this@BusinessData.baseHttpReq).getOrElse { e ->
+                if (this@BusinessData.debugMode)
+                    e.printStackTrace()
+                //TODO add error logger
+                this@BusinessData.publicAPIData
+            }
+        }
+
+        delay(this@BusinessData.clientCfg.publicAPIDataUpdateFrequency)
+
+        this@BusinessData.publicAPIDataUpdateJob = newPublicAPIDataUpdateJob()
+    }
+
+    fun startPublicAPIDataUpdateLoop() {
+        this.publicAPIDataUpdateJob.start()
+    }
+
+    data class PublicAPIData(
+        val matrixRoomTags: Map<String, PublicAPIMatrixRoomTag> = mapOf(),
+        val matrixServers: Map<String, PublicAPIMatrixServer> = mapOf(),
+        val matrixRooms: List<PublicAPIMatrixRoom> = listOf()
+    )
+
+    companion object {
+        private fun getAllPublicAPIData(httpHandler: HttpHandler, baseHttpReq: Request) : Result<PublicAPIData>
+        {
+            val matrixRoomTags = requestPublicMatrixRoomTagList(httpHandler, baseHttpReq).getOrElse { e ->
+                return Result.failure(e)
+            }
+            val matrixServers = requestPublicMatrixServerList(httpHandler, baseHttpReq).getOrElse { e ->
+                return Result.failure(e)
+            }
+            val matrixRooms = requestPublicMatrixRoomList(httpHandler, baseHttpReq, PublicAPIMatrixRoomListReq()).getOrElse { e ->
+                return Result.failure(e)
+            }
+
+            return Result.success(PublicAPIData(
+                matrixRoomTags = matrixRoomTags,
+                matrixServers = matrixServers,
+                matrixRooms = matrixRooms
+            ))
+        }
+    }
+}

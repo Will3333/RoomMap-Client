@@ -13,7 +13,7 @@ package pro.wsmi.roommap.client.backend.config
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ClientBackend (
+data class ClientHttpServerConfiguration (
     val port: Int = 80,
     val compression: Boolean
 )
