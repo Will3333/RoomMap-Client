@@ -124,6 +124,7 @@
 	  <#if room?index % 2 == 0><#assign lineVariationClass = "matrix-room-elm-line-var1"><#else><#assign lineVariationClass = "matrix-room-elm-line-var2"></#if>
 	  <div class="matrix-room-name-elm-container ${lineVariationClass}">
 		<img id="matrix-room-elm-arrow-${room?index}" class="matrix-room-name-arrow" src="/static/img/icon-collapsed.svg" width="17.5em" height="17.5em" onclick="handleMatrixRoomArrowClickEvent('matrix-room-elm-arrow-${room?index}')">
+		<span class="matrix-room-name-link"><#if room.canonicalAlias??><a href="https://matrix.to/#/${room.canonicalAlias}">${room.canonicalAlias}</a><#else><a href="https://matrix.to/#/${room.roomId}">${room.roomId}</a></#if></span>
 		<span class="matrix-room-name-elm"><#if room.name?has_content>${room.name}<#else>${room.roomId}</#if></span>
 	  </div>
 	  <div class="matrix-room-nou-elm ${lineVariationClass}">${room.numJoinedMembers}</div>
@@ -131,10 +132,10 @@
 	  <div class="matrix-room-wr-elm ${lineVariationClass}"><#if room.worldReadable>${texts.getString('wr_elm_yes_value_txt')?no_esc}<#else>${texts.getString('wr_elm_no_value_txt')?no_esc}</#if></div>
 	  <div class="matrix-room-server-elm ${lineVariationClass}"><a href="${matrixRoomsData.serverList[room.serverId].apiURL.toString()}">${matrixRoomsData.serverList[room.serverId].name}</a></div>
 	  <div id="matrix-room-details-${room?index}" class="matrix-room-details ${cssClasses.MATRIX_ROOM_DETAILS_HIDDEN}">
-	    <#if room.canonicalAlias??><span class="matrix-room-details-alias-title">${texts.getString('details_elm_alias_title')?no_esc} :</span><span class="matrix-room-details-alias"><a href="https://matrix.to/#/${room.canonicalAlias}">${room.canonicalAlias}</a></span>
-	    <#else><span class="matrix-room-details-room-id-title">${texts.getString('details_elm_room_id_title')?no_esc} :</span><span class="matrix-room-details-room-id"><a href="https://matrix.to/#/${room.roomId}">${room.roomId}</a></span></#if>
+	    <#if room.canonicalAlias??><span class="matrix-room-details-detail-title">${texts.getString('details_elm_id_title')?no_esc} :</span><span class="matrix-room-details-detail">${room.roomId}</span></#if>
 		<span class="matrix-room-details-server-title">${texts.getString('details_elm_server_title')?no_esc} :</span><span class="matrix-room-details-server"><a href="${matrixRoomsData.serverList[room.serverId].apiURL.toString()}">${matrixRoomsData.serverList[room.serverId].name}</a></span>
-		<#if room.topic??><span class="matrix-room-details-topic-title">${texts.getString('details_elm_topic_title')?no_esc} :</span><span class="matrix-room-details-topic" lang="">${room.topic}</span></#if>
+		<#if room.languages??><span class="matrix-room-details-detail-title">${texts.getString('details_elm_languages_title')?no_esc} :</span><span class="matrix-room-details-detail"><#list room.languages as lang><span>${lang.nativeName}</span></#list></span></#if>
+		<#if room.topic??><span class="matrix-room-details-detail-title">${texts.getString('details_elm_topic_title')?no_esc} :</span><span class="matrix-room-details-detail" lang="">${room.topic}</span></#if>
 	  </div>
 	  </#list>
 	</div>
